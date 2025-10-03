@@ -5,7 +5,7 @@ use bevy::prelude::*;
 use crate::{
     asset_tracking::LoadResource,
     audio::music,
-    demo::player::{PlayerAssets, player},
+    demo::player::{player, PlayerAssets},
     screens::Screen,
 };
 
@@ -15,17 +15,11 @@ pub(super) fn plugin(app: &mut App) {
 
 #[derive(Resource, Asset, Clone, Reflect)]
 #[reflect(Resource)]
-pub struct LevelAssets {
-    #[dependency]
-    music: Handle<AudioSource>,
-}
+pub struct LevelAssets {}
 
 impl FromWorld for LevelAssets {
     fn from_world(world: &mut World) -> Self {
-        let assets = world.resource::<AssetServer>();
-        Self {
-            music: assets.load("audio/music/Fluffing A Duck.ogg"),
-        }
+        Self {}
     }
 }
 
@@ -43,10 +37,10 @@ pub fn spawn_level(
         DespawnOnExit(Screen::Gameplay),
         children![
             player(400.0, &player_assets, &mut texture_atlas_layouts),
-            (
-                Name::new("Gameplay Music"),
-                music(level_assets.music.clone())
-            )
+            // (
+            //     Name::new("Gameplay Music"),
+            //     music(level_assets.music.clone())
+            // )
         ],
     ));
 }

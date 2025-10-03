@@ -16,7 +16,7 @@ pub(super) fn plugin(app: &mut App) {
 #[derive(Component, Debug, Reflect)]
 #[reflect(Component)]
 pub struct InteractionPalette {
-    pub none: Color,
+    pub none:    Color,
     pub hovered: Color,
     pub pressed: Color,
 }
@@ -50,8 +50,8 @@ impl FromWorld for InteractionAssets {
     fn from_world(world: &mut World) -> Self {
         let assets = world.resource::<AssetServer>();
         Self {
-            hover: assets.load("audio/sound_effects/button_hover.ogg"),
-            click: assets.load("audio/sound_effects/button_click.ogg"),
+            hover: assets.load("audio/ui/button_hover.ogg"),
+            click: assets.load("audio/ui/button_click.ogg"),
         }
     }
 }

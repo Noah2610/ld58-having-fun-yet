@@ -34,8 +34,8 @@ impl Plugin for AppPlugin {
                 })
                 .set(WindowPlugin {
                     primary_window: Window {
-                        title: "Ld58".to_string(),
-                        fit_canvas_to_parent: true,
+                        title: "LD58".to_string(),
+                        resizable: false,
                         ..default()
                     }
                     .into(),

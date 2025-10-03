@@ -16,6 +16,12 @@ tracing = { version = "0.1", features = [
     "release_max_level_warn",
 ] }
 
+[dependencies.bevy-inspector-egui]
+git = "https://github.com/jakobhellermann/bevy-inspector-egui"
+branch = "main"
+version = "0.34"
+optional = true
+
 [target.wasm32-unknown-unknown.dependencies]
 # getrandom = { version = "0.3", features = ["wasm_js"] }
 
@@ -29,6 +35,7 @@ dev = [
     "bevy/bevy_ui_debug",
     # Improve error messages coming from Bevy
     "bevy/track_location",
+    "bevy-inspector-egui",
 ]
 dev_native = [
     "dev",
