@@ -1,7 +1,10 @@
 # Rough Plan
 ## Day 1
-Priority: __Brainstorm game ideas!__  
+Priority: __Brainstorm game ideas!__ Theme: __Collector__  
 Get a bevy app up and running, preferably with a couple idea-related features already.
+
+### Progress - Day 1
+- game idea: __Losing My Marbles__
 
 ## Day 2
 Priority: __Implement core game loop!__  
