@@ -5,9 +5,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+avian2d = { git = "https://github.com/Jondolf/avian", branch = "main", version = "0.4.0-dev" }
 bevy = { version = "0.17", features = [
     "experimental_bevy_ui_widgets",
 ] }
+leafwing-input-manager = "0.18.0"
 # Compile out low-severity logs to improve performance.
 # Remove these features if you want to profile your game with tracy.
 # (see <https://github.com/bevyengine/bevy/blob/main/docs/profiling.md#tracy-profiler>)

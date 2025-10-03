@@ -3,8 +3,10 @@
 // Disable console on Windows for non-dev builds.
 #![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
 
+mod actions;
 mod asset_tracking;
 mod audio;
+mod character_controller;
 mod demo;
 #[cfg(feature = "dev")]
 mod dev_tools;
@@ -12,7 +14,9 @@ mod menus;
 mod screens;
 mod theme;
 
+use avian2d::prelude::PhysicsPlugins;
 use bevy::{asset::AssetMetaCheck, prelude::*};
+use leafwing_input_manager::prelude::InputManagerPlugin;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -23,7 +27,7 @@ pub struct AppPlugin;
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
         // Add Bevy plugins.
-        app.add_plugins(
+        app.add_plugins((
             DefaultPlugins
                 .set(AssetPlugin {
                     // Wasm builds will check for meta files (that don't exist) if this isn't set.
@@ -41,10 +45,13 @@ impl Plugin for AppPlugin {
                     .into(),
                     ..default()
                 }),
-        );
+            InputManagerPlugin::<actions::Action>::default(),
+            PhysicsPlugins::default(),
+        ));
 
         // Add other plugins.
         app.add_plugins((
+            character_controller::plugin,
             asset_tracking::plugin,
             audio::plugin,
             demo::plugin,
