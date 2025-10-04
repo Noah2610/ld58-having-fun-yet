@@ -85,7 +85,7 @@
   </object>
  </objectgroup>
  <objectgroup id="3" name="objects">
-  <object id="5" name="Player" x="-8" y="52" width="16" height="24">
+  <object id="5" name="Player" x="-8" y="52" width="8" height="16">
    <properties>
     <property name="Player" type="class" propertytype="ld58::game::player::Player"/>
    </properties>

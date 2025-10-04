@@ -18,6 +18,7 @@ mod theme;
 
 use avian2d::prelude::{Gravity, PhysicsPlugins};
 use bevy::{asset::AssetMetaCheck, prelude::*};
+use bevy_aseprite_ultra::AsepriteUltraPlugin;
 use bevy_ecs_tiled::prelude::*;
 use game_state::{GameplaySet, Paused};
 use std::path::PathBuf;
@@ -63,6 +64,7 @@ impl Plugin for AppPlugin {
                 ),
             }),
             TiledPhysicsPlugin::<TiledPhysicsAvianBackend>::default(),
+            AsepriteUltraPlugin,
         ));
 
         app.insert_resource(Gravity::ZERO);

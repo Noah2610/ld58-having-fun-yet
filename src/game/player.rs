@@ -1,16 +1,12 @@
-//! Player-specific behavior.
-
 use crate::{
     AppSystems,
     asset_tracking::LoadResource,
-    game::{
-        animation::PlayerAnimation,
-        movement::{Acceleration, MovementController},
-    },
+    game::movement::{Acceleration, MovementController},
     game_state::GameplaySet,
 };
 use avian2d::prelude::*;
 use bevy::{prelude::*, sprite::Anchor};
+use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
 use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
@@ -39,15 +35,12 @@ fn post_add_player(
 ) {
     for (entity, children) in players {
         // Create animation and sprite from spritesheet for the player
-        let animation = PlayerAnimation::new();
-        commands.entity(entity).insert((
-            PlayerInitialized,
-            Sprite::from_atlas_image(assets.ducky.clone(), TextureAtlas {
-                layout: assets.texture_atlas_layout.clone(),
-                index:  animation.get_atlas_index(),
-            }),
-            animation,
-        ));
+        commands
+            .entity(entity)
+            .insert((PlayerInitialized, AseAnimation {
+                aseprite:  assets.spritesheet.clone(),
+                animation: Animation::tag("idle"),
+            }));
 
         // Offset all children colliders to be centered on the player
         for &child in children {
@@ -76,6 +69,7 @@ fn post_add_player(
 #[reflect(Component)]
 #[require(
     Name::new("Player"),
+    Sprite::default(),
     Anchor::CENTER,
     MovementController,
     Acceleration(1800.0),
@@ -93,16 +87,16 @@ struct PlayerInitialized;
 #[reflect(Resource)]
 pub struct PlayerAssets {
     #[dependency]
-    ducky:                Handle<Image>,
+    spritesheet:          Handle<Aseprite>,
     texture_atlas_layout: Handle<TextureAtlasLayout>,
 }
 
 impl FromWorld for PlayerAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            ducky:                world
+            spritesheet:          world
                 .resource::<AssetServer>()
-                .load("images/ducky.png"),
+                .load("spritesheets/player.ase"),
             texture_atlas_layout: world
                 .resource_mut::<Assets<TextureAtlasLayout>>()
                 .add(TextureAtlasLayout::from_grid(
