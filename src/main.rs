@@ -5,6 +5,7 @@
 
 mod asset_tracking;
 mod audio;
+mod camera;
 #[cfg(feature = "dev")]
 mod dev_tools;
 mod editor;
@@ -18,7 +19,6 @@ mod theme;
 use avian2d::prelude::{Gravity, PhysicsPlugins};
 use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_ecs_tiled::prelude::*;
-use bevy_yoleck::{vpeol::VpeolCameraState, vpeol_2d::Vpeol2dCameraControl};
 use game_state::{GameplaySet, Paused};
 use std::path::PathBuf;
 
@@ -81,6 +81,7 @@ impl Plugin for AppPlugin {
             menus::plugin,
             theme::plugin,
             screens::plugin,
+            camera::plugin,
         ));
 
         // Order new `AppSystems` variants by adding them here:
@@ -93,9 +94,6 @@ impl Plugin for AppPlugin {
             )
                 .chain(),
         );
-
-        // Spawn the main camera.
-        app.add_systems(Startup, spawn_camera);
     }
 }
 
@@ -112,13 +110,4 @@ enum AppSystems {
     RecordInput,
     /// Do everything else (consider splitting this into further variants).
     Update,
-}
-
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn((
-        Name::new("Camera"),
-        Camera2d,
-        VpeolCameraState::default(),
-        Vpeol2dCameraControl::default(),
-    ));
 }
