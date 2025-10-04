@@ -8,7 +8,7 @@ Get a bevy app up and running, preferably with a couple idea-related features al
 - new idea: __2d Heavy Bullets__
 
 ### Implementation steps
-- [ ] top down movement
+- [X] top down movement
 - [ ] 8-directional aiming
 - [ ] bullet shooting
 - [ ] enemies

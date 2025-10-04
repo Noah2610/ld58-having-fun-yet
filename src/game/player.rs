@@ -10,7 +10,7 @@ use crate::{
     game_state::GameplaySet,
 };
 use avian2d::prelude::*;
-use bevy::prelude::*;
+use bevy::{prelude::*, sprite::Anchor};
 use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
@@ -19,18 +19,26 @@ pub(super) fn plugin(app: &mut App) {
 
     app.add_systems(
         Update,
-        insert_player_sprite_and_animation
+        post_add_player
             .in_set(GameplaySet)
             .in_set(AppSystems::Update),
     );
 }
 
-fn insert_player_sprite_and_animation(
+fn post_add_player(
     mut commands: Commands,
     assets: Res<PlayerAssets>,
-    players: Query<Entity, (Added<Player>, Without<PlayerInitialized>)>,
+    players: Query<
+        (Entity, &Children),
+        (Added<Player>, Without<PlayerInitialized>),
+    >,
+    mut colliders: Query<
+        (&ColliderAabb, &mut Transform),
+        (With<Collider>, With<ChildOf>),
+    >,
 ) {
-    for entity in players {
+    for (entity, children) in players {
+        // Create animation and sprite from spritesheet for the player
         let animation = PlayerAnimation::new();
         commands.entity(entity).insert((
             PlayerInitialized,
@@ -40,6 +48,15 @@ fn insert_player_sprite_and_animation(
             }),
             animation,
         ));
+
+        // Offset all children colliders to be centered on the player
+        for &child in children {
+            if let Ok((aabb, mut transform)) = colliders.get_mut(child) {
+                let half = (aabb.size() * 0.5).extend(0.0);
+                transform.translation.x -= half.x;
+                transform.translation.y += half.y;
+            }
+        }
     }
 }
 
@@ -59,11 +76,12 @@ fn insert_player_sprite_and_animation(
 #[reflect(Component)]
 #[require(
     Name::new("Player"),
+    Anchor::CENTER,
     MovementController,
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
-    // Collider::rectangle(32.0, 32.0),
+    Collider::default(), // Player needs a collider in order for its children colliders to work
     LockedAxes::ROTATION_LOCKED
 )]
 pub struct Player;
