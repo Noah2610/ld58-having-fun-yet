@@ -4,7 +4,6 @@ use bevy::prelude::*;
 
 use crate::{
     asset_tracking::LoadResource,
-    audio::music,
     demo::player::{player, PlayerAssets},
     screens::Screen,
 };
@@ -28,7 +27,6 @@ pub fn spawn_level(
     mut commands: Commands,
     level_assets: Res<LevelAssets>,
     player_assets: Res<PlayerAssets>,
-    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     commands.spawn((
         Name::new("Level"),
@@ -36,7 +34,7 @@ pub fn spawn_level(
         Visibility::default(),
         DespawnOnExit(Screen::Gameplay),
         children![
-            player(400.0, &player_assets, &mut texture_atlas_layouts),
+            player(400.0, &player_assets),
             // (
             //     Name::new("Gameplay Music"),
             //     music(level_assets.music.clone())
