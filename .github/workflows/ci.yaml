@@ -12,8 +12,7 @@ concurrency:
 
 env:
   # Reduce compile time and cache size.
-  RUSTFLAGS: -Dwarnings -Zshare-generics=y -Zthreads=0
-  RUSTDOCFLAGS: -Dwarnings -Zshare-generics=y -Zthreads=0
+  RUSTFLAGS: -Zshare-generics=y -Zthreads=0
   # Use the same Rust toolchain across jobs so they can share a cache.
   toolchain: nightly-2025-10-03
 
@@ -44,6 +43,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: echo "RUSTFLAGS=${RUSTFLAGS:+$RUSTFLAGS }-Dwarnings" >> "${GITHUB_ENV}"
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@master
