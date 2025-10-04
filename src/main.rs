@@ -57,10 +57,11 @@ impl Plugin for AppPlugin {
                     "./tiled/tiled_types_export.json",
                 )),
                 tiled_types_filter:      TiledFilter::from(
-                    RegexSet::new([r"^ld58::.*$"]).expect(
-                        "[TiledPluginConfig.tiled_types_filter] Expected \
-                         regexes to be valid",
-                    ),
+                    RegexSet::new([r"^ld58::.*$", r"^bevy_ecs::name::Name$"])
+                        .expect(
+                            "[TiledPluginConfig.tiled_types_filter] Expected \
+                             regexes to be valid",
+                        ),
                 ),
             }),
             TiledPhysicsPlugin::<TiledPhysicsAvianBackend>::default(),

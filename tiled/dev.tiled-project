@@ -317,6 +317,23 @@
             "useAs": [
                 "property"
             ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 19,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "bevy_ecs::name::Name",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
         }
     ]
 }

@@ -2,11 +2,11 @@
 
 use crate::{
     asset_tracking::LoadResource,
-    demo::player::{player, PlayerAssets},
+    demo::player::{player, Player, PlayerAssets},
     screens::Screen,
 };
 use bevy::prelude::*;
-use bevy_ecs_tiled::prelude::{TiledMap, TiledMapAsset};
+use bevy_ecs_tiled::prelude::*;
 
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<LevelAssets>();
@@ -33,16 +33,32 @@ pub fn spawn_level(
     level_assets: Res<LevelAssets>,
     player_assets: Res<PlayerAssets>,
 ) {
-    commands.spawn((
-        Name::new("Level"),
-        TiledMap(level_assets.map.clone()),
-        DespawnOnExit(Screen::Gameplay),
-        children![
-            player(&player_assets),
-            // (
-            //     Name::new("Gameplay Music"),
-            //     music(level_assets.music.clone())
-            // )
-        ],
-    ));
+    commands
+        .spawn((
+            Name::new("Level"),
+            TiledMap(level_assets.map.clone()),
+            TiledPhysicsSettings::<TiledPhysicsAvianBackend> {
+                objects_filter: TiledFilter::All,
+                objects_layer_filter: TiledFilter::Names(vec!["solid".into()]),
+                ..default()
+            },
+            DespawnOnExit(Screen::Gameplay),
+            // children![
+            //     player(&player_assets),
+            //     // (
+            //     //     Name::new("Gameplay Music"),
+            //     //     music(level_assets.music.clone())
+            //     // )
+            // ],
+        ))
+        .observe(
+            |ev: On<TiledEvent<MapCreated>>,
+             mut commands: Commands,
+             assets: Res<PlayerAssets>,
+             players: Query<Entity, With<Player>>| {
+                for entity in players {
+                    commands.entity(entity).insert(player(&assets));
+                }
+            },
+        );
 }

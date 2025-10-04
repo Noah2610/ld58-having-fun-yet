@@ -31,10 +31,10 @@ pub fn player(player_assets: &PlayerAssets) -> impl Bundle {
             layout: player_assets.texture_atlas_layout.clone(),
             index:  player_animation.get_atlas_index(),
         }),
-        Transform::from_scale(Vec2::splat(8.0).extend(1.0)),
+        // Transform::from_scale(Vec2::splat(8.0).extend(1.0)),
         ScreenWrap,
         player_animation,
-        CharacterControllerBundle::new(Collider::circle(16.0)),
+        CharacterControllerBundle::new(Collider::rectangle(16.0, 16.0)),
     )
 }
 
@@ -65,8 +65,9 @@ pub struct PlayerAssets {
 impl FromWorld for PlayerAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            ducky: world.resource::<AssetServer>().load("images/ducky.png"),
-
+            ducky:                world
+                .resource::<AssetServer>()
+                .load("images/ducky.png"),
             texture_atlas_layout: world
                 .resource_mut::<Assets<TextureAtlasLayout>>()
                 .add(TextureAtlasLayout::from_grid(
