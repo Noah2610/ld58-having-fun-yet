@@ -1,6 +1,6 @@
 //! Development tools for the game. This plugin is only enabled in dev builds.
 
-use crate::{game_state::GameState, screens::Screen};
+use crate::screens::Screen;
 use avian2d::prelude::{PhysicsDebugPlugin, PhysicsGizmos};
 use bevy::{
     dev_tools::{

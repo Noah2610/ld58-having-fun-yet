@@ -10,7 +10,7 @@ bevy = { version = "0.17", features = [
     "experimental_bevy_ui_widgets",
     "serialize",
 ] }
-bevy-yoleck = "0.29.0"
+bevy-yoleck = { version = "0.29.0", features = ["vpeol_2d"] }
 bevy_egui = "0.37.0"
 leafwing-input-manager = "0.18.0"
 serde = { version = "1.0.228", features = ["derive"] }

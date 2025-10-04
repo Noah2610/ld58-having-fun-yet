@@ -18,6 +18,7 @@ mod theme;
 
 use avian2d::prelude::PhysicsPlugins;
 use bevy::{asset::AssetMetaCheck, prelude::*};
+use bevy_yoleck::{vpeol::VpeolCameraState, vpeol_2d::Vpeol2dCameraControl};
 use game_state::{GameplaySet, Paused};
 
 fn main() -> AppExit {
@@ -99,5 +100,10 @@ enum AppSystems {
 }
 
 fn spawn_camera(mut commands: Commands) {
-    commands.spawn((Name::new("Camera"), Camera2d));
+    commands.spawn((
+        Name::new("Camera"),
+        Camera2d,
+        VpeolCameraState::default(),
+        Vpeol2dCameraControl::default(),
+    ));
 }

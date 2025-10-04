@@ -1,10 +1,16 @@
 use crate::{
-    demo::player::{player, Player, PlayerAssets},
+    demo::{
+        ground::{ground, Ground},
+        player::{player, Player, PlayerAssets},
+    },
     screens::Screen,
 };
 use bevy::prelude::*;
 use bevy_egui::EguiPlugin;
-use bevy_yoleck::prelude::*;
+use bevy_yoleck::{
+    prelude::*,
+    vpeol_2d::{Vpeol2dPluginForEditor, Vpeol2dPluginForGame, Vpeol2dPosition},
+};
 
 pub fn plugin(app: &mut App) {
     let is_editor = cfg!(feature = "editor")
@@ -15,22 +21,33 @@ pub fn plugin(app: &mut App) {
             app.add_plugins(EguiPlugin::default());
         }
 
-        app.add_plugins((YoleckPluginForEditor, YoleckSyncWithEditorState {
-            when_editor: Screen::Editor,
-            when_game:   Screen::Gameplay,
-        }));
+        app.add_plugins((
+            YoleckPluginForEditor,
+            Vpeol2dPluginForEditor,
+            YoleckSyncWithEditorState {
+                when_editor: Screen::Editor,
+                when_game:   Screen::Gameplay,
+            },
+        ));
     } else {
-        app.add_plugins(YoleckPluginForGame);
+        app.add_plugins((YoleckPluginForGame, Vpeol2dPluginForGame));
     }
 
-    app.add_yoleck_entity_type({
-        YoleckEntityType::new("Player").with::<Player>()
-    });
+    app.add_yoleck_entity_type(
+        YoleckEntityType::new("Player")
+            .with::<Player>()
+            .with::<Vpeol2dPosition>(),
+    );
+    app.add_yoleck_entity_type(
+        YoleckEntityType::new("Ground")
+            .with::<Ground>()
+            .with::<Vpeol2dPosition>(),
+    );
 
-    app.add_systems(YoleckSchedule::Populate, populate_player);
-
-    // app.add_yoleck_edit_system(edit_rectangle);
-    // app.add_systems(YoleckSchedule::Populate, populate_rectangle);
+    app.add_systems(
+        YoleckSchedule::Populate,
+        (populate_player, populate_ground),
+    );
 }
 
 fn populate_player(
@@ -39,5 +56,11 @@ fn populate_player(
 ) {
     populate.populate(|_ctx, mut commands, _player| {
         commands.insert(player(&assets));
+    });
+}
+
+fn populate_ground(mut populate: YoleckPopulate<&Ground>) {
+    populate.populate(|_ctx, mut commands, _player| {
+        commands.insert(ground());
     });
 }
