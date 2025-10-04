@@ -53,9 +53,11 @@ impl Plugin for AppPlugin {
                 .set(ImagePlugin::default_nearest()),
             PhysicsPlugins::default().with_length_unit(16.0),
             TiledPlugin(TiledPluginConfig {
-                tiled_types_export_file: Some(PathBuf::from(
-                    "./tiled/tiled_types_export.json",
-                )),
+                tiled_types_export_file: if cfg!(feature = "dev") {
+                    Some(PathBuf::from("./tiled/tiled_types_export.json"))
+                } else {
+                    None
+                },
                 tiled_types_filter:      TiledFilter::from(
                     RegexSet::new([r"^ld58::.+$", r"^bevy_ecs.+$"]).expect(
                         "[TiledPluginConfig.tiled_types_filter] Expected \
