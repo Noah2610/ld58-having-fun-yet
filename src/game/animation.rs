@@ -4,14 +4,10 @@
 //! - [Sprite animation](https://github.com/bevyengine/bevy/blob/latest/examples/2d/sprite_animation.rs)
 //! - [Timers](https://github.com/bevyengine/bevy/blob/latest/examples/time/timers.rs)
 
+use crate::{AppSystems, GameplaySet, game::player::PlayerAssets};
+use avian2d::prelude::LinearVelocity;
 use bevy::prelude::*;
 use std::time::Duration;
-
-use crate::{
-    AppSystems,
-    GameplaySet,
-    demo::{movement::MovementController, player::PlayerAssets},
-};
 
 pub(super) fn plugin(app: &mut App) {
     // Animate based on controls.
@@ -31,18 +27,18 @@ pub(super) fn plugin(app: &mut App) {
 /// Update the sprite direction and animation state (idling/walking).
 fn update_animation_movement(
     mut player_query: Query<(
-        &MovementController,
+        &LinearVelocity,
         &mut Sprite,
         &mut PlayerAnimation,
     )>,
 ) {
-    for (controller, mut sprite, mut animation) in &mut player_query {
-        let dx = controller.intent.x;
-        if dx != 0.0 {
+    for (velocity, mut sprite, mut animation) in &mut player_query {
+        let dx = velocity.x;
+        if dx.abs() > 0.1 {
             sprite.flip_x = dx < 0.0;
         }
 
-        let animation_state = if controller.intent == Vec2::ZERO {
+        let animation_state = if velocity.0.abs().max_element() < 0.3 {
             PlayerAnimationState::Idling
         } else {
             PlayerAnimationState::Walking

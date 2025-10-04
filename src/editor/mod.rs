@@ -1,8 +1,5 @@
 use crate::{
-    demo::{
-        ground::{Ground, ground},
-        player::{Player, PlayerAssets, player},
-    },
+    game::{player::Player, solid::Solid},
     screens::Screen,
 };
 use bevy::prelude::*;
@@ -40,27 +37,27 @@ pub fn plugin(app: &mut App) {
     );
     app.add_yoleck_entity_type(
         YoleckEntityType::new("Ground")
-            .with::<Ground>()
+            .with::<Solid>()
             .with::<Vpeol2dPosition>(),
     );
 
-    app.add_systems(
-        YoleckSchedule::Populate,
-        (populate_player, populate_ground),
-    );
+    // app.add_systems(
+    //     YoleckSchedule::Populate,
+    //     (populate_player, populate_ground),
+    // );
 }
 
-fn populate_player(
-    mut populate: YoleckPopulate<&Player>,
-    assets: Res<PlayerAssets>,
-) {
-    populate.populate(|_ctx, mut commands, _player| {
-        commands.insert(player(&assets));
-    });
-}
+// fn populate_player(
+//     mut populate: YoleckPopulate<&Player>,
+//     assets: Res<PlayerAssets>,
+// ) {
+//     populate.populate(|_ctx, mut commands, _player| {
+//         commands.insert(player(&assets));
+//     });
+// }
 
-fn populate_ground(mut populate: YoleckPopulate<&Ground>) {
-    populate.populate(|_ctx, mut commands, _player| {
-        commands.insert(ground());
-    });
-}
+// fn populate_ground(mut populate: YoleckPopulate<&Solid>) {
+//     populate.populate(|_ctx, mut commands, _player| {
+//         commands.insert(solid());
+//     });
+// }

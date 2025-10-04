@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
-pub fn plugin(app: &mut App) {
+pub fn plugin(_app: &mut App) {
 }
 
 #[derive(
@@ -19,23 +19,15 @@ pub fn plugin(app: &mut App) {
     Eq,
     Default,
 )]
-pub struct Ground;
-
-pub fn ground() -> impl Bundle {
-    (
-        Name::new("Ground"),
-        Ground,
-        Transform::default(),
-        RigidBody::Static,
-        Collider::rectangle(16.0, 16.0),
-    )
-}
+#[reflect(Component)]
+#[require(Name::new("Solid"), RigidBody::Static)]
+pub struct Solid;
 
 #[derive(Resource, Asset, Reflect, Clone)]
-pub struct GroundAssets {}
+pub struct SolidAssets {}
 
-impl FromWorld for GroundAssets {
+impl FromWorld for SolidAssets {
     fn from_world(_world: &mut World) -> Self {
-        GroundAssets {}
+        SolidAssets {}
     }
 }

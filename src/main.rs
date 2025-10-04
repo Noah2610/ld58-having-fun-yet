@@ -5,7 +5,6 @@
 
 mod asset_tracking;
 mod audio;
-mod character_controller;
 #[cfg(feature = "dev")]
 mod dev_tools;
 mod editor;
@@ -16,7 +15,7 @@ mod menus;
 mod screens;
 mod theme;
 
-use avian2d::prelude::PhysicsPlugins;
+use avian2d::prelude::{Gravity, PhysicsPlugins};
 use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_ecs_tiled::prelude::*;
 use bevy_yoleck::{vpeol::VpeolCameraState, vpeol_2d::Vpeol2dCameraControl};
@@ -57,15 +56,16 @@ impl Plugin for AppPlugin {
                     "./tiled/tiled_types_export.json",
                 )),
                 tiled_types_filter:      TiledFilter::from(
-                    RegexSet::new([r"^ld58::.*$", r"^bevy_ecs::name::Name$"])
-                        .expect(
-                            "[TiledPluginConfig.tiled_types_filter] Expected \
-                             regexes to be valid",
-                        ),
+                    RegexSet::new([r"^ld58::.+$", r"^bevy_ecs.+$"]).expect(
+                        "[TiledPluginConfig.tiled_types_filter] Expected \
+                         regexes to be valid",
+                    ),
                 ),
             }),
             TiledPhysicsPlugin::<TiledPhysicsAvianBackend>::default(),
         ));
+
+        app.insert_resource(Gravity::ZERO);
 
         #[cfg(feature = "dev")]
         app.add_plugins(dev_tools::plugin);
@@ -76,7 +76,6 @@ impl Plugin for AppPlugin {
             editor::plugin,
             input::plugin,
             asset_tracking::plugin,
-            character_controller::plugin,
             audio::plugin,
             game::plugin,
             menus::plugin,

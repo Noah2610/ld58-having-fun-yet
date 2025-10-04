@@ -1,41 +1,46 @@
 //! Player-specific behavior.
 
 use crate::{
+    AppSystems,
     asset_tracking::LoadResource,
-    character_controller::CharacterControllerBundle,
     game::{
         animation::PlayerAnimation,
-        movement::{MovementController, ScreenWrap},
+        movement::{Acceleration, MovementController},
     },
+    game_state::GameplaySet,
 };
-use avian2d::prelude::Collider;
-use bevy::{
-    image::{ImageLoaderSettings, ImageSampler},
-    prelude::*,
-};
+use avian2d::prelude::*;
+use bevy::prelude::*;
 use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
+
+    app.add_systems(
+        Update,
+        insert_player_sprite_and_animation
+            .in_set(GameplaySet)
+            .in_set(AppSystems::Update),
+    );
 }
 
-/// The player character.
-pub fn player(player_assets: &PlayerAssets) -> impl Bundle {
-    let player_animation = PlayerAnimation::new();
-
-    (
-        Name::new("Player"),
-        Player,
-        Sprite::from_atlas_image(player_assets.ducky.clone(), TextureAtlas {
-            layout: player_assets.texture_atlas_layout.clone(),
-            index:  player_animation.get_atlas_index(),
-        }),
-        // Transform::from_scale(Vec2::splat(8.0).extend(1.0)),
-        ScreenWrap,
-        player_animation,
-        CharacterControllerBundle::new(Collider::rectangle(16.0, 16.0)),
-    )
+fn insert_player_sprite_and_animation(
+    mut commands: Commands,
+    assets: Res<PlayerAssets>,
+    players: Query<Entity, (Added<Player>, Without<PlayerInitialized>)>,
+) {
+    for entity in players {
+        let animation = PlayerAnimation::new();
+        commands.entity(entity).insert((
+            PlayerInitialized,
+            Sprite::from_atlas_image(assets.ducky.clone(), TextureAtlas {
+                layout: assets.texture_atlas_layout.clone(),
+                index:  animation.get_atlas_index(),
+            }),
+            animation,
+        ));
+    }
 }
 
 #[derive(
@@ -52,7 +57,19 @@ pub fn player(player_assets: &PlayerAssets) -> impl Bundle {
     Default,
 )]
 #[reflect(Component)]
+#[require(
+    Name::new("Player"),
+    MovementController,
+    Acceleration(1800.0),
+    LinearDamping(15.0),
+    RigidBody::Dynamic,
+    // Collider::rectangle(32.0, 32.0),
+    LockedAxes::ROTATION_LOCKED
+)]
 pub struct Player;
+
+#[derive(Component)]
+struct PlayerInitialized;
 
 #[derive(Resource, Asset, Reflect, Clone)]
 #[reflect(Resource)]
