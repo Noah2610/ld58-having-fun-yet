@@ -89,6 +89,8 @@ pub struct PlayerAssets {
     #[dependency]
     spritesheet:          Handle<Aseprite>,
     texture_atlas_layout: Handle<TextureAtlasLayout>,
+    #[dependency]
+    pub steps:            Vec<Handle<AudioSource>>,
 }
 
 impl FromWorld for PlayerAssets {
@@ -106,6 +108,15 @@ impl FromWorld for PlayerAssets {
                     Some(UVec2::splat(1)),
                     None,
                 )),
+            steps:                {
+                let assets = world.resource::<AssetServer>();
+                vec![
+                    assets.load("audio/steps/step1.ogg"),
+                    assets.load("audio/steps/step2.ogg"),
+                    assets.load("audio/steps/step3.ogg"),
+                    assets.load("audio/steps/step4.ogg"),
+                ]
+            },
         }
     }
 }

@@ -3663,7 +3663,9 @@ dependencies = [
  "bevy_aseprite_ultra",
  "bevy_ecs_tiled",
  "bevy_egui",
+ "getrandom",
  "leafwing-input-manager",
+ "rand",
  "serde",
  "tracing",
 ]

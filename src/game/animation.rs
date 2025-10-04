@@ -11,7 +11,13 @@ use crate::{
 };
 use avian2d::prelude::LinearVelocity;
 use bevy::prelude::*;
-use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
+use bevy_aseprite_ultra::prelude::{
+    AnimationState,
+    AseAnimation,
+    Aseprite,
+    NextFrameEvent,
+};
+use rand::{Rng, prelude::IndexedRandom};
 use std::time::Duration;
 
 pub(super) fn plugin(app: &mut App) {
@@ -21,7 +27,8 @@ pub(super) fn plugin(app: &mut App) {
         update_animation
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
-    );
+    )
+    .add_observer(play_step_sounds);
 }
 
 fn update_animation(
@@ -36,10 +43,31 @@ fn update_animation(
             sprite.flip_x = dx < 0.0;
         }
 
-        if velocity.0.abs().max_element() < 0.3 {
+        if velocity.0.abs().max_element() < 5.0 {
             ase.animation.play_loop("idle");
         } else {
             ase.animation.play_loop("walk");
         };
+    }
+}
+
+fn play_step_sounds(
+    _: On<NextFrameEvent>,
+    mut commands: Commands,
+    assets: Res<PlayerAssets>,
+    animation: Single<(&AseAnimation, &AnimationState), With<Player>>,
+) {
+    if animation.1.current_frame % 2 == 0
+        && animation
+            .0
+            .animation
+            .tag
+            .as_ref()
+            .map(|t| t == "walk")
+            .unwrap_or_default()
+    {
+        let rng = &mut rand::rng();
+        let sfx = assets.steps.choose(rng).unwrap().clone();
+        commands.spawn((AudioPlayer(sfx), PlaybackSettings::DESPAWN));
     }
 }

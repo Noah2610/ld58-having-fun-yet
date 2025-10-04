@@ -67,7 +67,8 @@ impl Plugin for AppPlugin {
             AsepriteUltraPlugin,
         ));
 
-        app.insert_resource(Gravity::ZERO);
+        app.insert_resource(Gravity::ZERO)
+            .insert_resource(ClearColor(Color::BLACK));
 
         #[cfg(feature = "dev")]
         app.add_plugins(dev_tools::plugin);
