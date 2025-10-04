@@ -5,12 +5,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-avian2d = { git = "https://github.com/Jondolf/avian", branch = "main", version = "0.4.0-dev" }
+avian2d = "0.4.0-dev"
 bevy = { version = "0.17", features = [
     "experimental_bevy_ui_widgets",
     "serialize",
 ] }
+bevy-inspector-egui = { version = "0.34", optional = true }
 bevy-yoleck = { version = "0.29.0", features = ["vpeol_2d"] }
+bevy_ecs_tiled = { version = "0.9.5", features = ["user_properties", "physics"] }
 bevy_egui = "0.37.0"
 leafwing-input-manager = "0.18.0"
 serde = { version = "1.0.228", features = ["derive"] }
@@ -22,11 +24,10 @@ tracing = { version = "0.1", features = [
     "release_max_level_warn",
 ] }
 
-[dependencies.bevy-inspector-egui]
-git = "https://github.com/jakobhellermann/bevy-inspector-egui"
-branch = "main"
-version = "0.34"
-optional = true
+[patch.crates-io]
+bevy_ecs_tiled = { git = "https://github.com/adrien-bon/bevy_ecs_tiled", branch = "feat/bevy-0.17" }
+bevy-inspector-egui = { git = "https://github.com/jakobhellermann/bevy-inspector-egui", branch = "main" }
+avian2d = { git = "https://github.com/Jondolf/avian", branch = "main" }
 
 [target.wasm32-unknown-unknown.dependencies]
 # getrandom = { version = "0.3", features = ["wasm_js"] }
@@ -42,6 +43,7 @@ dev = [
     # Improve error messages coming from Bevy
     "bevy/track_location",
     "bevy-inspector-egui",
+    "bevy_ecs_tiled/debug"
 ]
 dev_native = [
     "dev",

@@ -18,6 +18,7 @@ mod theme;
 
 use avian2d::prelude::PhysicsPlugins;
 use bevy::{asset::AssetMetaCheck, prelude::*};
+use bevy_ecs_tiled::prelude::*;
 use bevy_yoleck::{vpeol::VpeolCameraState, vpeol_2d::Vpeol2dCameraControl};
 use game_state::{GameplaySet, Paused};
 
@@ -49,6 +50,7 @@ impl Plugin for AppPlugin {
                     ..default()
                 }),
             PhysicsPlugins::default(),
+            TiledPlugin::default(),
         ));
 
         #[cfg(feature = "dev")]

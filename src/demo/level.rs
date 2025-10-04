@@ -1,12 +1,12 @@
 //! Spawn the main level.
 
-use bevy::prelude::*;
-
 use crate::{
     asset_tracking::LoadResource,
     demo::player::{player, PlayerAssets},
     screens::Screen,
 };
+use bevy::prelude::*;
+use bevy_ecs_tiled::prelude::{TiledMap, TiledMapAsset};
 
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<LevelAssets>();
@@ -14,11 +14,16 @@ pub(super) fn plugin(app: &mut App) {
 
 #[derive(Resource, Asset, Clone, Reflect)]
 #[reflect(Resource)]
-pub struct LevelAssets {}
+pub struct LevelAssets {
+    #[dependency]
+    map: Handle<TiledMapAsset>,
+}
 
 impl FromWorld for LevelAssets {
     fn from_world(world: &mut World) -> Self {
-        Self {}
+        Self {
+            map: world.resource::<AssetServer>().load("maps/dev.tmx"),
+        }
     }
 }
 
@@ -30,8 +35,7 @@ pub fn spawn_level(
 ) {
     commands.spawn((
         Name::new("Level"),
-        Transform::default(),
-        Visibility::default(),
+        TiledMap(level_assets.map.clone()),
         DespawnOnExit(Screen::Gameplay),
         children![
             player(&player_assets),
