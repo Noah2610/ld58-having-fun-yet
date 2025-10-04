@@ -827,6 +827,7 @@ name = "bevy_ecs_tiled"
 version = "0.9.5"
 source = "git+https://github.com/adrien-bon/bevy_ecs_tiled?branch=feat%2Fbevy-0.17#6b8d0f11f553c308c6d783c450ef759759d158cd"
 dependencies = [
+ "avian2d",
  "bevy",
  "bevy_ecs_tilemap",
  "futures-lite",

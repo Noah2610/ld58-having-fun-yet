@@ -21,6 +21,7 @@ use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_ecs_tiled::prelude::*;
 use bevy_yoleck::{vpeol::VpeolCameraState, vpeol_2d::Vpeol2dCameraControl};
 use game_state::{GameplaySet, Paused};
+use std::path::PathBuf;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -48,9 +49,21 @@ impl Plugin for AppPlugin {
                     }
                     .into(),
                     ..default()
-                }),
-            PhysicsPlugins::default(),
-            TiledPlugin::default(),
+                })
+                .set(ImagePlugin::default_nearest()),
+            PhysicsPlugins::default().with_length_unit(16.0),
+            TiledPlugin(TiledPluginConfig {
+                tiled_types_export_file: Some(PathBuf::from(
+                    "./tiled/tiled_types_export.json",
+                )),
+                tiled_types_filter:      TiledFilter::from(
+                    RegexSet::new([r"^ld58::.*$"]).expect(
+                        "[TiledPluginConfig.tiled_types_filter] Expected \
+                         regexes to be valid",
+                    ),
+                ),
+            }),
+            TiledPhysicsPlugin::<TiledPhysicsAvianBackend>::default(),
         ));
 
         #[cfg(feature = "dev")]

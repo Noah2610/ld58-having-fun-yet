@@ -65,13 +65,7 @@ pub struct PlayerAssets {
 impl FromWorld for PlayerAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            ducky: world.resource::<AssetServer>().load_with_settings(
-                "images/ducky.png",
-                |settings: &mut ImageLoaderSettings| {
-                    // Use `nearest` image sampling to preserve pixel art style.
-                    settings.sampler = ImageSampler::nearest();
-                },
-            ),
+            ducky: world.resource::<AssetServer>().load("images/ducky.png"),
 
             texture_atlas_layout: world
                 .resource_mut::<Assets<TextureAtlasLayout>>()

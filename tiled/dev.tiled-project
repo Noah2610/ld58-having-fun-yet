@@ -1,0 +1,322 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "../"
+    ],
+    "properties": [
+    ],
+    "propertyTypes": [
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 1,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "color",
+                    "value": "#ffffffff"
+                }
+            ],
+            "name": "bevy_color::color::Color",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "bevy_time::timer::TimerMode:::Variant",
+                    "type": "string",
+                    "value": "Once"
+                }
+            ],
+            "name": "bevy_time::timer::TimerMode",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 3,
+            "name": "bevy_time::timer::TimerMode:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Once",
+                "Repeating"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 4,
+            "members": [
+                {
+                    "name": "x",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "y",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "glam::Vec2",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 5,
+            "members": [
+            ],
+            "name": "ld58::audio::Music",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 6,
+            "members": [
+            ],
+            "name": "ld58::audio::SoundEffect",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 7,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "ld58::demo::animation::PlayerAnimationState:::Variant",
+                    "type": "string",
+                    "value": "Idling"
+                }
+            ],
+            "name": "ld58::demo::animation::PlayerAnimationState",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 8,
+            "name": "ld58::demo::animation::PlayerAnimationState:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Idling",
+                "Walking"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 9,
+            "members": [
+                {
+                    "name": "map",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::demo::level::LevelAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "intent",
+                    "propertyType": "glam::Vec2",
+                    "type": "class",
+                    "value": {
+                    }
+                },
+                {
+                    "name": "max_speed",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::demo::movement::MovementController",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 11,
+            "members": [
+            ],
+            "name": "ld58::demo::movement::ScreenWrap",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+            ],
+            "name": "ld58::demo::player::Player",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 13,
+            "members": [
+                {
+                    "name": "ducky",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "texture_atlas_layout",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::demo::player::PlayerAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+            ],
+            "name": "ld58::menus::credits::CreditsAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 15,
+            "members": [
+            ],
+            "name": "ld58::menus::settings::GlobalVolumeLabel",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 16,
+            "members": [
+                {
+                    "name": "fade_duration",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "t",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "total_duration",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::screens::splash::ImageNodeFadeInOut",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 17,
+            "members": [
+                {
+                    "name": "click",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "hover",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::theme::interaction::InteractionAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 18,
+            "members": [
+                {
+                    "name": "hovered",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "none",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "pressed",
+                    "type": "color",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::theme::interaction::InteractionPalette",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        }
+    ]
+}
