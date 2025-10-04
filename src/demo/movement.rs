@@ -15,7 +15,7 @@
 
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::{AppSystems, PausableSystems};
+use crate::{AppSystems, GameplaySet};
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(
@@ -23,7 +23,7 @@ pub(super) fn plugin(app: &mut App) {
         (apply_movement, apply_screen_wrap)
             .chain()
             .in_set(AppSystems::Update)
-            .in_set(PausableSystems),
+            .in_set(GameplaySet),
     );
 }
 
@@ -44,7 +44,7 @@ pub struct MovementController {
 impl Default for MovementController {
     fn default() -> Self {
         Self {
-            intent: Vec2::ZERO,
+            intent:    Vec2::ZERO,
             // 400 pixels per second is a nice default, but we can still vary this per character.
             max_speed: 400.0,
         }

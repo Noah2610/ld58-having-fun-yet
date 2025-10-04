@@ -1,7 +1,7 @@
 //! Template from `avian2d`'s `dynamic_character_2d` example:
 //!   https://github.com/Jondolf/avian/blob/main/crates/avian2d/examples/dynamic_character_2d/plugin.rs
 
-use crate::actions::Action;
+use crate::input::PlayerAction;
 use avian2d::{math::*, prelude::*};
 use bevy::{ecs::query::Has, prelude::*};
 use leafwing_input_manager::prelude::ActionState;
@@ -152,8 +152,8 @@ fn update_grounded(
 /// Responds to [`MovementAction`] events and moves character controllers accordingly.
 fn movement(
     time: Res<Time>,
+    action_state: Res<ActionState<PlayerAction>>,
     mut controllers: Query<(
-        &ActionState<Action>,
         &MovementAcceleration,
         &JumpImpulse,
         &mut LinearVelocity,
@@ -165,18 +165,17 @@ fn movement(
     let delta_time = time.delta_secs();
 
     for (
-        action_state,
         movement_acceleration,
         jump_impulse,
         mut linear_velocity,
         is_grounded,
     ) in &mut controllers
     {
-        if is_grounded && action_state.just_pressed(&Action::Jump) {
+        if is_grounded && action_state.just_pressed(&PlayerAction::Jump) {
             linear_velocity.y = jump_impulse.0;
         }
 
-        let direction = action_state.clamped_value(&Action::Move);
+        let direction = action_state.clamped_value(&PlayerAction::Move);
         if direction.abs() > DEADZONE {
             linear_velocity.x +=
                 direction * movement_acceleration.0 * delta_time;

@@ -10,7 +10,7 @@ use std::time::Duration;
 use crate::{
     demo::{movement::MovementController, player::PlayerAssets},
     AppSystems,
-    PausableSystems,
+    GameplaySet,
 };
 
 pub(super) fn plugin(app: &mut App) {
@@ -24,7 +24,7 @@ pub(super) fn plugin(app: &mut App) {
                 .run_if(resource_exists::<PlayerAssets>)
                 .in_set(AppSystems::Update),
         )
-            .in_set(PausableSystems),
+            .in_set(GameplaySet),
     );
 }
 

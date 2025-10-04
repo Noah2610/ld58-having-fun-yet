@@ -8,8 +8,12 @@ edition = "2024"
 avian2d = { git = "https://github.com/Jondolf/avian", branch = "main", version = "0.4.0-dev" }
 bevy = { version = "0.17", features = [
     "experimental_bevy_ui_widgets",
+    "serialize",
 ] }
+bevy-yoleck = "0.29.0"
+bevy_egui = "0.37.0"
 leafwing-input-manager = "0.18.0"
+serde = { version = "1.0.228", features = ["derive"] }
 # Compile out low-severity logs to improve performance.
 # Remove these features if you want to profile your game with tracy.
 # (see <https://github.com/bevyengine/bevy/blob/main/docs/profiling.md#tracy-profiler>)
@@ -29,7 +33,7 @@ optional = true
 
 [features]
 # Default to a native dev build.
-default = ["dev_native"]
+default = ["dev_native", "editor"]
 dev = [
     # Improve compile times for dev builds by linking Bevy as a dynamic library.
     "bevy/dynamic_linking",
@@ -46,7 +50,7 @@ dev_native = [
     # Enable embedded asset hot reloading for native dev builds.
     "bevy/embedded_watcher",
 ]
-
+editor = []
 
 [package.metadata.bevy_cli.release]
 # Disable dev features for release builds.

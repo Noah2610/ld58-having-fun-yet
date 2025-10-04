@@ -3,20 +3,22 @@
 // Disable console on Windows for non-dev builds.
 #![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
 
-mod actions;
 mod asset_tracking;
 mod audio;
 mod character_controller;
 mod demo;
 #[cfg(feature = "dev")]
 mod dev_tools;
+mod editor;
+mod game_state;
+mod input;
 mod menus;
 mod screens;
 mod theme;
 
 use avian2d::prelude::PhysicsPlugins;
 use bevy::{asset::AssetMetaCheck, prelude::*};
-use leafwing_input_manager::prelude::InputManagerPlugin;
+use game_state::{GameplaySet, Paused};
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -45,21 +47,24 @@ impl Plugin for AppPlugin {
                     .into(),
                     ..default()
                 }),
-            InputManagerPlugin::<actions::Action>::default(),
             PhysicsPlugins::default(),
         ));
 
+        #[cfg(feature = "dev")]
+        app.add_plugins(dev_tools::plugin);
+
         // Add other plugins.
         app.add_plugins((
-            character_controller::plugin,
+            game_state::plugin,
+            editor::plugin,
+            input::plugin,
             asset_tracking::plugin,
+            character_controller::plugin,
             audio::plugin,
             demo::plugin,
-            #[cfg(feature = "dev")]
-            dev_tools::plugin,
             menus::plugin,
-            screens::plugin,
             theme::plugin,
+            screens::plugin,
         ));
 
         // Order new `AppSystems` variants by adding them here:
@@ -71,13 +76,6 @@ impl Plugin for AppPlugin {
                 AppSystems::Update,
             )
                 .chain(),
-        );
-
-        // Set up the `Pause` state.
-        app.init_state::<Pause>();
-        app.configure_sets(
-            Update,
-            PausableSystems.run_if(in_state(Pause(false))),
         );
 
         // Spawn the main camera.
@@ -99,14 +97,6 @@ enum AppSystems {
     /// Do everything else (consider splitting this into further variants).
     Update,
 }
-
-/// Whether or not the game is paused.
-#[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
-struct Pause(pub bool);
-
-/// A system set for systems that shouldn't run while the game is paused.
-#[derive(SystemSet, Copy, Clone, Eq, PartialEq, Hash, Debug)]
-struct PausableSystems;
 
 fn spawn_camera(mut commands: Commands) {
     commands.spawn((Name::new("Camera"), Camera2d));

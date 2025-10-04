@@ -2,7 +2,7 @@
 
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
-use crate::{Pause, demo::level::spawn_level, menus::Menu, screens::Screen};
+use crate::{demo::level::spawn_level, menus::Menu, screens::Screen, Paused};
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Screen::Gameplay), spawn_level);
@@ -12,9 +12,10 @@ pub(super) fn plugin(app: &mut App) {
         Update,
         (
             (pause, spawn_pause_overlay, open_pause_menu).run_if(
-                in_state(Screen::Gameplay)
-                    .and(in_state(Menu::None))
-                    .and(input_just_pressed(KeyCode::KeyP).or(input_just_pressed(KeyCode::Escape))),
+                in_state(Screen::Gameplay).and(in_state(Menu::None)).and(
+                    input_just_pressed(KeyCode::KeyP)
+                        .or(input_just_pressed(KeyCode::Escape)),
+                ),
             ),
             close_menu.run_if(
                 in_state(Screen::Gameplay)
@@ -30,12 +31,12 @@ pub(super) fn plugin(app: &mut App) {
     );
 }
 
-fn unpause(mut next_pause: ResMut<NextState<Pause>>) {
-    next_pause.set(Pause(false));
+fn unpause(mut next_pause: ResMut<NextState<Paused>>) {
+    next_pause.set(Paused(false));
 }
 
-fn pause(mut next_pause: ResMut<NextState<Pause>>) {
-    next_pause.set(Pause(true));
+fn pause(mut next_pause: ResMut<NextState<Paused>>) {
+    next_pause.set(Paused(true));
 }
 
 fn spawn_pause_overlay(mut commands: Commands) {
@@ -48,7 +49,7 @@ fn spawn_pause_overlay(mut commands: Commands) {
         },
         GlobalZIndex(1),
         BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.8)),
-        DespawnOnExit(Pause(true)),
+        DespawnOnExit(Paused(true)),
     ));
 }
 

@@ -1,7 +1,6 @@
 //! Player-specific behavior.
 
 use crate::{
-    actions::Action,
     asset_tracking::LoadResource,
     character_controller::CharacterControllerBundle,
     demo::{
@@ -14,18 +13,15 @@ use bevy::{
     image::{ImageLoaderSettings, ImageSampler},
     prelude::*,
 };
-use leafwing_input_manager::prelude::{
-    GamepadControlAxis,
-    InputMap,
-    VirtualAxis,
-};
+use bevy_yoleck::prelude::YoleckComponent;
+use serde::{Deserialize, Serialize};
 
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
 }
 
 /// The player character.
-pub fn player(max_speed: f32, player_assets: &PlayerAssets) -> impl Bundle {
+pub fn player(player_assets: &PlayerAssets) -> impl Bundle {
     let player_animation = PlayerAnimation::new();
 
     (
@@ -36,29 +32,29 @@ pub fn player(max_speed: f32, player_assets: &PlayerAssets) -> impl Bundle {
             index:  player_animation.get_atlas_index(),
         }),
         Transform::from_scale(Vec2::splat(8.0).extend(1.0)),
-        MovementController {
-            max_speed,
-            ..default()
-        },
         ScreenWrap,
         player_animation,
         CharacterControllerBundle::new(Collider::circle(16.0)),
-        InputMap::default()
-            .with_axis(Action::Move, VirtualAxis::ad())
-            .with_axis(Action::Move, VirtualAxis::horizontal_arrow_keys())
-            .with_axis(Action::Move, GamepadControlAxis::LEFT_X)
-            .with_axis(Action::Move, VirtualAxis::dpad_x())
-            .with(Action::Jump, KeyCode::Space)
-            .with(Action::Jump, KeyCode::KeyK)
-            .with(Action::Jump, GamepadButton::South),
     )
 }
 
-#[derive(Component, Debug, Clone, Copy, PartialEq, Eq, Default, Reflect)]
+#[derive(
+    Component,
+    Reflect,
+    Serialize,
+    Deserialize,
+    YoleckComponent,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Default,
+)]
 #[reflect(Component)]
-struct Player;
+pub struct Player;
 
-#[derive(Resource, Asset, Clone, Reflect)]
+#[derive(Resource, Asset, Reflect, Clone)]
 #[reflect(Resource)]
 pub struct PlayerAssets {
     #[dependency]

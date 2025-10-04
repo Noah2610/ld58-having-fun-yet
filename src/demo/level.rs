@@ -34,7 +34,7 @@ pub fn spawn_level(
         Visibility::default(),
         DespawnOnExit(Screen::Gameplay),
         children![
-            player(400.0, &player_assets),
+            player(&player_assets),
             // (
             //     Name::new("Gameplay Music"),
             //     music(level_assets.music.clone())
