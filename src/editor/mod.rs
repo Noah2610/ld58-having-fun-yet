@@ -1,7 +1,7 @@
 use crate::{
     demo::{
-        ground::{ground, Ground},
-        player::{player, Player, PlayerAssets},
+        ground::{Ground, ground},
+        player::{Player, PlayerAssets, player},
     },
     screens::Screen,
 };

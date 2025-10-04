@@ -8,9 +8,9 @@ use bevy::prelude::*;
 use std::time::Duration;
 
 use crate::{
-    demo::{movement::MovementController, player::PlayerAssets},
     AppSystems,
     GameplaySet,
+    demo::{movement::MovementController, player::PlayerAssets},
 };
 
 pub(super) fn plugin(app: &mut App) {

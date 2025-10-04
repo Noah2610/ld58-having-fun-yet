@@ -72,23 +72,22 @@ where
 }
 
 /// A small square button with text and an action defined as an [`Observer`].
-pub fn button_small<E, B, M, I>(text: impl Into<String>, action: I) -> impl Bundle
+pub fn button_small<E, B, M, I>(
+    text: impl Into<String>,
+    action: I,
+) -> impl Bundle
 where
     E: EntityEvent,
     B: Bundle,
     I: IntoObserverSystem<E, B, M>,
 {
-    button_base(
-        text,
-        action,
-        Node {
-            width: px(30),
-            height: px(30),
-            align_items: AlignItems::Center,
-            justify_content: JustifyContent::Center,
-            ..default()
-        },
-    )
+    button_base(text, action, Node {
+        width: px(30),
+        height: px(30),
+        align_items: AlignItems::Center,
+        justify_content: JustifyContent::Center,
+        ..default()
+    })
 }
 
 /// A simple button with text and an action defined as an [`Observer`]. The button's layout is provided by `button_bundle`.
@@ -114,7 +113,7 @@ where
                     Button,
                     BackgroundColor(BUTTON_BACKGROUND),
                     InteractionPalette {
-                        none: BUTTON_BACKGROUND,
+                        none:    BUTTON_BACKGROUND,
                         hovered: BUTTON_HOVERED_BACKGROUND,
                         pressed: BUTTON_PRESSED_BACKGROUND,
                     },

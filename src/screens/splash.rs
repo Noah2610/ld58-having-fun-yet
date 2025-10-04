@@ -38,8 +38,9 @@ pub(super) fn plugin(app: &mut App) {
     // Exit the splash screen early if the player hits escape.
     app.add_systems(
         Update,
-        enter_title_screen
-            .run_if(input_just_pressed(KeyCode::Escape).and(in_state(Screen::Splash))),
+        enter_title_screen.run_if(
+            input_just_pressed(KeyCode::Escape).and(in_state(Screen::Splash)),
+        ),
     );
 }
 
@@ -71,8 +72,8 @@ fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
             )),
             ImageNodeFadeInOut {
                 total_duration: SPLASH_DURATION_SECS,
-                fade_duration: SPLASH_FADE_DURATION_SECS,
-                t: 0.0,
+                fade_duration:  SPLASH_FADE_DURATION_SECS,
+                t:              0.0,
             },
         )],
     ));
@@ -84,9 +85,9 @@ struct ImageNodeFadeInOut {
     /// Total duration in seconds.
     total_duration: f32,
     /// Fade duration in seconds.
-    fade_duration: f32,
+    fade_duration:  f32,
     /// Current progress in seconds, between 0 and [`Self::total_duration`].
-    t: f32,
+    t:              f32,
 }
 
 impl ImageNodeFadeInOut {
@@ -100,13 +101,18 @@ impl ImageNodeFadeInOut {
     }
 }
 
-fn tick_fade_in_out(time: Res<Time>, mut animation_query: Query<&mut ImageNodeFadeInOut>) {
+fn tick_fade_in_out(
+    time: Res<Time>,
+    mut animation_query: Query<&mut ImageNodeFadeInOut>,
+) {
     for mut anim in &mut animation_query {
         anim.t += time.delta_secs();
     }
 }
 
-fn apply_fade_in_out(mut animation_query: Query<(&ImageNodeFadeInOut, &mut ImageNode)>) {
+fn apply_fade_in_out(
+    mut animation_query: Query<(&ImageNodeFadeInOut, &mut ImageNode)>,
+) {
     for (anim, mut image) in &mut animation_query {
         image.color.set_alpha(anim.alpha())
     }
@@ -134,7 +140,10 @@ fn tick_splash_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
     timer.0.tick(time.delta());
 }
 
-fn check_splash_timer(timer: ResMut<SplashTimer>, mut next_screen: ResMut<NextState<Screen>>) {
+fn check_splash_timer(
+    timer: ResMut<SplashTimer>,
+    mut next_screen: ResMut<NextState<Screen>>,
+) {
     if timer.0.just_finished() {
         next_screen.set(Screen::Title);
     }
