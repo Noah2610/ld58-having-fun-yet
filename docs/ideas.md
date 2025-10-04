@@ -1,5 +1,25 @@
 # Game Concept Ideas
+## 2d Heavy Bullets
+- top down, twin-stick shooter
+    * WASD: move, arrows: aim, space: shoot
+    * controller support
+- shooting:
+    * only one bullet in clip
+    * bullet ricochets and drops off shot enemies
+    * collect bullet to reload
+    * shooting causes player knockback
+- move slower with bullet / faster without
+- scoring + high-score, arcade-style
+    * possibly online leaderboard ?
+- difficulty scaling over time:
+    * increase enemy spawn frequency
+    * increase enemy HP ?
+
 ## Losing My Marbles
+
+<details>
+<summary>scrapped idea</summary>
+
 ### Story
 You are a happy, child-like creature, frolicking around a
 "Happy Fun Land". Along your journey you find colorful marbles to collect,
@@ -58,3 +78,5 @@ while doctors / guards chase and hunt you down.
 ### Detainment QTE
 During escape-sequence, if doctor/guard catches you:
 button mashing QTE to break free? maybe strength based on collected "Toys"/Limbs
+
+</details>
