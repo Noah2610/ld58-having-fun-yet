@@ -6,10 +6,10 @@
 mod asset_tracking;
 mod audio;
 mod character_controller;
-mod demo;
 #[cfg(feature = "dev")]
 mod dev_tools;
 mod editor;
+mod game;
 mod game_state;
 mod input;
 mod menus;
@@ -78,7 +78,7 @@ impl Plugin for AppPlugin {
             asset_tracking::plugin,
             character_controller::plugin,
             audio::plugin,
-            demo::plugin,
+            game::plugin,
             menus::plugin,
             theme::plugin,
             screens::plugin,

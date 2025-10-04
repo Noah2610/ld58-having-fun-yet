@@ -3,7 +3,7 @@
 use crate::{
     asset_tracking::LoadResource,
     character_controller::CharacterControllerBundle,
-    demo::{
+    game::{
         animation::PlayerAnimation,
         movement::{MovementController, ScreenWrap},
     },

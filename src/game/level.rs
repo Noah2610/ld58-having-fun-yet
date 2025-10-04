@@ -2,7 +2,7 @@
 
 use crate::{
     asset_tracking::LoadResource,
-    demo::player::{Player, PlayerAssets, player},
+    game::player::{Player, PlayerAssets, player},
     screens::Screen,
 };
 use bevy::prelude::*;
