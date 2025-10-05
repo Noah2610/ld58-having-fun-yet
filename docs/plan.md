@@ -12,6 +12,7 @@
 - [ ] bullet knockback enemy (? not necessary if one-shot)
 - [X] player recoil knockback
 - [X] collect dropped bullet
+- [ ] game over screen
 
 # Rough Plan
 ## Day 1

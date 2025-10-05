@@ -25,13 +25,6 @@ pub(super) fn plugin(app: &mut App) {
             .in_set(GameplaySet)
             .in_set(AppSystems::Update),
     );
-
-    app.add_systems(
-        Update,
-        handle_enemy_collision
-            .in_set(GameplaySet)
-            .in_set(AppSystems::Update),
-    );
 }
 
 fn post_add_player(
@@ -45,7 +38,8 @@ fn post_add_player(
             .insert((PlayerInitialized, AseAnimation {
                 aseprite:  assets.spritesheet.clone(),
                 animation: Animation::tag("idle"),
-            }));
+            }))
+            .observe(handle_enemy_collision);
     }
 }
 
@@ -123,28 +117,20 @@ impl FromWorld for PlayerAssets {
 }
 
 fn handle_enemy_collision(
-    contact_graph: Res<ContactGraph>,
+    trigger: On<CollisionStart>,
     assets: Res<PlayerAssets>,
-    players: Query<(Entity, &mut LinearVelocity), (With<Player>, Without<Enemy>)>,
-    enemies: Query<Entity, (With<Enemy>, Without<Player>)>,
+    mut players: Query<(&Transform, &mut LinearVelocity), (With<Player>, Without<Enemy>)>,
+    enemies: Query<&Transform, (With<Enemy>, Without<Player>)>,
 ) {
-    for (player, mut velocity) in players {
-        let mut knockback = Vec2::ZERO;
-        let mut has_collision = false;
+    let player = trigger.collider1;
+    let enemy = trigger.collider2;
 
-        for enemy in enemies {
-            if let Some((_, contact_pair)) = contact_graph.get(enemy, player) {
-                if contact_pair.is_touching() {
-                    has_collision = true;
-                    for manifold in &contact_pair.manifolds {
-                        knockback += manifold.normal.normalize();
-                    }
-                }
-            }
-        }
-
-        if has_collision {
-            velocity.0 += knockback * assets.knockback_strength;
-        }
+    if let (Ok((player_transform, mut velocity)), Ok(enemy_transform)) =
+        (players.get_mut(player), enemies.get(enemy))
+    {
+        let direction = (player_transform.translation.truncate()
+            - enemy_transform.translation.truncate())
+        .normalize_or_zero();
+        velocity.0 += direction * assets.knockback_strength;
     }
 }
