@@ -13,7 +13,6 @@ use crate::{
 use avian2d::prelude::*;
 use bevy::{prelude::*, sprite::Anchor};
 use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
-use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
 pub(super) fn plugin(app: &mut App) {
@@ -44,17 +43,7 @@ fn post_add_player(
 }
 
 #[derive(
-    Component,
-    Reflect,
-    Serialize,
-    Deserialize,
-    YoleckComponent,
-    Debug,
-    Clone,
-    Copy,
-    PartialEq,
-    Eq,
-    Default,
+    Component, Reflect, Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Default,
 )]
 #[reflect(Component)]
 #[require(

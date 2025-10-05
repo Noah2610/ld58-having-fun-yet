@@ -9,7 +9,6 @@ mod camera;
 #[cfg(feature = "dev")]
 mod dev_tools;
 mod direction;
-mod editor;
 mod game;
 mod game_state;
 mod input;
@@ -78,7 +77,6 @@ impl Plugin for AppPlugin {
         // Add other plugins.
         app.add_plugins((
             game_state::plugin,
-            editor::plugin,
             input::plugin,
             asset_tracking::plugin,
             audio::plugin,

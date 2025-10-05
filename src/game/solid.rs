@@ -1,23 +1,12 @@
 use crate::game::util::{CollisionTag, FixObjectColliders};
 use avian2d::prelude::*;
 use bevy::prelude::*;
-use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
 pub fn plugin(_app: &mut App) {}
 
 #[derive(
-    Component,
-    Reflect,
-    Serialize,
-    Deserialize,
-    YoleckComponent,
-    Clone,
-    Copy,
-    Debug,
-    PartialEq,
-    Eq,
-    Default,
+    Component, Reflect, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, Default,
 )]
 #[reflect(Component)]
 #[require(

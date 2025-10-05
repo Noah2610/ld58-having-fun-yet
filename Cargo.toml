@@ -11,7 +11,6 @@ bevy = { version = "0.17", features = [
     "serialize",
 ] }
 bevy-inspector-egui = { version = "0.34", optional = true }
-bevy-yoleck = { version = "0.29.0", features = ["vpeol_2d"] }
 bevy_aseprite_ultra = "0.7.0"
 bevy_ecs_tiled = { version = "0.9.5", features = ["user_properties", "avian"] }
 bevy_egui = "0.37.0"
@@ -99,10 +98,6 @@ opt-level = 1
 # Enable a large amount of optimization in the dev profile for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
-
-# Remove expensive debug assertions due to <https://github.com/bevyengine/bevy/issues/14291>
-[profile.dev.package.wgpu-types]
-debug-assertions = false
 
 [profile.release]
 # Compile the entire crate as one unit.
