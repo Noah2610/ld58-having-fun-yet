@@ -187,6 +187,9 @@ jobs:
             (matrix.platform == 'macos' && inputs.build_for_macos)
           }}' >> "${GITHUB_ENV}"
 
+          # DEBUG: Map `inputs.upload_to_github` to `env.upload_to_github`.
+          echo 'upload_to_github=${{ inputs.upload_to_github }}' >> "${GITHUB_ENV}"
+
       - name: Checkout repository
         if: ${{ env.is_platform_enabled == 'true' }}
         uses: actions/checkout@v4
@@ -311,7 +314,7 @@ jobs:
           retention-days: 1
 
       - name: Upload package to GitHub release
-        if: ${{ env.is_platform_enabled == 'true' && inputs.upload_to_github == 'true' }}
+        if: ${{ env.is_platform_enabled == 'true' && env.upload_to_github == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
