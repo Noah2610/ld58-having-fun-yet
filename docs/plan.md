@@ -13,9 +13,12 @@
 - [X] player recoil knockback
 - [X] collect dropped bullet
 - [ ] game over screen
+- [ ] enemy spawning system, spawn over time?
 - [ ] improve enemy behavior, randomize movement a bit?
 - [ ] slightly randomize bullet ricochet direction
 - [ ] add scoring system
+- [ ] bullet available indicator
+    - [ ] arrow pointing towards bullet if far enough away ?
 
 # Rough Plan
 ## Day 1
