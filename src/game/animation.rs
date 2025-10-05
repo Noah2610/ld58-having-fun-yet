@@ -94,7 +94,7 @@ fn play_step_sounds(
             .animation
             .tag
             .as_ref()
-            .map(|t| t == "walk")
+            .map(|t| t.starts_with("walk"))
             .unwrap_or_default()
     {
         let rng = &mut rand::rng();
