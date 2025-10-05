@@ -59,9 +59,13 @@ impl Plugin for AppPlugin {
                     None
                 },
                 tiled_types_filter:      TiledFilter::from(
-                    RegexSet::new([r"^ld58::.+$", r"^bevy_ecs.+$"]).expect(
-                        "[TiledPluginConfig.tiled_types_filter] Expected regexes to be valid",
-                    ),
+                    RegexSet::new([
+                        r"^ld58::.+$",
+                        r"^bevy_ecs.+$",
+                        r"^bevy_sprite::.+$",
+                        r"^avian2d::.+$",
+                    ])
+                    .expect("[TiledPluginConfig.tiled_types_filter] Expected regexes to be valid"),
                 ),
             }),
             TiledPhysicsPlugin::<TiledPhysicsAvianBackend>::default(),

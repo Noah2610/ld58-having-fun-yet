@@ -19,9 +19,7 @@ pub fn plugin(app: &mut App) {
             ))),
             update_hue_animations,
             animate_camera,
-        )
-            .in_set(AppSystems::Update)
-            .in_set(GameplaySet),
+        ), // .in_set(AppSystems::Update), // .in_set(GameplaySet),
     );
 }
 

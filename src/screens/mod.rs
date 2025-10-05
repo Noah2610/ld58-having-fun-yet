@@ -15,8 +15,8 @@ pub(super) fn plugin(app: &mut App) {
 #[derive(States, Reflect, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
 pub enum Screen {
     #[default]
-    Title,
     Loading,
+    Title,
     Gameplay,
     Editor,
 }
