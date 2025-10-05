@@ -14,15 +14,17 @@ pub(super) fn plugin(app: &mut App) {
     );
 }
 
+/// Workaround for collider issues.
+/// Take child collider and add to this entity, then despawn children.
 #[derive(Component, Default)]
-#[require(Collider::default())] // Entity needs a collider in order for its children colliders to work
+#[require(Collider::default())]
 pub struct FixObjectColliders;
 
 #[derive(Component)]
 struct FixObjectCollidersInitialized;
 
-/// Take child collider and assign to entity with offset for objects loaded from tiled.
-/// Workaround for incorrect colliders (I'm probably doing something wrong)
+/// Take child collider and assign to entity for FixObjectColliders objects loaded from tiled.
+/// Workaround for collider issues (I'm probably doing something wrong)
 fn fix_object_colliders(
     mut commands: Commands,
     objects: Query<
@@ -32,33 +34,15 @@ fn fix_object_colliders(
             Without<FixObjectCollidersInitialized>,
         ),
     >,
-    mut colliders: Query<
-        (&Collider, &ColliderAabb, &mut Transform),
-        (With<Collider>, With<ChildOf>, Without<FixObjectColliders>),
-    >,
+    colliders: Query<&Collider, (With<Collider>, With<ChildOf>, Without<FixObjectColliders>)>,
 ) {
     for (entity, children, mut collider) in objects {
-        // let mut shapes = Vec::<(Position, Rotation, Collider)>::new();
-
         for &child in children {
-            if let Ok((child_collider, aabb, mut transform)) = colliders.get_mut(child) {
+            if let Ok(child_collider) = colliders.get(child) {
                 *collider = child_collider.clone();
-
-                // shapes.push((
-                //     transform.translation.truncate().into(),
-                //     (*transform).into(),
-                //     child_collider.clone(),
-                // ));
-
-                // let half = (aabb.size() * 0.5).extend(0.0);
-                // transform.translation.x -= half.x;
-                // transform.translation.y += half.y;
+                break;
             }
         }
-
-        // if !shapes.is_empty() {
-        //     *collider = Collider::compound(shapes);
-        // }
 
         commands
             .entity(entity)
