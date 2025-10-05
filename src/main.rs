@@ -99,6 +99,12 @@ impl Plugin for AppPlugin {
             )
                 .chain(),
         );
+
+        #[cfg(feature = "dev")]
+        app.set_error_handler(bevy::ecs::error::panic);
+
+        #[cfg(not(feature = "dev"))]
+        app.set_error_handler(bevy::ecs::error::error);
     }
 }
 
