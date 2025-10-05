@@ -1,7 +1,7 @@
 mod player_action;
 
 use bevy::prelude::App;
-pub use leafwing_input_manager::prelude::*;
+pub use leafwing_input_manager::{common_conditions::*, prelude::*};
 pub use player_action::*;
 
 pub fn plugin(app: &mut App) {

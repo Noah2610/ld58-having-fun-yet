@@ -1,6 +1,6 @@
 use crate::{
     AppSystems, GameplaySet,
-    game::movement::Direction,
+    direction::Direction,
     input::{ActionState, PlayerAction},
 };
 use avian2d::math::Scalar;

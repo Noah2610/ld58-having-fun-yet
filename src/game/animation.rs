@@ -1,19 +1,14 @@
-//! Player sprite animation.
-//! This is based on multiple examples and may be very different for your game.
-//! - [Sprite flipping](https://github.com/bevyengine/bevy/blob/latest/examples/2d/sprite_flipping.rs)
-//! - [Sprite animation](https://github.com/bevyengine/bevy/blob/latest/examples/2d/sprite_animation.rs)
-//! - [Timers](https://github.com/bevyengine/bevy/blob/latest/examples/time/timers.rs)
-
 use crate::{
     AppSystems, GameplaySet,
+    direction::Direction,
     game::{
         aim::AimDirection,
-        movement::{Direction, WalkDirection},
+        movement::WalkDirection,
         player::{Player, PlayerAssets},
     },
 };
 use bevy::prelude::*;
-use bevy_aseprite_ultra::prelude::{AnimationState, AseAnimation, Aseprite, NextFrameEvent};
+use bevy_aseprite_ultra::prelude::{AnimationState, AseAnimation, NextFrameEvent};
 use rand::prelude::IndexedRandom;
 
 pub(super) fn plugin(app: &mut App) {
@@ -83,22 +78,24 @@ fn update_animation(
 }
 
 fn play_step_sounds(
-    _: On<NextFrameEvent>,
+    trigger: On<NextFrameEvent>,
     mut commands: Commands,
     assets: Res<PlayerAssets>,
-    animation: Single<(&AseAnimation, &AnimationState), With<Player>>,
+    players: Query<(&AseAnimation, &AnimationState), With<Player>>,
 ) {
-    if animation.1.current_frame % 2 == 0
-        && animation
-            .0
-            .animation
-            .tag
-            .as_ref()
-            .map(|t| t.starts_with("walk"))
-            .unwrap_or_default()
-    {
-        let rng = &mut rand::rng();
-        let sfx = assets.steps.choose(rng).unwrap().clone();
-        commands.spawn((AudioPlayer(sfx), PlaybackSettings::DESPAWN));
+    if let Ok(animation) = players.get(trigger.0) {
+        if animation.1.current_frame % 2 == 0
+            && animation
+                .0
+                .animation
+                .tag
+                .as_ref()
+                .map(|t| t.starts_with("walk"))
+                .unwrap_or_default()
+        {
+            let rng = &mut rand::rng();
+            let sfx = assets.steps.choose(rng).unwrap().clone();
+            commands.spawn((AudioPlayer(sfx), PlaybackSettings::DESPAWN));
+        }
     }
 }

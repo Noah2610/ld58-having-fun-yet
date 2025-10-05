@@ -8,6 +8,7 @@ mod audio;
 mod camera;
 #[cfg(feature = "dev")]
 mod dev_tools;
+mod direction;
 mod editor;
 mod game;
 mod game_state;

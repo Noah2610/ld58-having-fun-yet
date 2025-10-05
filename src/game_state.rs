@@ -1,5 +1,5 @@
 use crate::screens::Screen;
-use avian2d::prelude::{PhysicsSchedule, PhysicsSystems};
+use avian2d::prelude::PhysicsSystems;
 use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {

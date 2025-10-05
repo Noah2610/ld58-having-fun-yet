@@ -3,6 +3,7 @@ use crate::{
     asset_tracking::LoadResource,
     game::{
         aim::AimController,
+        bullet::BulletSpawner,
         movement::{Acceleration, MovementController},
     },
     game_state::GameplaySet,
@@ -75,6 +76,7 @@ fn post_add_player(
     RigidBody::Dynamic,
     Collider::default(), // Player needs a collider in order for its children colliders to work
     LockedAxes::ROTATION_LOCKED,
+    BulletSpawner,
 )]
 pub struct Player;
 
@@ -85,22 +87,18 @@ struct PlayerInitialized;
 #[reflect(Resource)]
 pub struct PlayerAssets {
     #[dependency]
-    spritesheet:          Handle<Aseprite>,
-    texture_atlas_layout: Handle<TextureAtlasLayout>,
+    spritesheet: Handle<Aseprite>,
     #[dependency]
-    pub steps:            Vec<Handle<AudioSource>>,
+    pub steps:   Vec<Handle<AudioSource>>,
 }
 
 impl FromWorld for PlayerAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            spritesheet:          world
+            spritesheet: world
                 .resource::<AssetServer>()
                 .load("spritesheets/player.ase"),
-            texture_atlas_layout: world.resource_mut::<Assets<TextureAtlasLayout>>().add(
-                TextureAtlasLayout::from_grid(UVec2::splat(32), 6, 2, Some(UVec2::splat(1)), None),
-            ),
-            steps:                {
+            steps:       {
                 let assets = world.resource::<AssetServer>();
                 vec![
                     assets.load("audio/steps/step1.ogg"),
