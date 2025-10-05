@@ -13,314 +13,6 @@
         {
             "color": "#ff000000",
             "drawFill": true,
-            "id": 1,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "color",
-                    "value": "#ffffffff"
-                }
-            ],
-            "name": "bevy_color::color::Color",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 2,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "string",
-                    "value": ""
-                }
-            ],
-            "name": "bevy_ecs::name::Name",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 3,
-            "members": [
-                {
-                    "name": ":variant",
-                    "propertyType": "bevy_time::timer::TimerMode:::Variant",
-                    "type": "string",
-                    "value": "Once"
-                }
-            ],
-            "name": "bevy_time::timer::TimerMode",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "id": 4,
-            "name": "bevy_time::timer::TimerMode:::Variant",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "Once",
-                "Repeating"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 5,
-            "members": [
-            ],
-            "name": "ld58::audio::Music",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 6,
-            "members": [
-            ],
-            "name": "ld58::audio::SoundEffect",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 7,
-            "members": [
-                {
-                    "name": ":variant",
-                    "propertyType": "ld58::game::animation::PlayerAnimationState:::Variant",
-                    "type": "string",
-                    "value": "Idling"
-                }
-            ],
-            "name": "ld58::game::animation::PlayerAnimationState",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "id": 8,
-            "name": "ld58::game::animation::PlayerAnimationState:::Variant",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "Idling",
-                "Walking"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 9,
-            "members": [
-                {
-                    "name": "map",
-                    "type": "file",
-                    "value": ""
-                }
-            ],
-            "name": "ld58::game::level::LevelAssets",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 10,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "float",
-                    "value": 0
-                }
-            ],
-            "name": "ld58::game::movement::Acceleration",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 11,
-            "members": [
-            ],
-            "name": "ld58::game::movement::MovementController",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 12,
-            "members": [
-            ],
-            "name": "ld58::game::player::Player",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 13,
-            "members": [
-                {
-                    "name": "ducky",
-                    "type": "file",
-                    "value": ""
-                },
-                {
-                    "name": "texture_atlas_layout",
-                    "type": "file",
-                    "value": ""
-                }
-            ],
-            "name": "ld58::game::player::PlayerAssets",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 14,
-            "members": [
-            ],
-            "name": "ld58::menus::credits::CreditsAssets",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 15,
-            "members": [
-            ],
-            "name": "ld58::menus::settings::GlobalVolumeLabel",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 16,
-            "members": [
-                {
-                    "name": "fade_duration",
-                    "type": "float",
-                    "value": 0
-                },
-                {
-                    "name": "t",
-                    "type": "float",
-                    "value": 0
-                },
-                {
-                    "name": "total_duration",
-                    "type": "float",
-                    "value": 0
-                }
-            ],
-            "name": "ld58::screens::splash::ImageNodeFadeInOut",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 17,
-            "members": [
-                {
-                    "name": "click",
-                    "type": "file",
-                    "value": ""
-                },
-                {
-                    "name": "hover",
-                    "type": "file",
-                    "value": ""
-                }
-            ],
-            "name": "ld58::theme::interaction::InteractionAssets",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 18,
-            "members": [
-                {
-                    "name": "hovered",
-                    "type": "color",
-                    "value": ""
-                },
-                {
-                    "name": "none",
-                    "type": "color",
-                    "value": ""
-                },
-                {
-                    "name": "pressed",
-                    "type": "color",
-                    "value": ""
-                }
-            ],
-            "name": "ld58::theme::interaction::InteractionPalette",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 19,
-            "members": [
-            ],
-            "name": "ld58::game::solid::Solid",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
             "id": 20,
             "members": [
                 {
@@ -394,39 +86,15 @@
         {
             "color": "#ff000000",
             "drawFill": true,
-            "id": 23,
-            "members": [
-            ],
-            "name": "bevy_ecs::entity_disabling::Disabled",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 24,
-            "members": [
-            ],
-            "name": "bevy_ecs::entity_disabling::Internal",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 25,
+            "id": 1,
             "members": [
                 {
                     "name": "0",
-                    "type": "object",
-                    "value": 0
+                    "type": "color",
+                    "value": "#ffffffff"
                 }
             ],
-            "name": "bevy_ecs::hierarchy::ChildOf",
+            "name": "bevy_color::color::Color",
             "type": "class",
             "useAs": [
                 "property"
@@ -607,6 +275,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -618,6 +287,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -629,12 +299,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -670,6 +342,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -681,6 +354,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -692,12 +366,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -733,6 +409,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -744,6 +421,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -755,12 +433,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -796,6 +476,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -807,6 +488,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -818,12 +500,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -859,6 +543,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -870,6 +555,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -881,12 +567,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -922,6 +610,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -933,6 +622,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -944,12 +634,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -985,6 +677,7 @@
                 },
                 {
                     "name": "layer",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -996,6 +689,7 @@
                 },
                 {
                     "name": "object",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -1007,12 +701,14 @@
                 },
                 {
                     "name": "tile",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
                     "type": "class",
                     "value": {
                     }
                 },
                 {
                     "name": "tilemap",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
                     "type": "class",
                     "value": {
                     }
@@ -1279,6 +975,25 @@
         {
             "color": "#ff000000",
             "drawFill": true,
+            "id": 59,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "core::option::Option<glam::Vec2>",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "bevy_ecs_tiled::tiled::world::chunking::TiledWorldChunking",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
             "id": 57,
             "members": [
             ],
@@ -1300,41 +1015,6 @@
                 }
             ],
             "name": "bevy_ecs_tiled::tiled::world::TiledWorld",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 59,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "class",
-                    "value": {
-                    }
-                }
-            ],
-            "name": "bevy_ecs_tiled::tiled::world::chunking::TiledWorldChunking",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 60,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "bool",
-                    "value": false
-                }
-            ],
-            "name": "bevy_ecs_tilemap::FrustumCulling",
             "type": "class",
             "useAs": [
                 "property"
@@ -1399,6 +1079,23 @@
                 }
             ],
             "name": "bevy_ecs_tilemap::anchor::TilemapAnchor::Custom",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 60,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "bool",
+                    "value": false
+                }
+            ],
+            "name": "bevy_ecs_tilemap::FrustumCulling",
             "type": "class",
             "useAs": [
                 "property"
@@ -1797,6 +1494,64 @@
         {
             "color": "#ff000000",
             "drawFill": true,
+            "id": 23,
+            "members": [
+            ],
+            "name": "bevy_ecs::entity_disabling::Disabled",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 24,
+            "members": [
+            ],
+            "name": "bevy_ecs::entity_disabling::Internal",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 25,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "bevy_ecs::hierarchy::ChildOf",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "bevy_ecs::name::Name",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
             "id": 84,
             "members": [
                 {
@@ -1939,6 +1694,35 @@
         {
             "color": "#ff000000",
             "drawFill": true,
+            "id": 3,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "bevy_time::timer::TimerMode:::Variant",
+                    "type": "string",
+                    "value": "Once"
+                }
+            ],
+            "name": "bevy_time::timer::TimerMode",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 4,
+            "name": "bevy_time::timer::TimerMode:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Once",
+                "Repeating"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
             "id": 100,
             "members": [
                 {
@@ -1980,6 +1764,633 @@
                 }
             ],
             "name": "glam::Vec3",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 5,
+            "members": [
+            ],
+            "name": "ld58::audio::Music",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 6,
+            "members": [
+            ],
+            "name": "ld58::audio::SoundEffect",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 7,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "ld58::game::animation::PlayerAnimationState:::Variant",
+                    "type": "string",
+                    "value": "Idling"
+                }
+            ],
+            "name": "ld58::game::animation::PlayerAnimationState",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 8,
+            "name": "ld58::game::animation::PlayerAnimationState:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Idling",
+                "Walking"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 9,
+            "members": [
+                {
+                    "name": "map",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::game::level::LevelAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::game::movement::Acceleration",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 11,
+            "members": [
+            ],
+            "name": "ld58::game::movement::MovementController",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+            ],
+            "name": "ld58::game::player::Player",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 13,
+            "members": [
+                {
+                    "name": "ducky",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "texture_atlas_layout",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::game::player::PlayerAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 19,
+            "members": [
+            ],
+            "name": "ld58::game::solid::Solid",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+            ],
+            "name": "ld58::menus::credits::CreditsAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 15,
+            "members": [
+            ],
+            "name": "ld58::menus::settings::GlobalVolumeLabel",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 16,
+            "members": [
+                {
+                    "name": "fade_duration",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "t",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "total_duration",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::screens::splash::ImageNodeFadeInOut",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 17,
+            "members": [
+                {
+                    "name": "click",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "hover",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::theme::interaction::InteractionAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 18,
+            "members": [
+                {
+                    "name": "hovered",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "none",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "pressed",
+                    "type": "color",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::theme::interaction::InteractionPalette",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 102,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>:::Variant",
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "name": "Some",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>::Some",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 103,
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "None",
+                "Some"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 104,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, bevy_ecs_tilemap::tiles::TilePos, u32)>::Some",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 105,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>:::Variant",
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "name": "Some",
+                    "propertyType": "core::option::Option<(bevy_ecs::entity::Entity, u32)>::Some",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, u32)>",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 106,
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, u32)>:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "None",
+                "Some"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 107,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "(bevy_ecs::entity::Entity, u32)",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<(bevy_ecs::entity::Entity, u32)>::Some",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 108,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "core::option::Option<glam::Vec2>:::Variant",
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "name": "Some",
+                    "propertyType": "core::option::Option<glam::Vec2>::Some",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<glam::Vec2>",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 109,
+            "name": "core::option::Option<glam::Vec2>:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "None",
+                "Some"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 110,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "glam::Vec2",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<glam::Vec2>::Some",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 111,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "core::option::Option<ld58::direction::Direction>:::Variant",
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "name": "Some",
+                    "propertyType": "core::option::Option<ld58::direction::Direction>::Some",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<ld58::direction::Direction>",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 112,
+            "name": "core::option::Option<ld58::direction::Direction>:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "None",
+                "Some"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 113,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "ld58::direction::Direction",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "core::option::Option<ld58::direction::Direction>::Some",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 114,
+            "members": [
+                {
+                    "name": ":variant",
+                    "propertyType": "ld58::direction::Direction:::Variant",
+                    "type": "string",
+                    "value": "Top"
+                }
+            ],
+            "name": "ld58::direction::Direction",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "id": 115,
+            "name": "ld58::direction::Direction:::Variant",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Top",
+                "Bottom",
+                "Left",
+                "Right",
+                "TopLeft",
+                "TopRight",
+                "BottomLeft",
+                "BottomRight"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 116,
+            "members": [
+            ],
+            "name": "ld58::game::aim::AimController",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 117,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "core::option::Option<ld58::direction::Direction>",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "ld58::game::aim::AimDirection",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 118,
+            "members": [
+            ],
+            "name": "ld58::game::bullet::Bullet",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 119,
+            "members": [
+            ],
+            "name": "ld58::game::bullet::BulletAvailable",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 120,
+            "members": [
+            ],
+            "name": "ld58::game::bullet::BulletSpawner",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 121,
+            "members": [
+            ],
+            "name": "ld58::game::bullet::Collectable",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 122,
+            "members": [
+            ],
+            "name": "ld58::game::enemy::Enemy",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 123,
+            "members": [
+                {
+                    "name": "spritesheet",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::game::enemy::EnemyAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 124,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "core::option::Option<ld58::direction::Direction>",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "ld58::game::movement::WalkDirection",
             "type": "class",
             "useAs": [
                 "property"

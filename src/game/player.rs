@@ -5,6 +5,7 @@ use crate::{
         aim::AimController,
         bullet::BulletSpawner,
         movement::{Acceleration, MovementController},
+        util::FixObjectColliders,
     },
     game_state::GameplaySet,
 };
@@ -28,26 +29,15 @@ pub(super) fn plugin(app: &mut App) {
 fn post_add_player(
     mut commands: Commands,
     assets: Res<PlayerAssets>,
-    players: Query<(Entity, &Children), (Added<Player>, Without<PlayerInitialized>)>,
-    mut colliders: Query<(&ColliderAabb, &mut Transform), (With<Collider>, With<ChildOf>)>,
+    players: Query<Entity, (Added<Player>, Without<PlayerInitialized>)>,
 ) {
-    for (entity, children) in players {
-        // Create animation and sprite from spritesheet for the player
+    for entity in players {
         commands
             .entity(entity)
             .insert((PlayerInitialized, AseAnimation {
                 aseprite:  assets.spritesheet.clone(),
                 animation: Animation::tag("idle"),
             }));
-
-        // Offset all children colliders to be centered on the player
-        for &child in children {
-            if let Ok((aabb, mut transform)) = colliders.get_mut(child) {
-                let half = (aabb.size() * 0.5).extend(0.0);
-                transform.translation.x -= half.x;
-                transform.translation.y += half.y;
-            }
-        }
     }
 }
 
@@ -67,6 +57,7 @@ fn post_add_player(
 #[reflect(Component)]
 #[require(
     Name::new("Player"),
+    FixObjectColliders,
     Sprite::default(),
     Anchor::CENTER,
     MovementController,
@@ -74,9 +65,8 @@ fn post_add_player(
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
-    Collider::default(), // Player needs a collider in order for its children colliders to work
     LockedAxes::ROTATION_LOCKED,
-    BulletSpawner,
+    BulletSpawner
 )]
 pub struct Player;
 
