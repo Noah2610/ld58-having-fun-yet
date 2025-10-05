@@ -4,7 +4,7 @@ use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
     app.add_systems(
-        Update,
+        PreUpdate,
         fix_object_colliders
             .in_set(GameplaySet)
             .in_set(AppSystems::Update),
@@ -12,10 +12,10 @@ pub fn plugin(app: &mut App) {
 }
 
 #[derive(Component, Default)]
+#[require(Collider::default())] // Entity needs a collider in order for its children colliders to work
 pub struct FixObjectColliders;
 
 #[derive(Component)]
-#[require(Collider::default())] // Entity needs a collider in order for its children colliders to work
 struct FixObjectCollidersInitialized;
 
 /// Offset colliders of children for entities loaded through tiled.

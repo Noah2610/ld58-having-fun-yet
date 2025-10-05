@@ -34,8 +34,8 @@ pub fn plugin(app: &mut App) {
     Name::new("Bullet"),
     Sprite::default(),
     RigidBody::Dynamic,
+    Mass(0.0),
     Collider::circle(6.5),
-    Sensor,
     CollisionEventsEnabled
 )]
 pub struct Bullet;

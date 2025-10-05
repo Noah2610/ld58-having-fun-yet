@@ -19,7 +19,7 @@ pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
 
     app.add_systems(
-        Update,
+        PreUpdate,
         post_add_player
             .in_set(GameplaySet)
             .in_set(AppSystems::Update),
@@ -65,6 +65,8 @@ fn post_add_player(
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
+    // MassPropertiesBundle::from_shape(&Collider::rectangle(16.0, 16.0), 1.0),
+    // ColliderDensity(1.0),
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner
 )]

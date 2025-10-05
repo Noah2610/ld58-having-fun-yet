@@ -38,6 +38,7 @@ fn post_add_enemy(
     FixObjectColliders,
     Sprite::default(),
     RigidBody::Dynamic,
+    // Mass(1.0),
     LockedAxes::ROTATION_LOCKED
 )]
 pub struct Enemy;
