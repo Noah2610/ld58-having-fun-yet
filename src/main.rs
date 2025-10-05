@@ -60,8 +60,7 @@ impl Plugin for AppPlugin {
                 },
                 tiled_types_filter:      TiledFilter::from(
                     RegexSet::new([r"^ld58::.+$", r"^bevy_ecs.+$"]).expect(
-                        "[TiledPluginConfig.tiled_types_filter] Expected \
-                         regexes to be valid",
+                        "[TiledPluginConfig.tiled_types_filter] Expected regexes to be valid",
                     ),
                 ),
             }),
@@ -105,9 +104,7 @@ impl Plugin for AppPlugin {
 /// High-level groupings of systems for the app in the `Update` schedule.
 /// When adding a new variant, make sure to order it in the `configure_sets`
 /// call above.
-#[derive(
-    SystemSet, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord,
-)]
+#[derive(SystemSet, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
 enum AppSystems {
     /// Tick timers.
     TickTimers,

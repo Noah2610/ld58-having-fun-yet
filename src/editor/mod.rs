@@ -10,8 +10,7 @@ use bevy_yoleck::{
 };
 
 pub fn plugin(app: &mut App) {
-    let is_editor = cfg!(feature = "editor")
-        && std::env::args().any(|arg| arg == "--editor");
+    let is_editor = cfg!(feature = "editor") && std::env::args().any(|arg| arg == "--editor");
 
     if is_editor {
         if !app.is_plugin_added::<EguiPlugin>() {

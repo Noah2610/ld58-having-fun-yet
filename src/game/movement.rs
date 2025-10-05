@@ -1,6 +1,5 @@
 use crate::{
-    AppSystems,
-    GameplaySet,
+    AppSystems, GameplaySet,
     input::{ActionState, PlayerAction},
 };
 use avian2d::{math::Scalar, prelude::*};
@@ -27,10 +26,7 @@ pub struct Acceleration(pub Scalar);
 fn apply_movement(
     time: Res<Time>,
     action_state: Res<ActionState<PlayerAction>>,
-    mut controllers: Query<
-        (&Acceleration, &mut LinearVelocity),
-        With<MovementController>,
-    >,
+    mut controllers: Query<(&Acceleration, &mut LinearVelocity), With<MovementController>>,
 ) {
     const DEADZONE: f32 = 0.1;
 

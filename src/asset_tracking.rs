@@ -1,8 +1,7 @@
 //! A high-level way to load collections of asset handles as resources.
 
-use std::collections::VecDeque;
-
 use bevy::prelude::*;
+use std::collections::VecDeque;
 
 pub(super) fn plugin(app: &mut App) {
     app.init_resource::<ResourceHandles>();
@@ -10,18 +9,15 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 pub trait LoadResource {
-    /// This will load the [`Resource`] as an [`Asset`]. When all of its asset dependencies
-    /// have been loaded, it will be inserted as a resource. This ensures that the resource only
-    /// exists when the assets are ready.
-    fn load_resource<T: Resource + Asset + Clone + FromWorld>(
-        &mut self,
-    ) -> &mut Self;
+    /// This will load the [`Resource`] as an [`Asset`]. When all of its asset
+    /// dependencies have been loaded, it will be inserted as a resource.
+    /// This ensures that the resource only exists when the assets are
+    /// ready.
+    fn load_resource<T: Resource + Asset + Clone + FromWorld>(&mut self) -> &mut Self;
 }
 
 impl LoadResource for App {
-    fn load_resource<T: Resource + Asset + Clone + FromWorld>(
-        &mut self,
-    ) -> &mut Self {
+    fn load_resource<T: Resource + Asset + Clone + FromWorld>(&mut self) -> &mut Self {
         self.init_asset::<T>();
         let world = self.world_mut();
         let value = T::from_world(world);
@@ -52,27 +48,25 @@ pub struct ResourceHandles {
 }
 
 impl ResourceHandles {
-    /// Returns true if all requested [`Asset`]s have finished loading and are available as [`Resource`]s.
+    /// Returns true if all requested [`Asset`]s have finished loading and are
+    /// available as [`Resource`]s.
     pub fn is_all_done(&self) -> bool {
         self.waiting.is_empty()
     }
 }
 
 fn load_resource_assets(world: &mut World) {
-    world.resource_scope(
-        |world, mut resource_handles: Mut<ResourceHandles>| {
-            world.resource_scope(|world, assets: Mut<AssetServer>| {
-                for _ in 0 .. resource_handles.waiting.len() {
-                    let (handle, insert_fn) =
-                        resource_handles.waiting.pop_front().unwrap();
-                    if assets.is_loaded_with_dependencies(&handle) {
-                        insert_fn(world, &handle);
-                        resource_handles.finished.push(handle);
-                    } else {
-                        resource_handles.waiting.push_back((handle, insert_fn));
-                    }
+    world.resource_scope(|world, mut resource_handles: Mut<ResourceHandles>| {
+        world.resource_scope(|world, assets: Mut<AssetServer>| {
+            for _ in 0 .. resource_handles.waiting.len() {
+                let (handle, insert_fn) = resource_handles.waiting.pop_front().unwrap();
+                if assets.is_loaded_with_dependencies(&handle) {
+                    insert_fn(world, &handle);
+                    resource_handles.finished.push(handle);
+                } else {
+                    resource_handles.waiting.push_back((handle, insert_fn));
                 }
-            });
-        },
-    );
+            }
+        });
+    });
 }

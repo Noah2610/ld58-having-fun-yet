@@ -3,8 +3,7 @@ use bevy::prelude::*;
 use bevy_yoleck::prelude::YoleckComponent;
 use serde::{Deserialize, Serialize};
 
-pub fn plugin(_app: &mut App) {
-}
+pub fn plugin(_app: &mut App) {}
 
 #[derive(
     Component,

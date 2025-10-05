@@ -1,25 +1,13 @@
 //! The credits menu.
 
-use bevy::{
-    ecs::spawn::SpawnIter,
-    input::common_conditions::input_just_pressed,
-    prelude::*,
-};
-
-use crate::{
-    asset_tracking::LoadResource,
-    audio::music,
-    menus::Menu,
-    theme::prelude::*,
-};
+use crate::{asset_tracking::LoadResource, audio::music, menus::Menu, theme::prelude::*};
+use bevy::{ecs::spawn::SpawnIter, input::common_conditions::input_just_pressed, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Menu::Credits), spawn_credits_menu);
     app.add_systems(
         Update,
-        go_back.run_if(
-            in_state(Menu::Credits).and(input_just_pressed(KeyCode::Escape)),
-        ),
+        go_back.run_if(in_state(Menu::Credits).and(input_just_pressed(KeyCode::Escape))),
     );
 
     app.load_resource::<CreditsAssets>();
@@ -55,8 +43,8 @@ fn assets() -> impl Bundle {
         ["Music", "CC BY 3.0 by Kevin MacLeod"],
         [
             "Bevy logo",
-            "All rights reserved by the Bevy Foundation, permission granted \
-             for splash screen use when unmodified",
+            "All rights reserved by the Bevy Foundation, permission granted for splash screen use \
+             when unmodified",
         ],
     ])
 }
@@ -71,8 +59,8 @@ fn grid(content: Vec<[&'static str; 2]>) -> impl Bundle {
             grid_template_columns: RepeatedGridTrack::px(2, 400.0),
             ..default()
         },
-        Children::spawn(SpawnIter(
-            content.into_iter().flatten().enumerate().map(|(i, text)| {
+        Children::spawn(SpawnIter(content.into_iter().flatten().enumerate().map(
+            |(i, text)| {
                 (widget::label(text), Node {
                     justify_self: if i.is_multiple_of(2) {
                         JustifySelf::End
@@ -81,15 +69,12 @@ fn grid(content: Vec<[&'static str; 2]>) -> impl Bundle {
                     },
                     ..default()
                 })
-            }),
-        )),
+            },
+        ))),
     )
 }
 
-fn go_back_on_click(
-    _: On<Pointer<Click>>,
-    mut next_menu: ResMut<NextState<Menu>>,
-) {
+fn go_back_on_click(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::Main);
 }
 
@@ -107,9 +92,6 @@ impl FromWorld for CreditsAssets {
     }
 }
 
-fn start_credits_music(
-    mut commands: Commands,
-    credits_music: Res<CreditsAssets>,
-) {
+fn start_credits_music(mut commands: Commands, credits_music: Res<CreditsAssets>) {
     commands.spawn((Name::new("Credits Music"), DespawnOnExit(Menu::Credits)));
 }

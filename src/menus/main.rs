@@ -1,13 +1,7 @@
 //! The main menu (seen on the title screen).
 
+use crate::{asset_tracking::ResourceHandles, menus::Menu, screens::Screen, theme::widget};
 use bevy::prelude::*;
-
-use crate::{
-    asset_tracking::ResourceHandles,
-    menus::Menu,
-    screens::Screen,
-    theme::widget,
-};
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Menu::Main), spawn_main_menu);
@@ -46,17 +40,11 @@ fn enter_loading_or_gameplay_screen(
     }
 }
 
-fn open_settings_menu(
-    _: On<Pointer<Click>>,
-    mut next_menu: ResMut<NextState<Menu>>,
-) {
+fn open_settings_menu(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::Settings);
 }
 
-fn open_credits_menu(
-    _: On<Pointer<Click>>,
-    mut next_menu: ResMut<NextState<Menu>>,
-) {
+fn open_credits_menu(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::Credits);
 }
 

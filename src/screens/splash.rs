@@ -1,12 +1,11 @@
 //! A splash screen that plays briefly at startup.
 
+use crate::{AppSystems, screens::Screen, theme::prelude::*};
 use bevy::{
     image::{ImageLoaderSettings, ImageSampler},
     input::common_conditions::input_just_pressed,
     prelude::*,
 };
-
-use crate::{AppSystems, screens::Screen, theme::prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
     // Spawn splash screen.
@@ -37,9 +36,8 @@ pub(super) fn plugin(app: &mut App) {
     // Exit the splash screen early if the player hits escape.
     app.add_systems(
         Update,
-        enter_title_screen.run_if(
-            input_just_pressed(KeyCode::Escape).and(in_state(Screen::Splash)),
-        ),
+        enter_title_screen
+            .run_if(input_just_pressed(KeyCode::Escape).and(in_state(Screen::Splash))),
     );
 }
 
@@ -100,18 +98,13 @@ impl ImageNodeFadeInOut {
     }
 }
 
-fn tick_fade_in_out(
-    time: Res<Time>,
-    mut animation_query: Query<&mut ImageNodeFadeInOut>,
-) {
+fn tick_fade_in_out(time: Res<Time>, mut animation_query: Query<&mut ImageNodeFadeInOut>) {
     for mut anim in &mut animation_query {
         anim.t += time.delta_secs();
     }
 }
 
-fn apply_fade_in_out(
-    mut animation_query: Query<(&ImageNodeFadeInOut, &mut ImageNode)>,
-) {
+fn apply_fade_in_out(mut animation_query: Query<(&ImageNodeFadeInOut, &mut ImageNode)>) {
     for (anim, mut image) in &mut animation_query {
         image.color.set_alpha(anim.alpha())
     }
@@ -139,10 +132,7 @@ fn tick_splash_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
     timer.0.tick(time.delta());
 }
 
-fn check_splash_timer(
-    timer: ResMut<SplashTimer>,
-    mut next_screen: ResMut<NextState<Screen>>,
-) {
+fn check_splash_timer(timer: ResMut<SplashTimer>, mut next_screen: ResMut<NextState<Screen>>) {
     if timer.0.just_finished() {
         next_screen.set(Screen::Title);
     }

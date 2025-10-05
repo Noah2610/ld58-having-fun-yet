@@ -6,8 +6,7 @@ pub fn plugin(app: &mut App) {
     app.init_state::<Paused>();
     app.configure_sets(
         Update,
-        GameplaySet
-            .run_if(in_state(Screen::Gameplay).and(in_state(Paused(false)))),
+        GameplaySet.run_if(in_state(Screen::Gameplay).and(in_state(Paused(false)))),
     );
     app.configure_sets(
         FixedPostUpdate,

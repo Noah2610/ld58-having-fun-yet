@@ -4,11 +4,7 @@ use crate::screens::Screen;
 use avian2d::prelude::{PhysicsDebugPlugin, PhysicsGizmos};
 use bevy::{
     dev_tools::{
-        fps_overlay::{
-            FpsOverlayConfig,
-            FpsOverlayPlugin,
-            FrameTimeGraphConfig,
-        },
+        fps_overlay::{FpsOverlayConfig, FpsOverlayPlugin, FrameTimeGraphConfig},
         states::log_transitions,
     },
     input::common_conditions::input_just_pressed,
@@ -49,10 +45,8 @@ pub(super) fn plugin(app: &mut App) {
             },
             ..default()
         },
-        WorldInspectorPlugin::default()
-            .run_if(in_state(InspectorEnabled(true))),
-        StateInspectorPlugin::<Screen>::default()
-            .run_if(in_state(InspectorEnabled(true))),
+        WorldInspectorPlugin::default().run_if(in_state(InspectorEnabled(true))),
+        StateInspectorPlugin::<Screen>::default().run_if(in_state(InspectorEnabled(true))),
         PhysicsDebugPlugin,
     ))
     .insert_gizmo_config(PhysicsGizmos::default(), GizmoConfig {

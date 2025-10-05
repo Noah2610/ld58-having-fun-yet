@@ -5,18 +5,12 @@
 //! - [Timers](https://github.com/bevyengine/bevy/blob/latest/examples/time/timers.rs)
 
 use crate::{
-    AppSystems,
-    GameplaySet,
+    AppSystems, GameplaySet,
     game::player::{Player, PlayerAssets},
 };
 use avian2d::prelude::LinearVelocity;
 use bevy::prelude::*;
-use bevy_aseprite_ultra::prelude::{
-    AnimationState,
-    AseAnimation,
-    Aseprite,
-    NextFrameEvent,
-};
+use bevy_aseprite_ultra::prelude::{AnimationState, AseAnimation, Aseprite, NextFrameEvent};
 use rand::{Rng, prelude::IndexedRandom};
 use std::time::Duration;
 
@@ -32,10 +26,7 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn update_animation(
-    mut query: Query<
-        (&LinearVelocity, &mut AseAnimation, &mut Sprite),
-        With<Player>,
-    >,
+    mut query: Query<(&LinearVelocity, &mut AseAnimation, &mut Sprite), With<Player>>,
 ) {
     for (velocity, mut ase, mut sprite) in &mut query {
         let dx = velocity.x;

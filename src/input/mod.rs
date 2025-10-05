@@ -1,6 +1,5 @@
-pub use leafwing_input_manager::prelude::*;
-
 use bevy::prelude::*;
+pub use leafwing_input_manager::prelude::*;
 
 pub fn plugin(app: &mut App) {
     app.add_plugins(InputManagerPlugin::<PlayerAction>::default())

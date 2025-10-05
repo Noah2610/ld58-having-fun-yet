@@ -24,14 +24,8 @@ pub(super) fn plugin(app: &mut App) {
 fn post_add_player(
     mut commands: Commands,
     assets: Res<PlayerAssets>,
-    players: Query<
-        (Entity, &Children),
-        (Added<Player>, Without<PlayerInitialized>),
-    >,
-    mut colliders: Query<
-        (&ColliderAabb, &mut Transform),
-        (With<Collider>, With<ChildOf>),
-    >,
+    players: Query<(Entity, &Children), (Added<Player>, Without<PlayerInitialized>)>,
+    mut colliders: Query<(&ColliderAabb, &mut Transform), (With<Collider>, With<ChildOf>)>,
 ) {
     for (entity, children) in players {
         // Create animation and sprite from spritesheet for the player
@@ -99,15 +93,9 @@ impl FromWorld for PlayerAssets {
             spritesheet:          world
                 .resource::<AssetServer>()
                 .load("spritesheets/player.ase"),
-            texture_atlas_layout: world
-                .resource_mut::<Assets<TextureAtlasLayout>>()
-                .add(TextureAtlasLayout::from_grid(
-                    UVec2::splat(32),
-                    6,
-                    2,
-                    Some(UVec2::splat(1)),
-                    None,
-                )),
+            texture_atlas_layout: world.resource_mut::<Assets<TextureAtlasLayout>>().add(
+                TextureAtlasLayout::from_grid(UVec2::splat(32), 6, 2, Some(UVec2::splat(1)), None),
+            ),
             steps:                {
                 let assets = world.resource::<AssetServer>();
                 vec![

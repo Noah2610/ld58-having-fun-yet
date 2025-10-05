@@ -1,13 +1,11 @@
 //! Helper functions for creating common widgets.
 
-use std::borrow::Cow;
-
+use crate::theme::{interaction::InteractionPalette, palette::*};
 use bevy::{
     ecs::{spawn::SpawnWith, system::IntoObserverSystem},
     prelude::*,
 };
-
-use crate::theme::{interaction::InteractionPalette, palette::*};
+use std::borrow::Cow;
 
 /// A root UI node that fills the window and centers its content.
 pub fn ui_root(name: impl Into<Cow<'static, str>>) -> impl Bundle {
@@ -72,10 +70,7 @@ where
 }
 
 /// A small square button with text and an action defined as an [`Observer`].
-pub fn button_small<E, B, M, I>(
-    text: impl Into<String>,
-    action: I,
-) -> impl Bundle
+pub fn button_small<E, B, M, I>(text: impl Into<String>, action: I) -> impl Bundle
 where
     E: EntityEvent,
     B: Bundle,
@@ -90,7 +85,8 @@ where
     })
 }
 
-/// A simple button with text and an action defined as an [`Observer`]. The button's layout is provided by `button_bundle`.
+/// A simple button with text and an action defined as an [`Observer`]. The
+/// button's layout is provided by `button_bundle`.
 fn button_base<E, B, M, I>(
     text: impl Into<String>,
     action: I,

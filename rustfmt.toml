@@ -1,0 +1,19 @@
+unstable_features = true
+
+edition                    = "2024"
+combine_control_expr       = true
+max_width                  = 100
+match_block_trailing_comma = true
+
+struct_field_align_threshold = 40
+enum_discrim_align_threshold = 40
+comment_width                = 100
+wrap_comments                = true
+format_strings               = true
+format_macro_matchers        = true
+spaces_around_ranges         = true
+empty_item_single_line       = true
+overflow_delimited_expr      = true
+imports_layout               = "Mixed"
+group_imports                = "One"
+imports_granularity          = "Crate"
