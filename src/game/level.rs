@@ -8,6 +8,7 @@ use crate::{
     },
     screens::Screen,
 };
+use avian2d::prelude::Collider;
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
 
@@ -37,7 +38,10 @@ pub fn spawn_level(mut commands: Commands, level_assets: Res<LevelAssets>) {
         TiledMap(level_assets.map.clone()),
         TiledPhysicsSettings::<TiledPhysicsAvianBackend> {
             // objects_filter: TiledFilter::All,
-            // objects_layer_filter: TiledFilter::Names(vec!["solid".into()]),
+            // objects_filter: TiledFilter::None,
+            objects_filter: TiledFilter::Names(vec!["solid".into()]),
+            objects_layer_filter: TiledFilter::Names(vec!["solid".into()]),
+            // backend: TiledPhysicsAvianBackend::Polyline,
             ..default()
         },
         TilemapAnchor::Center,
@@ -54,17 +58,18 @@ pub fn spawn_level(mut commands: Commands, level_assets: Res<LevelAssets>) {
 }
 
 // fn populate_objects(
-//     _ev: On<TiledEvent<MapCreated>>,
+//     trigger: On<TiledEvent<ObjectCreated>>,
 //     mut commands: Commands,
-//     assets: Res<PlayerAssets>,
-//     players: Query<Entity, With<Player>>,
-//     solids: Query<Entity, (With<Solid>, Without<Player>)>,
+//     objects: Query<&TiledObject, With<Solid>>,
 // ) {
-//     for entity in players {
-//         commands.entity(entity).insert(player(&assets));
-//     }
-
-//     for entity in solids {
-//         commands.entity(entity).insert(solid());
+//     if let Ok(object) = objects.get(trigger.origin) {
+//         match object {
+//             TiledObject::Rectangle { width, height } => {
+//                 commands
+//                     .entity(trigger.entity)
+//                     .insert(Collider::rectangle(*width, *height));
+//             },
+//             _ => (),
+//         }
 //     }
 // }

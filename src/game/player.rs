@@ -5,7 +5,7 @@ use crate::{
         aim::AimController,
         bullet::BulletSpawner,
         movement::{Acceleration, MovementController},
-        util::FixObjectColliders,
+        util::{CollisionTag, FixObjectColliders},
     },
     game_state::GameplaySet,
 };
@@ -57,18 +57,21 @@ fn post_add_player(
 #[reflect(Component)]
 #[require(
     Name::new("Player"),
-    FixObjectColliders,
+    // FixObjectColliders,
     Sprite::default(),
-    Anchor::CENTER,
     MovementController,
     AimController,
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
-    // MassPropertiesBundle::from_shape(&Collider::rectangle(16.0, 16.0), 1.0),
-    // ColliderDensity(1.0),
+    Collider::rectangle(8.0, 16.0),
+    Mass(1.0),
+    CollisionLayers::new(
+        [CollisionTag::Player, CollisionTag::Entity],
+        [CollisionTag::Solid, CollisionTag::Enemy, CollisionTag::Collectable],
+    ),
     LockedAxes::ROTATION_LOCKED,
-    BulletSpawner
+    BulletSpawner,
 )]
 pub struct Player;
 

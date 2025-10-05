@@ -1,5 +1,7 @@
 use crate::{
-    AppSystems, GameplaySet, asset_tracking::LoadResource, game::util::FixObjectColliders,
+    AppSystems, GameplaySet,
+    asset_tracking::LoadResource,
+    game::util::{CollisionTag, FixObjectColliders},
 };
 use avian2d::prelude::*;
 use bevy::prelude::*;
@@ -35,11 +37,17 @@ fn post_add_enemy(
 #[reflect(Component)]
 #[require(
     Name::new("Enemy"),
-    FixObjectColliders,
+    // FixObjectColliders,
     Sprite::default(),
     RigidBody::Dynamic,
-    // Mass(1.0),
-    LockedAxes::ROTATION_LOCKED
+    Collider::rectangle(14.0, 16.0),
+    Mass(1.0),
+    CollisionLayers::new(
+        [CollisionTag::Enemy, CollisionTag::Entity],
+        [CollisionTag::Solid, CollisionTag::Player, CollisionTag::Bullet, CollisionTag::Enemy],
+    ),
+    LockedAxes::ROTATION_LOCKED,
+    LinearDamping(10.0),
 )]
 pub struct Enemy;
 

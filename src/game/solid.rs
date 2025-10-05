@@ -1,3 +1,4 @@
+use crate::game::util::{CollisionTag, FixObjectColliders};
 use avian2d::prelude::*;
 use bevy::prelude::*;
 use bevy_yoleck::prelude::YoleckComponent;
@@ -19,7 +20,12 @@ pub fn plugin(_app: &mut App) {}
     Default,
 )]
 #[reflect(Component)]
-#[require(Name::new("Solid"), RigidBody::Static)]
+#[require(
+    Name::new("Solid"),
+    FixObjectColliders,
+    RigidBody::Static,
+    CollisionLayers::new(CollisionTag::Solid, CollisionTag::Entity)
+)]
 pub struct Solid;
 
 #[derive(Resource, Asset, Reflect, Clone)]

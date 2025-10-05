@@ -1,10 +1,11 @@
 use crate::{
     AppSystems, GameplaySet,
     asset_tracking::LoadResource,
-    game::aim::AimDirection,
+    game::{aim::AimDirection, util::CollisionTag},
     input::{PlayerAction, action_just_pressed},
+    screens::Screen,
 };
-use avian2d::{collision::collider::Sensor, math::Scalar, prelude::*};
+use avian2d::{math::Scalar, prelude::*};
 use bevy::prelude::*;
 use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
 use std::time::Duration;
@@ -32,10 +33,17 @@ pub fn plugin(app: &mut App) {
 #[reflect(Component)]
 #[require(
     Name::new("Bullet"),
+    DespawnOnExit::<_>(Screen::Gameplay),
     Sprite::default(),
     RigidBody::Dynamic,
-    Mass(0.0),
+    Mass(0.1),
+    CollisionLayers::new(
+        [CollisionTag::Bullet, CollisionTag::Entity],
+        [CollisionTag::Solid, CollisionTag::Enemy],
+    ),
     Collider::circle(6.5),
+    // Collider::rectangle(11.0, 11.0),
+    AngularDamping(2.0),
     CollisionEventsEnabled
 )]
 pub struct Bullet;
@@ -111,7 +119,7 @@ fn handle_spawn_bullet(
                     Transform::from_translation(transform.translation + offset),
                     LinearVelocity(dir_vec * assets.speed),
                 ))
-                .observe(handle_bullet_collision);
+                .observe(handle_bullet_collection);
 
             commands.entity(entity).remove::<BulletAvailable>();
         }
@@ -122,16 +130,24 @@ fn handle_bullet_timers(
     mut commands: Commands,
     time: Res<Time>,
     bullets: Query<
-        (Entity, &mut BulletTimer, &mut AseAnimation),
+        (
+            Entity,
+            &mut BulletTimer,
+            &mut AseAnimation,
+            &mut CollisionLayers,
+        ),
         (With<Bullet>, Without<Collectable>),
     >,
     assets: Res<BulletAssets>,
 ) {
     let delta = time.delta();
-    for (entity, mut timer, mut ase) in bullets {
+    for (entity, mut timer, mut ase, mut collision_layers) in bullets {
         timer.0.tick(delta);
         if timer.0.is_finished() {
             ase.animation.play_loop("idle");
+            collision_layers.memberships = CollisionTag::Collectable.into();
+            collision_layers.memberships |= CollisionTag::Entity;
+            collision_layers.filters |= CollisionTag::Player;
             commands
                 .entity(entity)
                 .remove::<BulletTimer>()
@@ -140,7 +156,7 @@ fn handle_bullet_timers(
     }
 }
 
-fn handle_bullet_collision(
+fn handle_bullet_collection(
     trigger: On<CollisionStart>,
     mut commands: Commands,
     bullets: Query<(), (With<Bullet>, With<Collectable>)>,
