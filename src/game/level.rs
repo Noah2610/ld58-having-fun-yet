@@ -2,13 +2,8 @@
 
 use crate::{
     asset_tracking::LoadResource,
-    game::{
-        player::{Player, PlayerAssets},
-        solid::Solid,
-    },
     screens::Screen,
 };
-use avian2d::prelude::Collider;
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
 

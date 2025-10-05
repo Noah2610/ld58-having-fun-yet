@@ -6,5 +6,5 @@ pub use collision_tag::*;
 pub use fix_object_colliders::*;
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_plugins((collision_tag::plugin, fix_object_colliders::plugin));
+    app.add_plugins(fix_object_colliders::plugin);
 }

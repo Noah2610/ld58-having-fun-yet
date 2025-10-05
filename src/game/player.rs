@@ -6,12 +6,12 @@ use crate::{
         bullet::BulletSpawner,
         enemy::{Enemy, EnemyGoal},
         movement::{Acceleration, MovementController},
-        util::{CollisionTag, FixObjectColliders},
+        util::CollisionTag,
     },
     game_state::GameplaySet,
 };
 use avian2d::prelude::*;
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::prelude::*;
 use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
 use serde::{Deserialize, Serialize};
 

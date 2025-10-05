@@ -1,8 +1,5 @@
 use crate::{AppSystems, game_state::GameplaySet};
-use avian2d::{
-    parry::{math::Isometry, shape::SharedShape},
-    prelude::*,
-};
+use avian2d::prelude::*;
 use bevy::prelude::*;
 
 pub(super) fn plugin(app: &mut App) {

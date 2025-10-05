@@ -41,7 +41,6 @@ pub(super) fn plugin(app: &mut App) {
                 },
                 ..default()
             },
-            ..default()
         },
         WorldInspectorPlugin::default().run_if(in_state(InspectorEnabled(true))),
         StateInspectorPlugin::<Screen>::default().run_if(in_state(InspectorEnabled(true))),

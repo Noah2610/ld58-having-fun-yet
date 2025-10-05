@@ -50,30 +50,27 @@ fn update_animation(
 
         ase.animation.play_loop(anim);
 
-        match anim_dir {
-            Some(dir) => match dir {
-                Top | Bottom => { /* Retain current flip */ },
-                Left => sprite.flip_x = true,
-                Right => sprite.flip_x = false,
-                TopLeft => {
-                    sprite.flip_x = true;
-                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-                },
-                TopRight => {
-                    sprite.flip_x = false;
-                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
-                },
-                BottomLeft => {
-                    sprite.flip_x = true;
-                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
-                },
-                BottomRight => {
-                    sprite.flip_x = false;
-                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-                },
+        if let Some(dir) = anim_dir { match dir {
+            Top | Bottom => { /* Retain current flip */ },
+            Left => sprite.flip_x = true,
+            Right => sprite.flip_x = false,
+            TopLeft => {
+                sprite.flip_x = true;
+                transform.rotation = Quat::from_rotation_z(-TILT_DEG);
             },
-            None => (),
-        }
+            TopRight => {
+                sprite.flip_x = false;
+                transform.rotation = Quat::from_rotation_z(TILT_DEG);
+            },
+            BottomLeft => {
+                sprite.flip_x = true;
+                transform.rotation = Quat::from_rotation_z(TILT_DEG);
+            },
+            BottomRight => {
+                sprite.flip_x = false;
+                transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+            },
+        } }
     }
 }
 
@@ -83,8 +80,8 @@ fn play_step_sounds(
     assets: Res<PlayerAssets>,
     players: Query<(&AseAnimation, &AnimationState), With<Player>>,
 ) {
-    if let Ok(animation) = players.get(trigger.0) {
-        if animation.1.current_frame % 2 == 0
+    if let Ok(animation) = players.get(trigger.0)
+        && animation.1.current_frame % 2 == 0
             && animation
                 .0
                 .animation
@@ -97,5 +94,4 @@ fn play_step_sounds(
             let sfx = assets.steps.choose(rng).unwrap().clone();
             commands.spawn((AudioPlayer(sfx), PlaybackSettings::DESPAWN));
         }
-    }
 }
