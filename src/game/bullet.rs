@@ -1,7 +1,11 @@
 use crate::{
     AppSystems, GameplaySet,
     asset_tracking::LoadResource,
-    game::{aim::AimDirection, util::CollisionTag},
+    game::{
+        aim::AimDirection,
+        enemy::{Enemy, EnemyStunned},
+        util::CollisionTag,
+    },
     input::{PlayerAction, action_just_pressed},
     screens::Screen,
 };
@@ -81,6 +85,7 @@ struct BulletAssets {
     duration:         Duration,
     velocity_damping: Scalar,
     player_knockback: Scalar,
+    enemy_knockback:  Scalar,
 }
 
 impl FromWorld for BulletAssets {
@@ -95,6 +100,7 @@ impl FromWorld for BulletAssets {
             duration:         Duration::from_millis(500),
             velocity_damping: 2.0,
             player_knockback: 300.0,
+            enemy_knockback:  300.0,
         }
     }
 }
@@ -127,7 +133,8 @@ fn handle_spawn_bullet(
                     Transform::from_translation(transform.translation + offset),
                     LinearVelocity(dir_vec * assets.speed),
                 ))
-                .observe(handle_collect_bullet);
+                .observe(handle_collect_bullet)
+                .observe(handle_bullet_enemy_collision);
 
             commands.entity(entity).remove::<BulletAvailable>();
         }
@@ -175,5 +182,30 @@ fn handle_collect_bullet(
     if bullets.contains(bullet) && spawners.contains(spawner) {
         commands.entity(bullet).despawn();
         commands.entity(spawner).insert(BulletAvailable);
+    }
+}
+
+fn handle_bullet_enemy_collision(
+    trigger: On<CollisionStart>,
+    mut commands: Commands,
+    assets: Res<BulletAssets>,
+    bullets: Query<&Transform, (With<Bullet>, Without<Collectable>, Without<Enemy>)>,
+    mut enemies: Query<
+        (&Transform, &mut LinearVelocity),
+        (With<Enemy>, Without<EnemyStunned>, Without<Bullet>),
+    >,
+) {
+    let bullet = trigger.collider1;
+    let enemy = trigger.collider2;
+
+    if let (Ok(bullet_transform), Ok((enemy_transform, mut velocity))) =
+        (bullets.get(bullet), enemies.get_mut(enemy))
+    {
+        let direction = (enemy_transform.translation.truncate()
+            - bullet_transform.translation.truncate())
+        .normalize_or_zero();
+        velocity.0 += direction * assets.enemy_knockback;
+
+        commands.entity(enemy).insert(EnemyStunned);
     }
 }

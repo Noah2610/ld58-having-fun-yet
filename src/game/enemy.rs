@@ -1,18 +1,15 @@
-use crate::{
-    AppSystems, GameplaySet,
-    asset_tracking::LoadResource,
-    game::util::{CollisionTag, FixObjectColliders},
-};
+use crate::{AppSystems, GameplaySet, asset_tracking::LoadResource, game::util::CollisionTag};
 use avian2d::{math::Scalar, prelude::*};
 use bevy::prelude::*;
 use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 
 pub fn plugin(app: &mut App) {
     app.load_resource::<EnemyAssets>();
     app.add_systems(
         Update,
-        (post_add_enemy, run_enemy_behavior)
+        (post_add_enemy, run_enemy_behavior, handle_enemy_stun)
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
     );
@@ -37,7 +34,6 @@ fn post_add_enemy(
 #[reflect(Component)]
 #[require(
     Name::new("Enemy"),
-    EnemyActive,
     // FixObjectColliders,
     Sprite::default(),
     RigidBody::Dynamic,
@@ -61,7 +57,10 @@ pub struct EnemyGoal;
 
 #[derive(Component, Reflect, Clone, Copy, Debug, Default)]
 #[reflect(Component)]
-struct EnemyActive;
+pub struct EnemyStunned;
+
+#[derive(Component)]
+struct EnemyStunnedTimer(Timer);
 
 #[derive(Component)]
 struct EnemyInitialized;
@@ -70,17 +69,19 @@ struct EnemyInitialized;
 #[reflect(Resource)]
 struct EnemyAssets {
     #[dependency]
-    spritesheet: Handle<Aseprite>,
-    speed:       Scalar,
+    spritesheet:   Handle<Aseprite>,
+    speed:         Scalar,
+    stun_duration: Duration,
 }
 
 impl FromWorld for EnemyAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            spritesheet: world
+            spritesheet:   world
                 .resource::<AssetServer>()
                 .load("spritesheets/enemy.ase"),
-            speed:       400.0,
+            speed:         400.0,
+            stun_duration: Duration::from_secs(2),
         }
     }
 }
@@ -90,7 +91,7 @@ fn run_enemy_behavior(
     assets: Res<EnemyAssets>,
     enemies: Query<
         (&Transform, &mut LinearVelocity),
-        (With<Enemy>, With<EnemyActive>, Without<EnemyGoal>),
+        (With<Enemy>, Without<EnemyStunned>, Without<EnemyGoal>),
     >,
     goals: Query<&Transform, (With<EnemyGoal>, Without<Enemy>)>,
 ) {
@@ -115,6 +116,40 @@ fn run_enemy_behavior(
         {
             let direction = (target - transform.translation.truncate()).normalize();
             velocity.0 += direction * assets.speed * delta;
+        }
+    }
+}
+
+fn handle_enemy_stun(
+    time: Res<Time>,
+    mut commands: Commands,
+    assets: Res<EnemyAssets>,
+    newly_stunned_enemies: Query<
+        (Entity, &mut AseAnimation),
+        (With<Enemy>, Added<EnemyStunned>, Without<EnemyStunnedTimer>),
+    >,
+    stunned_enemies: Query<
+        (Entity, &mut EnemyStunnedTimer, &mut AseAnimation),
+        (With<Enemy>, With<EnemyStunned>),
+    >,
+) {
+    for (enemy, mut ase) in newly_stunned_enemies {
+        commands.entity(enemy).insert(EnemyStunnedTimer(Timer::new(
+            assets.stun_duration,
+            TimerMode::Once,
+        )));
+        ase.animation.play_loop("stun");
+    }
+
+    let delta = time.delta();
+
+    for (enemy, mut timer, mut ase) in stunned_enemies {
+        timer.0.tick(delta);
+        if timer.0.is_finished() {
+            commands
+                .entity(enemy)
+                .remove::<(EnemyStunned, EnemyStunnedTimer)>();
+            ase.animation.play_loop("idle");
         }
     }
 }
