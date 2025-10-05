@@ -1,14 +1,14 @@
 # Implementation steps
 - [X] top down movement
 - [X] 8-directional aiming
-- [ ] bullet shooting
+- [X] bullet shooting
 - [ ] enemies:
     - [ ] enemy spawning
     - [ ] enemy contact damage with player
     - [ ] enemy hit by bullet
 - [ ] bullet ricochet
 - [ ] player recoil knockback
-- [ ] collect dropped bullet
+- [X] collect dropped bullet
 
 # Rough Plan
 ## Day 1
