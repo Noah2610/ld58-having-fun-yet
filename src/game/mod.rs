@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+pub mod aim;
 pub mod animation;
 pub mod level;
 pub mod movement;
@@ -13,5 +14,6 @@ pub(super) fn plugin(app: &mut App) {
         movement::plugin,
         player::plugin,
         solid::plugin,
+        aim::plugin,
     ));
 }

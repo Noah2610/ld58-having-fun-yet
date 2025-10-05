@@ -1,7 +1,10 @@
 use crate::{
     AppSystems,
     asset_tracking::LoadResource,
-    game::movement::{Acceleration, MovementController},
+    game::{
+        aim::AimDirection,
+        movement::{Acceleration, MovementController, WalkDirection},
+    },
     game_state::GameplaySet,
 };
 use avian2d::prelude::*;
@@ -70,7 +73,9 @@ fn post_add_player(
     LinearDamping(15.0),
     RigidBody::Dynamic,
     Collider::default(), // Player needs a collider in order for its children colliders to work
-    LockedAxes::ROTATION_LOCKED
+    LockedAxes::ROTATION_LOCKED,
+    WalkDirection,
+    AimDirection,
 )]
 pub struct Player;
 

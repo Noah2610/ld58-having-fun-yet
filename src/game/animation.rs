@@ -6,13 +6,14 @@
 
 use crate::{
     AppSystems, GameplaySet,
-    game::player::{Player, PlayerAssets},
+    game::{
+        movement::{Direction, WalkDirection},
+        player::{Player, PlayerAssets},
+    },
 };
-use avian2d::prelude::LinearVelocity;
 use bevy::prelude::*;
 use bevy_aseprite_ultra::prelude::{AnimationState, AseAnimation, Aseprite, NextFrameEvent};
-use rand::{Rng, prelude::IndexedRandom};
-use std::time::Duration;
+use rand::prelude::IndexedRandom;
 
 pub(super) fn plugin(app: &mut App) {
     // Animate based on controls.
@@ -26,19 +27,50 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn update_animation(
-    mut query: Query<(&LinearVelocity, &mut AseAnimation, &mut Sprite), With<Player>>,
+    mut query: Query<
+        (
+            &WalkDirection,
+            &mut AseAnimation,
+            &mut Sprite,
+            &mut Transform,
+        ),
+        With<Player>,
+    >,
 ) {
-    for (velocity, mut ase, mut sprite) in &mut query {
-        let dx = velocity.x;
-        if dx.abs() > 0.1 {
-            sprite.flip_x = dx < 0.0;
-        }
+    use Direction::*;
 
-        if velocity.0.abs().max_element() < 5.0 {
-            ase.animation.play_loop("idle");
-        } else {
-            ase.animation.play_loop("walk");
-        };
+    const TILT_DEG: f32 = 0.2;
+
+    for (direction, mut ase, mut sprite, mut transform) in &mut query {
+        transform.rotation = Quat::IDENTITY;
+
+        match &direction.0 {
+            Some(dir) => {
+                ase.animation.play_loop("walk");
+                match dir {
+                    Top | Bottom => { /* Retain current flip */ },
+                    Left => sprite.flip_x = true,
+                    Right => sprite.flip_x = false,
+                    TopLeft => {
+                        sprite.flip_x = true;
+                        transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                    },
+                    TopRight => {
+                        sprite.flip_x = false;
+                        transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                    },
+                    BottomLeft => {
+                        sprite.flip_x = true;
+                        transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                    },
+                    BottomRight => {
+                        sprite.flip_x = false;
+                        transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                    },
+                }
+            },
+            None => ase.animation.play_loop("idle"),
+        }
     }
 }
 
