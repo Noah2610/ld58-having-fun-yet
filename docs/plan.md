@@ -15,10 +15,14 @@
 - [ ] game over screen
 - [ ] enemy spawning system, spawn over time?
 - [ ] improve enemy behavior, randomize movement a bit?
+    - [ ] increase enemy speed, maybe on every hit?
 - [ ] slightly randomize bullet ricochet direction
 - [ ] add scoring system
+    - [ ] highscore system
+    - [ ] online leaderboard???
 - [ ] bullet available indicator
     - [ ] arrow pointing towards bullet if far enough away ?
+- [ ] update theme/UI style
 
 # Rough Plan
 ## Day 1
