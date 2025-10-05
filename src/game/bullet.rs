@@ -36,13 +36,16 @@ pub fn plugin(app: &mut App) {
     DespawnOnExit::<_>(Screen::Gameplay),
     Sprite::default(),
     RigidBody::Dynamic,
+    Collider::circle(6.5),
     Mass(0.1),
     CollisionLayers::new(
         [CollisionTag::Bullet, CollisionTag::Entity],
         [CollisionTag::Solid, CollisionTag::Enemy],
     ),
-    Collider::circle(6.5),
-    // Collider::rectangle(11.0, 11.0),
+    Restitution {
+        coefficient: 0.3,
+        combine_rule: CoefficientCombine::Max
+    },
     AngularDamping(2.0),
     CollisionEventsEnabled
 )]

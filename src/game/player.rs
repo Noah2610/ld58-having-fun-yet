@@ -70,6 +70,10 @@ fn post_add_player(
         [CollisionTag::Player, CollisionTag::Entity],
         [CollisionTag::Solid, CollisionTag::Enemy, CollisionTag::Collectable],
     ),
+    Restitution {
+        coefficient: 0.1,
+        combine_rule: CoefficientCombine::Max
+    },
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner,
 )]

@@ -7,7 +7,8 @@
     - [ ] enemy contact damage with player
     - [ ] knockback player on hurt
     - [ ] enemy hit by bullet
-- [ ] bullet ricochet
+- [X] bullet ricochet
+- [ ] bullet knockback enemy
 - [ ] player recoil knockback
 - [X] collect dropped bullet
 
