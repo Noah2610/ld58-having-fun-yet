@@ -2,14 +2,14 @@
 - [X] top down movement
 - [X] 8-directional aiming
 - [X] bullet shooting
-- [o] enemies:
+- [O] enemies:
     - [X] enemy spawning
     - [X] enemy behavior
     - [ ] enemy contact damage with player
-    - [ ] knockback player on hurt
+    - [X] knockback player on enemy contact
     - [ ] enemy hit by bullet
 - [X] bullet ricochet
-- [ ] bullet knockback enemy
+- [ ] bullet knockback enemy (? not necessary if one-shot)
 - [X] player recoil knockback
 - [X] collect dropped bullet
 

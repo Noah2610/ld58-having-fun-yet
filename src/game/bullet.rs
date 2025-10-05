@@ -127,7 +127,7 @@ fn handle_spawn_bullet(
                     Transform::from_translation(transform.translation + offset),
                     LinearVelocity(dir_vec * assets.speed),
                 ))
-                .observe(handle_bullet_collection);
+                .observe(handle_collect_bullet);
 
             commands.entity(entity).remove::<BulletAvailable>();
         }
@@ -164,7 +164,7 @@ fn handle_bullet_timers(
     }
 }
 
-fn handle_bullet_collection(
+fn handle_collect_bullet(
     trigger: On<CollisionStart>,
     mut commands: Commands,
     bullets: Query<(), (With<Bullet>, With<Collectable>)>,
