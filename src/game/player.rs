@@ -2,8 +2,8 @@ use crate::{
     AppSystems,
     asset_tracking::LoadResource,
     game::{
-        aim::AimDirection,
-        movement::{Acceleration, MovementController, WalkDirection},
+        aim::AimController,
+        movement::{Acceleration, MovementController},
     },
     game_state::GameplaySet,
 };
@@ -69,13 +69,12 @@ fn post_add_player(
     Sprite::default(),
     Anchor::CENTER,
     MovementController,
+    AimController,
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
     Collider::default(), // Player needs a collider in order for its children colliders to work
     LockedAxes::ROTATION_LOCKED,
-    WalkDirection,
-    AimDirection,
 )]
 pub struct Player;
 

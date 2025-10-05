@@ -5,6 +5,7 @@ use crate::{
 use avian2d::{math::Scalar, prelude::*};
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(
@@ -17,6 +18,7 @@ pub(super) fn plugin(app: &mut App) {
 
 #[derive(Component, Reflect, Default)]
 #[reflect(Component)]
+#[require(Acceleration(1000.0), WalkDirection)]
 pub struct MovementController;
 
 #[derive(Component, Reflect, Serialize, Deserialize)]
@@ -27,7 +29,7 @@ pub struct Acceleration(pub Scalar);
 #[reflect(Component)]
 pub struct WalkDirection(pub Option<Direction>);
 
-#[derive(Reflect)]
+#[derive(Reflect, Clone, Copy)]
 pub enum Direction {
     Top,
     Bottom,
@@ -37,6 +39,33 @@ pub enum Direction {
     TopRight,
     BottomLeft,
     BottomRight,
+}
+
+impl Direction {
+    /// Returns the absolute direction for x, converting left to right variants
+    pub fn abs_x(self) -> Self {
+        match self {
+            Direction::Left => Direction::Right,
+            Direction::TopLeft => Direction::TopRight,
+            Direction::BottomLeft => Direction::BottomRight,
+            _ => self,
+        }
+    }
+}
+
+impl fmt::Display for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", match self {
+            Direction::Top => "top",
+            Direction::Bottom => "bottom",
+            Direction::Left => "left",
+            Direction::Right => "right",
+            Direction::TopLeft => "top-left",
+            Direction::TopRight => "top-right",
+            Direction::BottomLeft => "bottom-left",
+            Direction::BottomRight => "bottom-right",
+        })
+    }
 }
 
 fn apply_movement(

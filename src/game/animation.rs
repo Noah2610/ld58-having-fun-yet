@@ -7,6 +7,7 @@
 use crate::{
     AppSystems, GameplaySet,
     game::{
+        aim::AimDirection,
         movement::{Direction, WalkDirection},
         player::{Player, PlayerAssets},
     },
@@ -30,6 +31,7 @@ fn update_animation(
     mut query: Query<
         (
             &WalkDirection,
+            &AimDirection,
             &mut AseAnimation,
             &mut Sprite,
             &mut Transform,
@@ -41,35 +43,41 @@ fn update_animation(
 
     const TILT_DEG: f32 = 0.2;
 
-    for (direction, mut ase, mut sprite, mut transform) in &mut query {
+    for (walk_direction, aim_direction, mut ase, mut sprite, mut transform) in &mut query {
         transform.rotation = Quat::IDENTITY;
 
-        match &direction.0 {
-            Some(dir) => {
-                ase.animation.play_loop("walk");
-                match dir {
-                    Top | Bottom => { /* Retain current flip */ },
-                    Left => sprite.flip_x = true,
-                    Right => sprite.flip_x = false,
-                    TopLeft => {
-                        sprite.flip_x = true;
-                        transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-                    },
-                    TopRight => {
-                        sprite.flip_x = false;
-                        transform.rotation = Quat::from_rotation_z(TILT_DEG);
-                    },
-                    BottomLeft => {
-                        sprite.flip_x = true;
-                        transform.rotation = Quat::from_rotation_z(TILT_DEG);
-                    },
-                    BottomRight => {
-                        sprite.flip_x = false;
-                        transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-                    },
-                }
+        let (anim, anim_dir) = match (&walk_direction.0, &aim_direction.0) {
+            (Some(_), Some(aim)) => (format!("walk-aim-{}", aim.abs_x()), Some(*aim)),
+            (Some(walk), None) => ("walk".into(), Some(*walk)),
+            (None, Some(aim)) => (format!("aim-{}", aim.abs_x()), Some(*aim)),
+            (None, None) => ("idle".into(), None),
+        };
+
+        ase.animation.play_loop(anim);
+
+        match anim_dir {
+            Some(dir) => match dir {
+                Top | Bottom => { /* Retain current flip */ },
+                Left => sprite.flip_x = true,
+                Right => sprite.flip_x = false,
+                TopLeft => {
+                    sprite.flip_x = true;
+                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                },
+                TopRight => {
+                    sprite.flip_x = false;
+                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                },
+                BottomLeft => {
+                    sprite.flip_x = true;
+                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                },
+                BottomRight => {
+                    sprite.flip_x = false;
+                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                },
             },
-            None => ase.animation.play_loop("idle"),
+            None => (),
         }
     }
 }
