@@ -9,7 +9,7 @@
     - [ ] enemy hit by bullet
 - [X] bullet ricochet
 - [ ] bullet knockback enemy
-- [ ] player recoil knockback
+- [X] player recoil knockback
 - [X] collect dropped bullet
 
 # Rough Plan

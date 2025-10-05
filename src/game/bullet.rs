@@ -80,6 +80,7 @@ struct BulletAssets {
     speed:            Scalar,
     duration:         Duration,
     velocity_damping: Scalar,
+    player_knockback: Scalar,
 }
 
 impl FromWorld for BulletAssets {
@@ -91,8 +92,9 @@ impl FromWorld for BulletAssets {
             sfx_shoot:        world.resource::<AssetServer>().load("audio/sfx/shoot.ogg"),
             spawn_offset:     16.0,
             speed:            200.0,
-            duration:         Duration::from_secs(1),
+            duration:         Duration::from_millis(500),
             velocity_damping: 2.0,
+            player_knockback: 300.0,
         }
     }
 }
@@ -101,14 +103,17 @@ fn handle_spawn_bullet(
     mut commands: Commands,
     assets: Res<BulletAssets>,
     spawners: Query<
-        (Entity, &Transform, &AimDirection),
+        (Entity, &Transform, &AimDirection, &mut LinearVelocity),
         (With<BulletSpawner>, With<BulletAvailable>),
     >,
 ) {
-    for (entity, transform, aim) in spawners {
+    for (entity, transform, aim, mut velocity) in spawners {
         if let Some(dir) = &aim.0 {
             let dir_vec = dir.vec();
             let offset = (dir_vec * assets.spawn_offset).extend(0.0);
+            let knockback = dir.opposite().vec() * assets.player_knockback;
+
+            velocity.0 += knockback;
 
             commands
                 .spawn((

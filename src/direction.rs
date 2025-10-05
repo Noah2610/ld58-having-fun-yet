@@ -24,7 +24,21 @@ impl Direction {
         }
     }
 
-    pub fn vec(&self) -> Vec2 {
+    pub fn opposite(self) -> Self {
+        use Direction::*;
+        match self {
+            Top => Bottom,
+            Bottom => Top,
+            Left => Right,
+            Right => Left,
+            TopLeft => BottomRight,
+            TopRight => BottomLeft,
+            BottomLeft => TopRight,
+            BottomRight => TopLeft,
+        }
+    }
+
+    pub fn vec(self) -> Vec2 {
         use Direction::*;
         match self {
             Top => Vec2::Y,
