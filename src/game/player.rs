@@ -4,6 +4,7 @@ use crate::{
     game::{
         aim::AimController,
         bullet::BulletSpawner,
+        enemy::EnemyGoal,
         movement::{Acceleration, MovementController},
         util::{CollisionTag, FixObjectColliders},
     },
@@ -76,6 +77,7 @@ fn post_add_player(
     },
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner,
+    EnemyGoal,
 )]
 pub struct Player;
 

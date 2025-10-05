@@ -4,6 +4,7 @@
 - [X] bullet shooting
 - [o] enemies:
     - [X] enemy spawning
+    - [X] enemy behavior
     - [ ] enemy contact damage with player
     - [ ] knockback player on hurt
     - [ ] enemy hit by bullet
