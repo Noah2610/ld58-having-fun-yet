@@ -7,6 +7,7 @@ use crate::{
         enemy::{Enemy, EnemyGoal},
         movement::{Acceleration, MovementController},
         util::CollisionTag,
+        visuals::{AnimationDirection, ColorAnimation, ColorAnimationState},
     },
     game_state::GameplaySet,
 };
@@ -69,6 +70,13 @@ fn post_add_player(
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner,
     EnemyGoal,
+
+    ColorAnimation {
+        period: 8.0,
+        direction: AnimationDirection::Linear,
+        ..default()
+    },
+    ColorAnimationState(Color::hsl(0.0, 0.8, 0.75)),
 )]
 pub struct Player;
 

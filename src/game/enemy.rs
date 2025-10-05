@@ -1,7 +1,15 @@
-use crate::{AppSystems, GameplaySet, asset_tracking::LoadResource, game::util::CollisionTag};
+use crate::{
+    AppSystems, GameplaySet,
+    asset_tracking::LoadResource,
+    game::{
+        util::CollisionTag,
+        visuals::{AnimationDirection, ColorAnimation, ColorAnimationState},
+    },
+};
 use avian2d::{math::Scalar, prelude::*};
 use bevy::prelude::*;
 use bevy_aseprite_ultra::prelude::{Animation, AseAnimation, Aseprite};
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -45,6 +53,15 @@ fn post_add_enemy(
     ),
     LockedAxes::ROTATION_LOCKED,
     LinearDamping(10.0),
+
+    ColorAnimation {
+        // hue_range: (40.0, 180.0),
+        period: 6.0,
+        direction: AnimationDirection::Boomerang,
+        time_offset: rand::rng().random_range(0.0 .. 6.0),
+        ..default()
+    },
+    ColorAnimationState(Color::hsl(0.0, 0.6, 0.8)),
 )]
 pub struct Enemy;
 

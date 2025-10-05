@@ -15,8 +15,8 @@ pub fn plugin(app: &mut App) {
     .configure_sets(
         PostUpdate,
         GameplaySet.run_if(in_state(Screen::Gameplay).and(in_state(Paused(false)))),
-    );
-    app.configure_sets(
+    )
+    .configure_sets(
         FixedPostUpdate,
         PhysicsSystems::StepSimulation
             .run_if(in_state(Screen::Gameplay).and(in_state(Paused(false)))),

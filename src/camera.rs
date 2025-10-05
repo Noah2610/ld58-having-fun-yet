@@ -1,5 +1,8 @@
 use crate::{AppSystems, GameplaySet, game::player::Player};
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    render::view::{ColorGrading, ColorGradingGlobal},
+};
 
 pub fn plugin(app: &mut App) {
     app.add_systems(Startup, spawn_camera).add_systems(
@@ -19,9 +22,16 @@ fn spawn_camera(mut commands: Commands) {
     commands.spawn((
         MainCamera,
         Projection::Orthographic(OrthographicProjection {
-            scale: 0.5,
+            scale: 0.25,
             ..OrthographicProjection::default_2d()
         }),
+        ColorGrading {
+            global: ColorGradingGlobal {
+                hue: 0.0,
+                ..default()
+            },
+            ..default()
+        },
     ));
 }
 

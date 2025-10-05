@@ -5,6 +5,7 @@ use crate::{
         aim::AimDirection,
         enemy::{Enemy, EnemyStunned},
         util::CollisionTag,
+        visuals::{AnimationDirection, ColorAnimation, ColorAnimationState},
     },
     input::{PlayerAction, action_just_pressed},
     screens::Screen,
@@ -51,7 +52,15 @@ pub fn plugin(app: &mut App) {
         combine_rule: CoefficientCombine::Max
     },
     AngularDamping(2.0),
-    CollisionEventsEnabled
+    CollisionEventsEnabled,
+
+    ColorAnimation {
+        range: (0.0, 70.0),
+        period: 1.0,
+        direction: AnimationDirection::Boomerang,
+        ..default()
+    },
+    ColorAnimationState(Color::hsl(0.0, 0.9, 0.4)),
 )]
 pub struct Bullet;
 

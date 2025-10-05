@@ -8,6 +8,7 @@ pub mod level;
 pub mod movement;
 pub mod player;
 pub mod solid;
+pub mod visuals;
 
 mod util;
 
@@ -22,5 +23,6 @@ pub(super) fn plugin(app: &mut App) {
         aim::plugin,
         bullet::plugin,
         enemy::plugin,
+        visuals::plugin,
     ));
 }
