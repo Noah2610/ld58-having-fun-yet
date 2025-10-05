@@ -13,6 +13,9 @@
 - [X] player recoil knockback
 - [X] collect dropped bullet
 - [ ] game over screen
+- [ ] improve enemy behavior, randomize movement a bit?
+- [ ] slightly randomize bullet ricochet direction
+- [ ] add scoring system
 
 # Rough Plan
 ## Day 1
