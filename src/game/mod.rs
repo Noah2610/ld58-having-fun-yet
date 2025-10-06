@@ -1,16 +1,17 @@
 use bevy::prelude::*;
 
-pub mod waves;
 pub mod aim;
 pub mod animation;
 pub mod bullet;
 pub mod enemy;
+pub mod health;
 pub mod level;
 pub mod movement;
 pub mod player;
 pub mod solid;
 pub mod survival_timer;
 pub mod visuals;
+pub mod waves;
 
 mod util;
 
@@ -28,5 +29,6 @@ pub(super) fn plugin(app: &mut App) {
         visuals::plugin,
         survival_timer::plugin,
         waves::plugin,
+        health::plugin,
     ));
 }

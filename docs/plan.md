@@ -23,6 +23,7 @@
 - [ ] bullet available indicator
     - [ ] arrow pointing towards bullet if far enough away ?
 - [ ] update theme/UI style
+- [ ] ability to knock enemies into other enemies to deal damage
 
 # Rough Plan
 ## Day 1

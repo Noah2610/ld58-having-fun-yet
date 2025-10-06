@@ -104,12 +104,12 @@ impl FromWorld for BulletAssets {
                 .resource::<AssetServer>()
                 .load("spritesheets/bullet.ase"),
             sfx_shoot:        world.resource::<AssetServer>().load("audio/sfx/shoot.ogg"),
-            spawn_offset:     16.0,
+            spawn_offset:     8.0,
             speed:            200.0,
             duration:         Duration::from_millis(500),
             velocity_damping: 2.0,
             player_knockback: 300.0,
-            enemy_knockback:  300.0,
+            enemy_knockback:  500.0,
         }
     }
 }

@@ -5,6 +5,7 @@ use crate::{
         aim::AimController,
         bullet::BulletSpawner,
         enemy::{Enemy, EnemyGoal},
+        health::Health,
         movement::{Acceleration, MovementController},
         util::CollisionTag,
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},

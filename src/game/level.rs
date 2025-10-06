@@ -1,6 +1,6 @@
 //! Spawn the main level.
 
-use crate::{asset_tracking::LoadResource, game::waves::WavesManager, screens::Screen};
+use crate::{asset_tracking::LoadResource, game::waves::waves_managers, screens::Screen};
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
 
@@ -38,12 +38,13 @@ pub fn spawn_level(mut commands: Commands, level_assets: Res<LevelAssets>) {
         },
         TilemapAnchor::Center,
         DespawnOnExit(Screen::Gameplay),
-        children![
-            WavesManager,
-            // (
-            //     Name::new("Gameplay Music"),
-            //     music(level_assets.music.clone())
-            // )
-        ],
+        Children::spawn(waves_managers()),
+        // children![
+        //     // WavesManager,
+        //     // (
+        //     //     Name::new("Gameplay Music"),
+        //     //     music(level_assets.music.clone())
+        //     // )
+        // ],
     ));
 }
