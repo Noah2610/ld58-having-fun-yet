@@ -4,8 +4,8 @@ use crate::{
     game::{
         aim::AimController,
         bullet::BulletSpawner,
-        enemy::{Enemy, EnemyGoal, EnemySettings},
-        health::Health,
+        enemy::{Enemy, EnemyGoal, EnemySettings, EnemyStunned},
+        health::{Dead, Health},
         movement::{Acceleration, MovementController},
         util::CollisionTag,
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
@@ -71,6 +71,7 @@ fn post_add_player(
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner,
     EnemyGoal,
+    Health::new(3),
 
     SetSpriteColor(Color::hsl(0.0, 0.8, 0.75)),
     HueAnimation(VisualAnimation {
@@ -114,18 +115,32 @@ impl FromWorld for PlayerAssets {
 
 fn handle_enemy_collision(
     trigger: On<CollisionStart>,
-    mut players: Query<(&Transform, &mut LinearVelocity), (With<Player>, Without<Enemy>)>,
-    enemies: Query<(&Transform, &EnemySettings), (With<Enemy>, Without<Player>)>,
+    mut players: Query<
+        (&Transform, &mut LinearVelocity, Option<&mut Health>),
+        (With<Player>, Without<Enemy>),
+    >,
+    enemies: Query<
+        (&Transform, &EnemySettings),
+        (
+            With<Enemy>,
+            Without<EnemyStunned>,
+            Without<Dead>,
+            Without<Player>,
+        ),
+    >,
 ) {
     let player = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok((player_transform, mut velocity)), Ok((enemy_transform, enemy_settings))) =
+    if let (Ok((player_transform, mut velocity, health)), Ok((enemy_transform, enemy_settings))) =
         (players.get_mut(player), enemies.get(enemy))
     {
         let direction = (player_transform.translation.truncate()
             - enemy_transform.translation.truncate())
         .normalize_or_zero();
         velocity.0 += direction * enemy_settings.knockback_strength;
+        if let Some(mut health) = health {
+            health.damage(1);
+        }
     }
 }

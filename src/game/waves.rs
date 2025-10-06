@@ -65,9 +65,9 @@ impl Default for WavesManagerSettings {
     fn default() -> Self {
         Self {
             enemy_variant:            EnemyVariant::Basic,
-            spawn_every_n_secs:       10,
-            initial_enemies:          3,
-            enemies_incr_per_wave:    2,
+            spawn_every_n_secs:       5,
+            initial_enemies:          1,
+            enemies_incr_per_wave:    1,
             enemy_spawn_radius_range: (100.0, 200.0),
         }
     }

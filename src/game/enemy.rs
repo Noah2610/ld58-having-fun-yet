@@ -2,7 +2,7 @@ use crate::{
     AppSystems, GameplaySet,
     asset_tracking::LoadResource,
     game::{
-        health::Health,
+        health::{Dead, Health},
         util::{CollisionTag, SetScale},
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
@@ -109,6 +109,7 @@ pub enum EnemyVariant {
 struct EnemyVariantBundle {
     settings: EnemySettings,
     scale:    SetScale,
+    health:   Health,
 }
 
 impl From<EnemyVariant> for EnemyVariantBundle {
@@ -121,6 +122,7 @@ impl From<EnemyVariant> for EnemyVariantBundle {
                     knockback_strength: 300.0,
                 },
                 scale:    Vec2::splat(1.0).into(),
+                health:   Health::new(1),
             },
             EnemyVariant::Bigger => Self {
                 settings: EnemySettings {
@@ -129,6 +131,7 @@ impl From<EnemyVariant> for EnemyVariantBundle {
                     knockback_strength: 600.0,
                 },
                 scale:    Vec2::splat(2.0).into(),
+                health:   Health::new(3),
             },
         }
     }
@@ -183,7 +186,12 @@ fn run_enemy_behavior(
     time: Res<Time>,
     enemies: Query<
         (&GlobalTransform, &EnemySettings, &mut LinearVelocity),
-        (With<Enemy>, Without<EnemyStunned>, Without<EnemyGoal>),
+        (
+            With<Enemy>,
+            Without<EnemyStunned>,
+            Without<Dead>,
+            Without<EnemyGoal>,
+        ),
     >,
     goals: Query<&GlobalTransform, (With<EnemyGoal>, Without<Enemy>)>,
 ) {

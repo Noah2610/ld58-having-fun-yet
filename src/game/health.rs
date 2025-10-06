@@ -4,7 +4,8 @@ use bevy::prelude::*;
 pub fn plugin(app: &mut App) {
     app.add_systems(
         Update,
-        sync_alive_dead
+        (sync_alive_dead, handle_dead_entities, despawn_entities)
+            .chain()
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
     );
@@ -51,6 +52,27 @@ fn sync_alive_dead(
     for (entity, health) in dead_query {
         if health.is_alive() {
             commands.entity(entity).remove::<Dead>().insert(Alive);
+        }
+    }
+}
+
+fn handle_dead_entities(time: Res<Time>, dead_query: Query<&mut Transform, With<Dead>>) {
+    let dt = time.delta_secs();
+    let delta = 1.0 * dt;
+    for mut transform in dead_query {
+        transform.scale = Vec3::new(
+            transform.scale.x - delta,
+            transform.scale.y - delta,
+            transform.scale.z,
+        )
+        .max(Vec3::ZERO);
+    }
+}
+
+fn despawn_entities(mut commands: Commands, dead_query: Query<(Entity, &Transform), With<Dead>>) {
+    for (entity, transform) in dead_query {
+        if transform.scale.x <= 0.0 || transform.scale.y <= 0.0 {
+            commands.entity(entity).despawn();
         }
     }
 }

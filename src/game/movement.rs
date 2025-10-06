@@ -1,6 +1,7 @@
 use crate::{
     AppSystems, GameplaySet,
     direction::Direction,
+    game::health::Dead,
     input::{ActionState, PlayerAction},
 };
 use avian2d::{math::Scalar, prelude::*};
@@ -32,7 +33,10 @@ pub struct WalkDirection(pub Option<Direction>);
 fn apply_movement(
     time: Res<Time>,
     action_state: Res<ActionState<PlayerAction>>,
-    mut controllers: Query<(&Acceleration, &mut LinearVelocity), With<MovementController>>,
+    mut controllers: Query<
+        (&Acceleration, &mut LinearVelocity),
+        (With<MovementController>, Without<Dead>),
+    >,
 ) {
     const DEADZONE: Scalar = 0.1;
 

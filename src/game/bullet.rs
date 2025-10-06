@@ -4,6 +4,7 @@ use crate::{
     game::{
         aim::AimDirection,
         enemy::{Enemy, EnemyStunned},
+        health::{Dead, Health},
         util::CollisionTag,
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
@@ -200,14 +201,19 @@ fn handle_bullet_enemy_collision(
     assets: Res<BulletAssets>,
     bullets: Query<&Transform, (With<Bullet>, Without<Collectable>, Without<Enemy>)>,
     mut enemies: Query<
-        (&Transform, &mut LinearVelocity),
-        (With<Enemy>, Without<EnemyStunned>, Without<Bullet>),
+        (&Transform, &mut LinearVelocity, Option<&mut Health>),
+        (
+            With<Enemy>,
+            Without<EnemyStunned>,
+            Without<Dead>,
+            Without<Bullet>,
+        ),
     >,
 ) {
     let bullet = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok(bullet_transform), Ok((enemy_transform, mut velocity))) =
+    if let (Ok(bullet_transform), Ok((enemy_transform, mut velocity, health))) =
         (bullets.get(bullet), enemies.get_mut(enemy))
     {
         let direction = (enemy_transform.translation.truncate()
@@ -216,5 +222,9 @@ fn handle_bullet_enemy_collision(
         velocity.0 += direction * assets.enemy_knockback;
 
         commands.entity(enemy).insert(EnemyStunned);
+
+        if let Some(mut health) = health {
+            health.damage(1);
+        }
     }
 }
