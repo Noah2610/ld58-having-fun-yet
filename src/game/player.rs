@@ -11,7 +11,7 @@ use crate::{
         util::CollisionTag,
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
-    game_state::GameplaySet,
+    game_state::{GameOver, GameplaySet},
 };
 use avian2d::prelude::*;
 use bevy::prelude::*;
@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
 
-    app.add_systems(Update, handle_player_death_sfx);
+    app.add_systems(Update, handle_player_death);
     app.add_systems(
         PreUpdate,
         post_add_player
@@ -139,12 +139,19 @@ fn handle_enemy_collision(
     }
 }
 
-fn handle_player_death_sfx(
+fn handle_player_death(
     mut commands: Commands,
+    mut next_state: ResMut<NextState<GameOver>>,
     assets: Res<PlayerAssets>,
     players: Query<(), (With<Player>, Added<Dead>)>,
 ) {
+    let mut did_die = false;
     for _ in players {
+        did_die = true;
         commands.spawn(sound_effect(assets.sfx_death.clone()));
+    }
+
+    if did_die {
+        next_state.set(GameOver(true));
     }
 }

@@ -6,6 +6,7 @@ use crate::{
         score::Score,
         survival_timer::SurvivalTimer,
     },
+    game_state::GameOver,
 };
 use bevy::{ecs::relationship::RelatedSpawner, prelude::*};
 use rand::Rng;
@@ -14,6 +15,7 @@ pub fn plugin(app: &mut App) {
     app.add_systems(
         Update,
         handle_waves_manager
+            .run_if(in_state(GameOver(false)))
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
     );

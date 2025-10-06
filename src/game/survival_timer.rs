@@ -1,4 +1,4 @@
-use crate::{AppSystems, GameplaySet, Paused, screens::Screen};
+use crate::{AppSystems, GameplaySet, Paused, game_state::GameOver, screens::Screen};
 use bevy::{prelude::*, time::Stopwatch};
 use std::time::Duration;
 
@@ -15,6 +15,7 @@ pub fn plugin(app: &mut App) {
         OnEnter(Paused(false)),
         resume_timer.run_if(in_state(Screen::Gameplay)),
     );
+    app.add_systems(OnEnter(GameOver(true)), stop_timer);
 
     app.add_systems(
         Update,
@@ -46,7 +47,6 @@ fn start_timer(mut timer: ResMut<SurvivalTimer>) {
 
 fn stop_timer(mut timer: ResMut<SurvivalTimer>) {
     timer.0.pause();
-    timer.0.reset();
 }
 
 fn pause_timer(mut timer: ResMut<SurvivalTimer>) {
