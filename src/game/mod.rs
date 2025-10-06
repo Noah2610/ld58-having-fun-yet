@@ -3,6 +3,7 @@ use bevy::prelude::*;
 pub mod aim;
 pub mod animation;
 pub mod bullet;
+pub mod decoration;
 pub mod enemy;
 pub mod health;
 pub mod level;
@@ -30,5 +31,6 @@ pub(super) fn plugin(app: &mut App) {
         survival_timer::plugin,
         waves::plugin,
         health::plugin,
+        decoration::plugin,
     ));
 }

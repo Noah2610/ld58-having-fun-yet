@@ -1,6 +1,10 @@
 //! Spawn the main level.
 
-use crate::{asset_tracking::LoadResource, game::waves::waves_managers, screens::Screen};
+use crate::{
+    asset_tracking::LoadResource,
+    game::{decoration::Decoration, waves::waves_managers},
+    screens::Screen,
+};
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
 
@@ -17,8 +21,13 @@ pub struct LevelAssets {
 
 impl FromWorld for LevelAssets {
     fn from_world(world: &mut World) -> Self {
+        use std::env;
+        let filename = env::var("LEVEL").unwrap_or_else(|_| "map.tmx".into());
+
         Self {
-            map: world.resource::<AssetServer>().load("maps/dev.tmx"),
+            map: world
+                .resource::<AssetServer>()
+                .load(format!("maps/{filename}")),
         }
     }
 }

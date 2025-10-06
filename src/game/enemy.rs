@@ -60,7 +60,7 @@ fn handle_variant_change(
             continue;
         }
         commands.entity(entity).insert((
-            EnemyInitializedVariant(*dbg!(variant)),
+            EnemyInitializedVariant(*variant),
             EnemyVariantBundle::from(*variant),
         ));
     }

@@ -3,6 +3,7 @@
 
 use crate::AppSystems;
 use bevy::prelude::*;
+use bevy_ecs_tiled::prelude::TileColor;
 use std::f32::consts::PI;
 
 pub fn plugin(app: &mut App) {
@@ -33,7 +34,7 @@ pub fn plugin(app: &mut App) {
 
     app.add_systems(
         Update,
-        (
+        ((
             handle_set_sprite_color,
             (
                 (
@@ -55,10 +56,12 @@ pub fn plugin(app: &mut App) {
                     update_projection_scale_animations,
                 )
                     .run_if(global_camera_animations_enabled),
-            )
-                .run_if(global_animations_enabled),
+            ),
+            render_animations,
         )
-            .in_set(AppSystems::Update), // .in_set(GameplaySet),
+            .chain()
+            .run_if(global_animations_enabled))
+        .in_set(AppSystems::Update), // .in_set(GameplaySet),
     );
 }
 
@@ -212,11 +215,66 @@ const DEFAULT_CAMERA_SCALE_RANGE: (f32, f32) = (0.2, 0.3);
 
 fn handle_set_sprite_color(
     mut commands: Commands,
-    query: Query<(Entity, &SetSpriteColor, &mut Sprite), Added<SetSpriteColor>>,
+    query: Query<
+        (
+            Entity,
+            &SetSpriteColor,
+            Option<&mut Sprite>,
+            Option<&mut TileColor>,
+        ),
+        (Added<SetSpriteColor>, Or<(With<Sprite>, With<TileColor>)>),
+    >,
 ) {
-    for (entity, color, mut sprite) in query {
-        sprite.color = color.0;
+    for (entity, set_color, mut sprite, mut tile) in query {
+        let color = sprite
+            .as_mut()
+            .map(|s| &mut s.color)
+            .or_else(|| tile.as_mut().map(|t| &mut t.0));
+
+        if let Some(color) = color {
+            *color = set_color.0;
+        }
+
         commands.entity(entity).remove::<SetSpriteColor>();
+    }
+}
+
+fn render_animations(
+    query: Query<
+        (
+            Option<&mut Sprite>,
+            Option<&mut TileColor>,
+            Option<&HueAnimationState>,
+            Option<&SaturationAnimationState>,
+            Option<&LightnessAnimationState>,
+        ),
+        (
+            Without<AnimationsDisabled>,
+            Or<(
+                With<HueAnimationState>,
+                With<SaturationAnimationState>,
+                With<LightnessAnimationState>,
+            )>,
+            Or<(With<Sprite>, With<TileColor>)>,
+        ),
+    >,
+) {
+    for (mut sprite, mut tile_color, hue, saturation, lightness) in query {
+        let color = sprite
+            .as_mut()
+            .map(|s| &mut s.color)
+            .or_else(|| tile_color.as_mut().map(|t| &mut t.0));
+        if let Some(color) = color {
+            if let Some(hue) = hue {
+                color.set_hue(hue.0);
+            }
+            if let Some(saturation) = saturation {
+                color.set_saturation(saturation.0);
+            }
+            if let Some(lightness) = lightness {
+                *color = Color::hsl(color.hue(), color.saturation(), lightness.0);
+            }
+        }
     }
 }
 
@@ -252,48 +310,34 @@ fn animate_background_lightness(
 
 fn update_hue_animations(
     time: Res<Time>,
-    mut animations: Query<
-        (&HueAnimation, &mut HueAnimationState, &mut Sprite),
-        Without<AnimationsDisabled>,
-    >,
+    mut animations: Query<(&HueAnimation, &mut HueAnimationState), Without<AnimationsDisabled>>,
 ) {
-    for (anim, mut state, mut sprite) in &mut animations {
+    for (anim, mut state) in &mut animations {
         state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_HUE_RANGE);
-        sprite.color.set_hue(state.0);
     }
 }
 
 fn update_saturation_animations(
     time: Res<Time>,
     mut animations: Query<
-        (
-            &SaturationAnimation,
-            &mut SaturationAnimationState,
-            &mut Sprite,
-        ),
+        (&SaturationAnimation, &mut SaturationAnimationState),
         Without<AnimationsDisabled>,
     >,
 ) {
-    for (anim, mut state, mut sprite) in &mut animations {
+    for (anim, mut state) in &mut animations {
         state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SATURATION_RANGE);
-        sprite.color.set_saturation(state.0);
     }
 }
 
 fn update_lightness_animations(
     time: Res<Time>,
     mut animations: Query<
-        (
-            &LightnessAnimation,
-            &mut LightnessAnimationState,
-            &mut Sprite,
-        ),
+        (&LightnessAnimation, &mut LightnessAnimationState),
         Without<AnimationsDisabled>,
     >,
 ) {
-    for (anim, mut state, mut sprite) in &mut animations {
+    for (anim, mut state) in &mut animations {
         state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_LIGHTNESS_RANGE);
-        sprite.color = Color::hsl(sprite.color.hue(), sprite.color.saturation(), state.0);
     }
 }
 
