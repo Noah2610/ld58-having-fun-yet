@@ -11,6 +11,7 @@ pub mod movement;
 pub mod player;
 pub mod solid;
 pub mod survival_timer;
+pub mod visual_scaling;
 pub mod visuals;
 pub mod waves;
 
@@ -32,5 +33,6 @@ pub(super) fn plugin(app: &mut App) {
         waves::plugin,
         health::plugin,
         decoration::plugin,
+        visual_scaling::plugin,
     ));
 }
