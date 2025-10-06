@@ -73,7 +73,7 @@ fn post_add_player(
     LockedAxes::ROTATION_LOCKED,
     BulletSpawner,
     EnemyGoal,
-    Health::new(3),
+    Health::new(100),
 
     SetSpriteColor(Color::hsl(0.0, 0.8, 0.75)),
     HueAnimation(VisualAnimation {
