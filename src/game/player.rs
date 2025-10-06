@@ -1,6 +1,7 @@
 use crate::{
     AppSystems,
     asset_tracking::LoadResource,
+    audio::sound_effect,
     game::{
         aim::AimController,
         bullet::BulletSpawner,
@@ -20,6 +21,7 @@ use serde::{Deserialize, Serialize};
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
 
+    app.add_systems(Update, handle_player_death_sfx);
     app.add_systems(
         PreUpdate,
         post_add_player
@@ -90,6 +92,8 @@ struct PlayerInitialized;
 pub struct PlayerAssets {
     #[dependency]
     spritesheet: Handle<Aseprite>,
+    #[dependency]
+    sfx_death:   Handle<AudioSource>,
 }
 
 impl FromWorld for PlayerAssets {
@@ -98,6 +102,7 @@ impl FromWorld for PlayerAssets {
             spritesheet: world
                 .resource::<AssetServer>()
                 .load("spritesheets/player.ase"),
+            sfx_death:   world.resource::<AssetServer>().load("audio/sfx/death.ogg"),
         }
     }
 }
@@ -131,5 +136,15 @@ fn handle_enemy_collision(
         if let Some(mut health) = health {
             health.damage(1);
         }
+    }
+}
+
+fn handle_player_death_sfx(
+    mut commands: Commands,
+    assets: Res<PlayerAssets>,
+    players: Query<(), (With<Player>, Added<Dead>)>,
+) {
+    for _ in players {
+        commands.spawn(sound_effect(assets.sfx_death.clone()));
     }
 }

@@ -7,7 +7,7 @@ use bevy_ecs_tiled::prelude::TileColor;
 use std::f32::consts::PI;
 
 pub fn plugin(app: &mut App) {
-    app.insert_resource(ClearColor(Color::hsl(0.0, 0.2, 0.075)));
+    app.insert_resource(ClearColor(Color::hsl(0.0, 0.3, 0.075)));
 
     app.insert_resource(BackgroundHueAnimation(VisualAnimation {
         range: Some((110.0, 220.0)),
