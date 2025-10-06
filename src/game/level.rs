@@ -1,9 +1,6 @@
 //! Spawn the main level.
 
-use crate::{
-    asset_tracking::LoadResource,
-    screens::Screen,
-};
+use crate::{asset_tracking::LoadResource, game::waves::WavesManager, screens::Screen};
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;
 
@@ -41,30 +38,12 @@ pub fn spawn_level(mut commands: Commands, level_assets: Res<LevelAssets>) {
         },
         TilemapAnchor::Center,
         DespawnOnExit(Screen::Gameplay),
-        // children![
-        //     player(&player_assets),
-        //     // (
-        //     //     Name::new("Gameplay Music"),
-        //     //     music(level_assets.music.clone())
-        //     // )
-        // ],
+        children![
+            WavesManager,
+            // (
+            //     Name::new("Gameplay Music"),
+            //     music(level_assets.music.clone())
+            // )
+        ],
     ));
-    // .observe(populate_objects);
 }
-
-// fn populate_objects(
-//     trigger: On<TiledEvent<ObjectCreated>>,
-//     mut commands: Commands,
-//     objects: Query<&TiledObject, With<Solid>>,
-// ) {
-//     if let Ok(object) = objects.get(trigger.origin) {
-//         match object {
-//             TiledObject::Rectangle { width, height } => {
-//                 commands
-//                     .entity(trigger.entity)
-//                     .insert(Collider::rectangle(*width, *height));
-//             },
-//             _ => (),
-//         }
-//     }
-// }

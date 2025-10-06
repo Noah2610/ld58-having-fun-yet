@@ -107,31 +107,34 @@ fn run_enemy_behavior(
     time: Res<Time>,
     assets: Res<EnemyAssets>,
     enemies: Query<
-        (&Transform, &mut LinearVelocity),
+        (&GlobalTransform, &mut LinearVelocity),
         (With<Enemy>, Without<EnemyStunned>, Without<EnemyGoal>),
     >,
-    goals: Query<&Transform, (With<EnemyGoal>, Without<Enemy>)>,
+    goals: Query<&GlobalTransform, (With<EnemyGoal>, Without<Enemy>)>,
 ) {
     let delta = time.delta_secs();
     for (transform, mut velocity) in enemies {
+        let translation = transform.translation();
+
         if let Some(target) = goals
             .into_iter()
             .fold(None, |acc: Option<(f32, Vec2)>, goal| {
-                let distance = transform.translation.distance_squared(goal.translation);
+                let goal_translation = goal.translation();
+                let distance = translation.distance_squared(goal_translation);
                 Some(match acc {
                     Some(nearest) => {
                         if distance < nearest.0 {
-                            (distance, goal.translation.truncate())
+                            (distance, goal_translation.truncate())
                         } else {
                             nearest
                         }
                     },
-                    None => (distance, goal.translation.truncate()),
+                    None => (distance, goal_translation.truncate()),
                 })
             })
             .map(|(_, goal)| goal)
         {
-            let direction = (target - transform.translation.truncate()).normalize();
+            let direction = (target - translation.truncate()).normalize();
             velocity.0 += direction * assets.speed * delta;
         }
     }

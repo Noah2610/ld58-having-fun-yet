@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+pub mod waves;
 pub mod aim;
 pub mod animation;
 pub mod bullet;
@@ -26,5 +27,6 @@ pub(super) fn plugin(app: &mut App) {
         enemy::plugin,
         visuals::plugin,
         survival_timer::plugin,
+        waves::plugin,
     ));
 }
