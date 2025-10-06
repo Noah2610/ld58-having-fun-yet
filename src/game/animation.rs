@@ -1,15 +1,10 @@
 use crate::{
     AppSystems, GameplaySet,
     direction::Direction,
-    game::{
-        aim::AimDirection,
-        movement::WalkDirection,
-        player::{Player, PlayerAssets},
-    },
+    game::{aim::AimDirection, movement::WalkDirection, player::Player},
 };
 use bevy::prelude::*;
-use bevy_aseprite_ultra::prelude::{AnimationState, AseAnimation, NextFrameEvent};
-use rand::prelude::IndexedRandom;
+use bevy_aseprite_ultra::prelude::AseAnimation;
 
 pub(super) fn plugin(app: &mut App) {
     // Animate based on controls.
@@ -18,8 +13,7 @@ pub(super) fn plugin(app: &mut App) {
         update_animation
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
-    )
-    .add_observer(play_step_sounds);
+    );
 }
 
 fn update_animation(
@@ -50,48 +44,28 @@ fn update_animation(
 
         ase.animation.play_loop(anim);
 
-        if let Some(dir) = anim_dir { match dir {
-            Top | Bottom => { /* Retain current flip */ },
-            Left => sprite.flip_x = true,
-            Right => sprite.flip_x = false,
-            TopLeft => {
-                sprite.flip_x = true;
-                transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-            },
-            TopRight => {
-                sprite.flip_x = false;
-                transform.rotation = Quat::from_rotation_z(TILT_DEG);
-            },
-            BottomLeft => {
-                sprite.flip_x = true;
-                transform.rotation = Quat::from_rotation_z(TILT_DEG);
-            },
-            BottomRight => {
-                sprite.flip_x = false;
-                transform.rotation = Quat::from_rotation_z(-TILT_DEG);
-            },
-        } }
-    }
-}
-
-fn play_step_sounds(
-    trigger: On<NextFrameEvent>,
-    mut commands: Commands,
-    assets: Res<PlayerAssets>,
-    players: Query<(&AseAnimation, &AnimationState), With<Player>>,
-) {
-    if let Ok(animation) = players.get(trigger.0)
-        && animation.1.current_frame % 2 == 0
-            && animation
-                .0
-                .animation
-                .tag
-                .as_ref()
-                .map(|t| t.starts_with("walk"))
-                .unwrap_or_default()
-        {
-            let rng = &mut rand::rng();
-            let sfx = assets.steps.choose(rng).unwrap().clone();
-            commands.spawn((AudioPlayer(sfx), PlaybackSettings::DESPAWN));
+        if let Some(dir) = anim_dir {
+            match dir {
+                Top | Bottom => { /* Retain current flip */ },
+                Left => sprite.flip_x = true,
+                Right => sprite.flip_x = false,
+                TopLeft => {
+                    sprite.flip_x = true;
+                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                },
+                TopRight => {
+                    sprite.flip_x = false;
+                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                },
+                BottomLeft => {
+                    sprite.flip_x = true;
+                    transform.rotation = Quat::from_rotation_z(TILT_DEG);
+                },
+                BottomRight => {
+                    sprite.flip_x = false;
+                    transform.rotation = Quat::from_rotation_z(-TILT_DEG);
+                },
+            }
         }
+    }
 }

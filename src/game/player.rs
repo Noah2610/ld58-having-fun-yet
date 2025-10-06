@@ -90,8 +90,6 @@ struct PlayerInitialized;
 pub struct PlayerAssets {
     #[dependency]
     spritesheet: Handle<Aseprite>,
-    #[dependency]
-    pub steps:   Vec<Handle<AudioSource>>,
 }
 
 impl FromWorld for PlayerAssets {
@@ -100,15 +98,6 @@ impl FromWorld for PlayerAssets {
             spritesheet: world
                 .resource::<AssetServer>()
                 .load("spritesheets/player.ase"),
-            steps:       {
-                let assets = world.resource::<AssetServer>();
-                vec![
-                    assets.load("audio/steps/step1.ogg"),
-                    assets.load("audio/steps/step2.ogg"),
-                    assets.load("audio/steps/step3.ogg"),
-                    assets.load("audio/steps/step4.ogg"),
-                ]
-            },
         }
     }
 }
