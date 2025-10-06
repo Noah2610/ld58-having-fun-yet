@@ -8,6 +8,7 @@ pub mod level;
 pub mod movement;
 pub mod player;
 pub mod solid;
+pub mod survival_timer;
 pub mod visuals;
 
 mod util;
@@ -24,5 +25,6 @@ pub(super) fn plugin(app: &mut App) {
         bullet::plugin,
         enemy::plugin,
         visuals::plugin,
+        survival_timer::plugin,
     ));
 }

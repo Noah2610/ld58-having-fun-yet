@@ -1,10 +1,16 @@
 //! The screen state for the main gameplay.
 
-use crate::{Paused, game::level::spawn_level, menus::Menu, screens::Screen};
+use crate::{
+    Paused,
+    game::{level::spawn_level, survival_timer::TimeSurvivedValueUi},
+    menus::Menu,
+    screens::Screen,
+    theme::widget,
+};
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_systems(OnEnter(Screen::Gameplay), spawn_level);
+    app.add_systems(OnEnter(Screen::Gameplay), (spawn_level, spawn_ui));
 
     // Toggle pause on key press.
     app.add_systems(
@@ -27,6 +33,39 @@ pub(super) fn plugin(app: &mut App) {
         OnEnter(Menu::None),
         unpause.run_if(in_state(Screen::Gameplay)),
     );
+}
+
+fn spawn_ui(mut commands: Commands) {
+    commands.spawn((
+        Name::new("SurvivalTimer UI"),
+        Node {
+            position_type: PositionType::Absolute,
+            top: Val::Px(0.0),
+            width: percent(100),
+            flex_direction: FlexDirection::Column,
+            align_items: AlignItems::Center,
+            justify_content: JustifyContent::FlexStart,
+            row_gap: Val::Px(4.0),
+            ..default()
+        },
+        DespawnOnExit(Screen::Gameplay),
+        Pickable::IGNORE,
+        children![
+            (
+                Name::new("SurvivalTimer text"),
+                Text::new("Time Survived:"),
+                TextFont::from_font_size(16.0),
+                TextColor(Color::WHITE)
+            ),
+            (
+                Name::new("SurvivalTimer value"),
+                Text::new("00:00"),
+                TimeSurvivedValueUi,
+                TextFont::from_font_size(24.0),
+                TextColor(Color::WHITE)
+            )
+        ],
+    ));
 }
 
 fn unpause(mut next_pause: ResMut<NextState<Paused>>) {
