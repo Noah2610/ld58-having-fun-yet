@@ -29,6 +29,7 @@ pub fn plugin(app: &mut App) {
 
     app.insert_resource(GlobalAnimationsEnabled(true));
     app.insert_resource(GlobalColorAnimationsEnabled(true));
+    app.insert_resource(GlobalTransformAnimationsEnabled(true));
     app.insert_resource(GlobalCameraAnimationsEnabled(true));
     app.insert_resource(BackgroundVisualAnimationEnabled(true));
 
@@ -52,10 +53,15 @@ pub fn plugin(app: &mut App) {
                 )
                     .run_if(global_color_animations_enabled),
                 (
-                    update_rotation_animations,
-                    update_projection_scale_animations,
+                    (
+                        update_rotation_animations,
+                        update_projection_scale_animations,
+                    )
+                        .run_if(global_camera_animations_enabled),
+                    update_transform_scale_x_animations,
+                    update_transform_scale_y_animations,
                 )
-                    .run_if(global_camera_animations_enabled),
+                    .run_if(global_transform_animations_enabled),
             ),
             render_animations,
         )
@@ -74,6 +80,12 @@ fn global_color_animations_enabled(enabled: Option<Res<GlobalColorAnimationsEnab
 }
 
 fn global_camera_animations_enabled(enabled: Option<Res<GlobalCameraAnimationsEnabled>>) -> bool {
+    enabled.map(|e| e.0).unwrap_or_default()
+}
+
+fn global_transform_animations_enabled(
+    enabled: Option<Res<GlobalTransformAnimationsEnabled>>,
+) -> bool {
     enabled.map(|e| e.0).unwrap_or_default()
 }
 
@@ -107,6 +119,9 @@ pub struct GlobalColorAnimationsEnabled(bool);
 #[derive(Resource, Reflect)]
 #[reflect(Resource)]
 pub struct GlobalCameraAnimationsEnabled(bool);
+#[derive(Resource, Reflect)]
+#[reflect(Resource)]
+pub struct GlobalTransformAnimationsEnabled(bool);
 
 #[derive(Component, Reflect, Clone, Copy, Default)]
 #[reflect(Component)]
@@ -207,11 +222,28 @@ pub struct ProjectionScaleAnimation(pub VisualAnimation);
 #[reflect(Component)]
 pub struct ProjectionScaleAnimationState(pub f32);
 
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+#[require(ScaleXAnimationState)]
+pub struct ScaleXAnimation(pub VisualAnimation);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct ScaleXAnimationState(pub f32);
+
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+#[require(ScaleYAnimationState)]
+pub struct ScaleYAnimation(pub VisualAnimation);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct ScaleYAnimationState(pub f32);
+
 const DEFAULT_HUE_RANGE: (f32, f32) = (0.0, 360.0);
 const DEFAULT_SATURATION_RANGE: (f32, f32) = (0.0, 1.0);
 const DEFAULT_LIGHTNESS_RANGE: (f32, f32) = (0.0, 1.0);
 const DEFAULT_CAMERA_ROTATION_RANGE: (f32, f32) = (-0.05, 0.05);
 const DEFAULT_CAMERA_SCALE_RANGE: (f32, f32) = (0.2, 0.3);
+const DEFAULT_SCALE_RANGE: (f32, f32) = (0.5, 1.5);
 
 fn handle_set_sprite_color(
     mut commands: Commands,
@@ -374,6 +406,32 @@ fn update_projection_scale_animations(
             state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_CAMERA_SCALE_RANGE);
             ortho.scale = state.0;
         }
+    }
+}
+
+fn update_transform_scale_x_animations(
+    time: Res<Time>,
+    mut query: Query<
+        (&ScaleXAnimation, &mut ScaleXAnimationState, &mut Transform),
+        Without<AnimationsDisabled>,
+    >,
+) {
+    for (anim, mut state, mut transform) in &mut query {
+        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SCALE_RANGE);
+        transform.scale = Vec3::new(state.0, transform.scale.y, transform.scale.z);
+    }
+}
+
+fn update_transform_scale_y_animations(
+    time: Res<Time>,
+    mut query: Query<
+        (&ScaleYAnimation, &mut ScaleYAnimationState, &mut Transform),
+        Without<AnimationsDisabled>,
+    >,
+) {
+    for (anim, mut state, mut transform) in &mut query {
+        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SCALE_RANGE);
+        transform.scale = Vec3::new(transform.scale.x, state.0, transform.scale.z);
     }
 }
 

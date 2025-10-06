@@ -1,5 +1,6 @@
 use crate::game::visuals::{
-    AnimationDirection, HueAnimation, RotationAnimation, SetSpriteColor, VisualAnimation,
+    AnimationDirection, HueAnimation, RotationAnimation, ScaleXAnimation, ScaleYAnimation,
+    SetSpriteColor, VisualAnimation,
 };
 use bevy::prelude::*;
 use rand::Rng;
@@ -20,11 +21,27 @@ pub fn plugin(_app: &mut App) {}
         time_offset: rand::rng().random_range(0.0 .. 10.0),
         ..default()
     }),
-    RotationAnimation(VisualAnimation {
-        period: 10.0,
-        direction: AnimationDirection::Linear,
-        time_offset: rand::rng().random_range(0.0 .. 10.0),
-        ..default()
-    }),
+
+    // Transform,
+    // RotationAnimation(VisualAnimation {
+    //     period: 10.0,
+    //     direction: AnimationDirection::Linear,
+    //     time_offset: rand::rng().random_range(0.0 .. 10.0),
+    //     ..default()
+    // }),
+    // ScaleXAnimation(VisualAnimation {
+    //     period: 4.0,
+    //     range: Some((0.7, 1.3)),
+    //     direction: AnimationDirection::Boomerang,
+    //     time_offset: rand::rng().random_range(0.0 .. 4.0),
+    //     ..default()
+    // }),
+    // ScaleYAnimation(VisualAnimation {
+    //     period: 4.0,
+    //     range: Some((0.7, 1.3)),
+    //     direction: AnimationDirection::Boomerang,
+    //     time_offset: rand::rng().random_range(0.0 .. 4.0),
+    //     ..default()
+    // }),
 )]
 pub struct Decoration;
