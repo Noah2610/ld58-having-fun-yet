@@ -57,7 +57,7 @@ fn resume_timer(mut timer: ResMut<SurvivalTimer>) {
     timer.0.unpause();
 }
 
-fn render_timer(timer: Res<SurvivalTimer>, query: Query<&mut Text, With<TimeSurvivedValueUi>>) {
+fn render_timer(timer: Res<SurvivalTimer>, query: Query<&mut TextSpan, With<TimeSurvivedValueUi>>) {
     for mut ui_text in query {
         ui_text.0 = format_time(timer.0.elapsed());
     }

@@ -2,7 +2,7 @@
 
 use crate::{
     Paused,
-    game::{level::spawn_level, survival_timer::TimeSurvivedValueUi},
+    game::{level::spawn_level, score::ScoreValueUi, survival_timer::TimeSurvivedValueUi},
     menus::Menu,
     screens::Screen,
     theme::widget,
@@ -37,11 +37,12 @@ pub(super) fn plugin(app: &mut App) {
 
 fn spawn_ui(mut commands: Commands) {
     commands.spawn((
-        Name::new("SurvivalTimer UI"),
+        Name::new("Score UI"),
         Node {
             position_type: PositionType::Absolute,
             top: Val::Px(0.0),
             width: percent(100),
+            margin: UiRect::top(Val::Px(4.0)),
             flex_direction: FlexDirection::Column,
             align_items: AlignItems::Center,
             justify_content: JustifyContent::FlexStart,
@@ -53,17 +54,30 @@ fn spawn_ui(mut commands: Commands) {
         children![
             (
                 Name::new("SurvivalTimer text"),
-                Text::new("Time Survived:"),
+                Text::new("Time Survived: "),
                 TextFont::from_font_size(16.0),
-                TextColor(Color::WHITE)
+                TextColor(Color::WHITE),
+                children![(
+                    Name::new("SurvivalTimer value"),
+                    TextSpan::new("00:00"),
+                    TimeSurvivedValueUi,
+                    TextFont::from_font_size(24.0),
+                    TextColor(Color::WHITE)
+                )],
             ),
             (
-                Name::new("SurvivalTimer value"),
-                Text::new("00:00"),
-                TimeSurvivedValueUi,
-                TextFont::from_font_size(24.0),
-                TextColor(Color::WHITE)
-            )
+                Name::new("Score text"),
+                Text::new("Score: "),
+                TextFont::from_font_size(16.0),
+                TextColor(Color::WHITE),
+                children![(
+                    Name::new("Score value"),
+                    TextSpan::new("0"),
+                    ScoreValueUi,
+                    TextFont::from_font_size(24.0),
+                    TextColor(Color::WHITE)
+                )],
+            ),
         ],
     ));
 }

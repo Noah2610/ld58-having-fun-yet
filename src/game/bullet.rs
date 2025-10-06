@@ -3,8 +3,9 @@ use crate::{
     asset_tracking::LoadResource,
     game::{
         aim::AimDirection,
-        enemy::{Enemy, EnemyStunned},
+        enemy::{Enemy, EnemySettings, EnemyStunned},
         health::{Dead, Health},
+        score::Score,
         util::CollisionTag,
         visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
@@ -95,7 +96,6 @@ struct BulletAssets {
     duration:         Duration,
     velocity_damping: Scalar,
     player_knockback: Scalar,
-    enemy_knockback:  Scalar,
 }
 
 impl FromWorld for BulletAssets {
@@ -110,7 +110,6 @@ impl FromWorld for BulletAssets {
             duration:         Duration::from_millis(500),
             velocity_damping: 2.0,
             player_knockback: 300.0,
-            enemy_knockback:  500.0,
         }
     }
 }
@@ -198,10 +197,15 @@ fn handle_collect_bullet(
 fn handle_bullet_enemy_collision(
     trigger: On<CollisionStart>,
     mut commands: Commands,
-    assets: Res<BulletAssets>,
+    mut score: ResMut<Score>,
     bullets: Query<&Transform, (With<Bullet>, Without<Collectable>, Without<Enemy>)>,
     mut enemies: Query<
-        (&Transform, &mut LinearVelocity, Option<&mut Health>),
+        (
+            &Transform,
+            &EnemySettings,
+            &mut LinearVelocity,
+            Option<&mut Health>,
+        ),
         (
             With<Enemy>,
             Without<EnemyStunned>,
@@ -213,18 +217,21 @@ fn handle_bullet_enemy_collision(
     let bullet = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok(bullet_transform), Ok((enemy_transform, mut velocity, health))) =
+    if let (Ok(bullet_transform), Ok((enemy_transform, settings, mut velocity, health))) =
         (bullets.get(bullet), enemies.get_mut(enemy))
     {
         let direction = (enemy_transform.translation.truncate()
             - bullet_transform.translation.truncate())
         .normalize_or_zero();
-        velocity.0 += direction * assets.enemy_knockback;
+        velocity.0 += direction * settings.knockback_strength_bullet;
 
         commands.entity(enemy).insert(EnemyStunned);
 
         if let Some(mut health) = health {
             health.damage(1);
+            if !health.is_alive() {
+                score.0 += settings.score_worth;
+            }
         }
     }
 }

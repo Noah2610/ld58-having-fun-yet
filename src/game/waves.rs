@@ -3,6 +3,7 @@ use crate::{
     game::{
         enemy::{Enemy, EnemyVariant},
         player::Player,
+        score::Score,
         survival_timer::SurvivalTimer,
     },
 };
@@ -42,6 +43,7 @@ pub fn waves_managers() -> Vec<WavesManagerBundle> {
             initial_enemies:          1,
             enemies_incr_per_wave:    1,
             enemy_spawn_radius_range: (250.0, 300.0),
+            score_mult:               500.0,
         }),
     ]
 }
@@ -59,6 +61,8 @@ struct WavesManagerSettings {
     enemies_incr_per_wave:    u32,
     /// Distance to player to spawn enemies at, randomized in this range
     enemy_spawn_radius_range: (f32, f32),
+    /// Add (wave_index * score_mult) on new wave
+    score_mult:               f32,
 }
 
 impl Default for WavesManagerSettings {
@@ -69,6 +73,7 @@ impl Default for WavesManagerSettings {
             initial_enemies:          1,
             enemies_incr_per_wave:    1,
             enemy_spawn_radius_range: (100.0, 200.0),
+            score_mult:               1.0,
         }
     }
 }
@@ -97,10 +102,11 @@ struct WaveCounter(u32);
 fn handle_waves_manager(
     mut commands: Commands,
     survival_time: Res<SurvivalTimer>,
+    mut score: ResMut<Score>,
     mut wave_managers: Query<(Entity, &WavesManagerSettings, &mut WaveCounter), With<WavesManager>>,
-    players: Query<(Entity, &Transform), With<Player>>,
+    players: Query<&Transform, With<Player>>,
 ) {
-    for (player_entity, player_transform) in players {
+    for player_transform in players {
         let player_pos = player_transform.translation.truncate();
 
         for (manager_entity, settings, mut wave_counter) in &mut wave_managers {
@@ -119,6 +125,7 @@ fn handle_waves_manager(
                     player_pos,
                 ));
                 wave_counter.0 += 1;
+                score.0 += (wave_counter.0 as f32 * settings.score_mult) as u32;
             }
         }
     }

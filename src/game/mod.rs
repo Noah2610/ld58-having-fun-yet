@@ -9,6 +9,7 @@ pub mod health;
 pub mod level;
 pub mod movement;
 pub mod player;
+pub mod score;
 pub mod solid;
 pub mod survival_timer;
 pub mod visual_scaling;
@@ -33,6 +34,6 @@ pub(super) fn plugin(app: &mut App) {
         waves::plugin,
         health::plugin,
         decoration::plugin,
-        visual_scaling::plugin,
-    ));
+    ))
+    .add_plugins((score::plugin, visual_scaling::plugin));
 }
