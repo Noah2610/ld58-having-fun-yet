@@ -3,7 +3,7 @@ use crate::{
     asset_tracking::LoadResource,
     game::{
         util::CollisionTag,
-        visuals::{AnimationDirection, ColorAnimation, ColorAnimationState},
+        visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
 };
 use avian2d::{math::Scalar, prelude::*};
@@ -54,14 +54,14 @@ fn post_add_enemy(
     LockedAxes::ROTATION_LOCKED,
     LinearDamping(10.0),
 
-    ColorAnimation {
+    SetSpriteColor(Color::hsl(0.0, 0.6, 0.8)),
+    HueAnimation(VisualAnimation {
         // hue_range: (40.0, 180.0),
         period: 6.0,
         direction: AnimationDirection::Boomerang,
         time_offset: rand::rng().random_range(0.0 .. 6.0),
         ..default()
-    },
-    ColorAnimationState(Color::hsl(0.0, 0.6, 0.8)),
+    }),
 )]
 pub struct Enemy;
 

@@ -7,7 +7,7 @@ use crate::{
         enemy::{Enemy, EnemyGoal},
         movement::{Acceleration, MovementController},
         util::CollisionTag,
-        visuals::{AnimationDirection, ColorAnimation, ColorAnimationState},
+        visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
     },
     game_state::GameplaySet,
 };
@@ -71,12 +71,12 @@ fn post_add_player(
     BulletSpawner,
     EnemyGoal,
 
-    ColorAnimation {
+    SetSpriteColor(Color::hsl(0.0, 0.8, 0.75)),
+    HueAnimation(VisualAnimation {
         period: 8.0,
         direction: AnimationDirection::Linear,
         ..default()
-    },
-    ColorAnimationState(Color::hsl(0.0, 0.8, 0.75)),
+    }),
 )]
 pub struct Player;
 

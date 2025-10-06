@@ -1,8 +1,13 @@
-use crate::{AppSystems, GameplaySet, game::player::Player};
-use bevy::{
-    prelude::*,
-    render::view::{ColorGrading, ColorGradingGlobal},
+use crate::{
+    AppSystems, GameplaySet,
+    game::{
+        player::Player,
+        visuals::{
+            AnimationDirection, ProjectionScaleAnimation, RotationAnimation, VisualAnimation,
+        },
+    },
 };
+use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
     app.add_systems(Startup, spawn_camera).add_systems(
@@ -15,7 +20,22 @@ pub fn plugin(app: &mut App) {
 
 #[derive(Component, Reflect, Clone, Copy, Debug, Default)]
 #[reflect(Component)]
-#[require(Name::new("Camera"), Camera2d)]
+#[require(
+    Name::new("Camera"),
+    Camera2d,
+    RotationAnimation(VisualAnimation {
+        direction:   AnimationDirection::Boomerang,
+        period:      4.0,
+        range:       Some((-0.003, 0.003)),
+        ..default()
+    }),
+    ProjectionScaleAnimation(VisualAnimation {
+        direction:   AnimationDirection::Boomerang,
+        period:      8.0,
+        range:       Some((0.20, 0.21)),
+        ..default()
+    })
+)]
 pub struct MainCamera;
 
 fn spawn_camera(mut commands: Commands) {
@@ -25,13 +45,6 @@ fn spawn_camera(mut commands: Commands) {
             scale: 0.25,
             ..OrthographicProjection::default_2d()
         }),
-        ColorGrading {
-            global: ColorGradingGlobal {
-                hue: 0.0,
-                ..default()
-            },
-            ..default()
-        },
     ));
 }
 
