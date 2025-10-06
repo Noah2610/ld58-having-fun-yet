@@ -20,13 +20,14 @@ pub enum PlayerAction {
 impl PlayerAction {
     fn default_input_map() -> InputMap<PlayerAction> {
         use PlayerAction::*;
+        const DEADZONE: f32 = 0.3;
         InputMap::default()
             .with_dual_axis(Move, VirtualDPad::wasd())
             .with_dual_axis(Move, VirtualDPad::dpad())
-            .with_dual_axis(Move, GamepadStick::LEFT)
+            .with_dual_axis(Move, GamepadStick::LEFT.with_deadzone_symmetric(DEADZONE))
             .with_dual_axis(Aim, VirtualDPad::arrow_keys())
             .with_dual_axis(Aim, VirtualDPad::action_pad())
-            .with_dual_axis(Aim, GamepadStick::RIGHT)
+            .with_dual_axis(Aim, GamepadStick::RIGHT.with_deadzone_symmetric(DEADZONE))
             .with(Shoot, KeyCode::Space)
             .with(Shoot, GamepadButton::RightTrigger)
             .with(Shoot, GamepadButton::RightTrigger2)
