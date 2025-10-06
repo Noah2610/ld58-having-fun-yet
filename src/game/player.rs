@@ -4,7 +4,7 @@ use crate::{
     game::{
         aim::AimController,
         bullet::BulletSpawner,
-        enemy::{Enemy, EnemyGoal},
+        enemy::{Enemy, EnemyGoal, EnemySettings},
         health::Health,
         movement::{Acceleration, MovementController},
         util::CollisionTag,
@@ -88,19 +88,18 @@ struct PlayerInitialized;
 #[reflect(Resource)]
 pub struct PlayerAssets {
     #[dependency]
-    spritesheet:        Handle<Aseprite>,
+    spritesheet: Handle<Aseprite>,
     #[dependency]
-    pub steps:          Vec<Handle<AudioSource>>,
-    knockback_strength: f32,
+    pub steps:   Vec<Handle<AudioSource>>,
 }
 
 impl FromWorld for PlayerAssets {
     fn from_world(world: &mut World) -> Self {
         Self {
-            spritesheet:        world
+            spritesheet: world
                 .resource::<AssetServer>()
                 .load("spritesheets/player.ase"),
-            steps:              {
+            steps:       {
                 let assets = world.resource::<AssetServer>();
                 vec![
                     assets.load("audio/steps/step1.ogg"),
@@ -109,26 +108,24 @@ impl FromWorld for PlayerAssets {
                     assets.load("audio/steps/step4.ogg"),
                 ]
             },
-            knockback_strength: 400.0,
         }
     }
 }
 
 fn handle_enemy_collision(
     trigger: On<CollisionStart>,
-    assets: Res<PlayerAssets>,
     mut players: Query<(&Transform, &mut LinearVelocity), (With<Player>, Without<Enemy>)>,
-    enemies: Query<&Transform, (With<Enemy>, Without<Player>)>,
+    enemies: Query<(&Transform, &EnemySettings), (With<Enemy>, Without<Player>)>,
 ) {
     let player = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok((player_transform, mut velocity)), Ok(enemy_transform)) =
+    if let (Ok((player_transform, mut velocity)), Ok((enemy_transform, enemy_settings))) =
         (players.get_mut(player), enemies.get(enemy))
     {
         let direction = (player_transform.translation.truncate()
             - enemy_transform.translation.truncate())
         .normalize_or_zero();
-        velocity.0 += direction * assets.knockback_strength;
+        velocity.0 += direction * enemy_settings.knockback_strength;
     }
 }

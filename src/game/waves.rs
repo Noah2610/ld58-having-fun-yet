@@ -6,10 +6,7 @@ use crate::{
         survival_timer::SurvivalTimer,
     },
 };
-use bevy::{
-    ecs::{relationship::RelatedSpawner, spawn::SpawnableList},
-    prelude::*,
-};
+use bevy::{ecs::relationship::RelatedSpawner, prelude::*};
 use rand::Rng;
 
 pub fn plugin(app: &mut App) {
@@ -41,7 +38,7 @@ pub fn waves_managers() -> Vec<WavesManagerBundle> {
         WavesManagerBundle::from_settings(WavesManagerSettings::default()),
         WavesManagerBundle::from_settings(WavesManagerSettings {
             enemy_variant:            EnemyVariant::Bigger,
-            spawn_every_n_secs:       5,
+            spawn_every_n_secs:       60,
             initial_enemies:          1,
             enemies_incr_per_wave:    1,
             enemy_spawn_radius_range: (250.0, 300.0),

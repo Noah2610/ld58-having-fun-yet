@@ -116,15 +116,17 @@ impl From<EnemyVariant> for EnemyVariantBundle {
         match variant {
             EnemyVariant::Basic => Self {
                 settings: EnemySettings {
-                    speed:         400.0,
-                    stun_duration: Duration::from_secs(2),
+                    speed:              400.0,
+                    stun_duration:      Duration::from_secs(2),
+                    knockback_strength: 300.0,
                 },
                 scale:    Vec2::splat(1.0).into(),
             },
             EnemyVariant::Bigger => Self {
                 settings: EnemySettings {
-                    speed:         200.0,
-                    stun_duration: Duration::from_secs(4),
+                    speed:              200.0,
+                    stun_duration:      Duration::from_secs(4),
+                    knockback_strength: 600.0,
                 },
                 scale:    Vec2::splat(2.0).into(),
             },
@@ -135,8 +137,9 @@ impl From<EnemyVariant> for EnemyVariantBundle {
 #[derive(Component, Reflect, Clone, Debug)]
 #[reflect(Component)]
 pub struct EnemySettings {
-    pub speed:         Scalar,
-    pub stun_duration: Duration,
+    pub speed:              Scalar,
+    pub stun_duration:      Duration,
+    pub knockback_strength: Scalar,
 }
 
 /// Marks an entity (player) which becomes the goal for enemies to move towards.
