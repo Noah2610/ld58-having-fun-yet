@@ -17,9 +17,9 @@ pub fn plugin(app: &mut App) {
     );
 }
 
-const ROTATION_INCREASE: f32 = 0.0005;
-const SCALE_INCREASE: f32 = 0.0005;
-const SCALE_EVERY_N_SECS: u32 = 5;
+const ROTATION_INCREASE: f32 = 0.00005;
+const SCALE_INCREASE: f32 = 0.00005;
+const SCALE_EVERY_N_SECS: u32 = 10;
 
 fn handle_visual_scaling(
     time: Res<SurvivalTimer>,
