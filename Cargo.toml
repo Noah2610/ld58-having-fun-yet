@@ -38,21 +38,20 @@ getrandom = { version = "0.3", features = ["wasm_js"] }
 # Default to a native dev build.
 default = ["dev_native"]
 dev = [
-    # Improve compile times for dev builds by linking Bevy as a dynamic library.
+    "dev_tools",
     "bevy/dynamic_linking",
-    "bevy/bevy_dev_tools",
-    "bevy/bevy_ui_debug",
-    # Improve error messages coming from Bevy
     "bevy/track_location",
-    "bevy-inspector-egui",
-    "bevy_ecs_tiled/debug"
 ]
 dev_native = [
     "dev",
-    # Enable asset hot reloading for native dev builds.
     "bevy/file_watcher",
-    # Enable embedded asset hot reloading for native dev builds.
     "bevy/embedded_watcher",
+]
+dev_tools = [
+    "bevy/bevy_dev_tools",
+    "bevy/bevy_ui_debug",
+    "bevy-inspector-egui",
+    "bevy_ecs_tiled/debug",
 ]
 no_window_decorations = []
 no_pause_ui = []
