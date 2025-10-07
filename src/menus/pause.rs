@@ -27,14 +27,17 @@ fn spawn_pause_menu(mut commands: Commands) {
     ));
 }
 
+#[cfg(not(feature = "no_pause_ui"))]
 fn open_settings_menu(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::Settings);
 }
 
+#[cfg(not(feature = "no_pause_ui"))]
 fn close_menu(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
     next_menu.set(Menu::None);
 }
 
+#[cfg(not(feature = "no_pause_ui"))]
 fn quit_to_title(_: On<Pointer<Click>>, mut next_screen: ResMut<NextState<Screen>>) {
     next_screen.set(Screen::Title);
 }
