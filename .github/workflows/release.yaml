@@ -36,6 +36,10 @@ on:
         description: "Deny warnings"
         default: false
         type: boolean
+      feature_flags:
+        description: "Set optional feature flags"
+        default: ""
+        type: string
 
 # Cancel the release workflow when a more recent workflow begins.
 concurrency:
@@ -190,6 +194,8 @@ jobs:
           # DEBUG: Map `inputs.upload_to_github` to `env.upload_to_github`.
           echo 'upload_to_github=${{ inputs.upload_to_github }}' >> "${GITHUB_ENV}"
 
+          echo 'feature_flags=${{ inputs.feature_flags }}' >> "${GITHUB_ENV}"
+
       - name: Checkout repository
         if: ${{ env.is_platform_enabled == 'true' }}
         uses: actions/checkout@v4
@@ -230,14 +236,14 @@ jobs:
         run: |
           cargo binstall --locked --no-confirm --force wasm-bindgen-cli
           cargo binstall --locked --no-confirm --force wasm-opt
-          bevy build --locked --release --features='${{ matrix.features }}' --yes web --bundle
+          bevy build --locked --release --features='${{ matrix.features }},${{ env.feature_flags }}' --yes web --bundle
           mv 'target/bevy_web/web-release/${{ env.cargo_build_binary_name }}' '${{ env.app }}'
 
       - name: Build and add binaries to app (non-Web)
         if: ${{ env.is_platform_enabled == 'true' && matrix.platform != 'web' }}
         run: |
           for target in ${{ matrix.targets }}; do
-            bevy build --locked --release --target="${target}" --features='${{ matrix.features }}'
+            bevy build --locked --release --target="${target}" --features='${{ matrix.features }},${{ env.feature_flags }}'
             mv target/"${target}"/release/'${{ env.cargo_build_binary_name }}${{ matrix.binary_ext }}' tmp/binary/"${target}"'${{ matrix.binary_ext }}'
           done
           if [ '${{ matrix.platform }}' = 'macos' ]; then
