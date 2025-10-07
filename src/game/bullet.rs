@@ -198,10 +198,10 @@ fn handle_bullet_enemy_collision(
     trigger: On<CollisionStart>,
     mut commands: Commands,
     mut score: ResMut<Score>,
-    bullets: Query<(&Transform, &LinearVelocity), (With<Bullet>, Without<Enemy>)>,
+    bullets: Query<(&GlobalTransform, &LinearVelocity), (With<Bullet>, Without<Enemy>)>,
     mut enemies: Query<
         (
-            &Transform,
+            &GlobalTransform,
             &EnemySettings,
             &mut LinearVelocity,
             Option<&mut Health>,
@@ -215,19 +215,22 @@ fn handle_bullet_enemy_collision(
 
     if let (
         Ok((bullet_transform, bullet_velocity)),
-        Ok((enemy_transform, settings, mut velocity, health, is_stunned)),
+        Ok((enemy_transform, settings, mut enemy_velocity, health, is_stunned)),
     ) = (bullets.get(bullet), enemies.get_mut(enemy))
     {
         const MAX_SPEED_FOR_DAMAGE: f32 = 30.0;
-        if (bullet_velocity.0.x.powi(2) + bullet_velocity.0.y.powi(2)).sqrt() < MAX_SPEED_FOR_DAMAGE
-        {
+
+        if bullet_velocity.length() < MAX_SPEED_FOR_DAMAGE {
             return;
         }
 
-        let direction = (enemy_transform.translation.truncate()
-            - bullet_transform.translation.truncate())
-        .normalize_or_zero();
-        velocity.0 += direction * settings.knockback_strength_bullet;
+        let bullet_translation = bullet_transform.translation();
+        let enemy_translation = enemy_transform.translation();
+
+        let direction =
+            (enemy_translation.truncate() - bullet_translation.truncate()).normalize_or_zero();
+
+        enemy_velocity.0 += direction * settings.knockback_strength_bullet;
 
         if !is_stunned {
             commands.entity(enemy).insert(EnemyStunned);
