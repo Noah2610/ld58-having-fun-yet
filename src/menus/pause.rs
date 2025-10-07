@@ -4,6 +4,7 @@ use crate::{menus::Menu, screens::Screen, theme::widget};
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
+    #[cfg(not(feature = "no_pause_ui"))]
     app.add_systems(OnEnter(Menu::Pause), spawn_pause_menu);
     app.add_systems(
         Update,
@@ -11,10 +12,8 @@ pub(super) fn plugin(app: &mut App) {
     );
 }
 
+#[cfg(not(feature = "no_pause_ui"))]
 fn spawn_pause_menu(mut commands: Commands) {
-    #[cfg(feature = "no_pause_ui")]
-    return;
-
     commands.spawn((
         widget::ui_root("Pause Menu"),
         GlobalZIndex(2),
