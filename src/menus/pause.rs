@@ -12,6 +12,9 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn spawn_pause_menu(mut commands: Commands) {
+    #[cfg(feature = "no_pause_ui")]
+    return;
+
     commands.spawn((
         widget::ui_root("Pause Menu"),
         GlobalZIndex(2),

@@ -36,7 +36,7 @@ getrandom = { version = "0.3", features = ["wasm_js"] }
 
 [features]
 # Default to a native dev build.
-default = ["dev_native", "editor"]
+default = ["dev_native"]
 dev = [
     # Improve compile times for dev builds by linking Bevy as a dynamic library.
     "bevy/dynamic_linking",
@@ -54,7 +54,8 @@ dev_native = [
     # Enable embedded asset hot reloading for native dev builds.
     "bevy/embedded_watcher",
 ]
-editor = []
+no_window_decorations = []
+no_pause_ui = []
 
 [package.metadata.bevy_cli.release]
 # Disable dev features for release builds.

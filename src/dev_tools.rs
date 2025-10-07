@@ -13,7 +13,8 @@ use bevy::{
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::quick::{StateInspectorPlugin, WorldInspectorPlugin};
 
-const TOGGLE_INSPECTOR: KeyCode = KeyCode::F2;
+const TOGGLE_FPS_KEY: KeyCode = KeyCode::F1;
+const TOGGLE_INSPECTOR_KEY: KeyCode = KeyCode::F2;
 const TOGGLE_GIZMOS_KEY: KeyCode = KeyCode::F3;
 const TOGGLE_UI_KEY: KeyCode = KeyCode::F4;
 
@@ -22,20 +23,21 @@ const TOGGLE_UI_KEY: KeyCode = KeyCode::F4;
 struct InspectorEnabled(bool);
 impl Default for InspectorEnabled {
     fn default() -> Self {
-        InspectorEnabled(true)
+        Self(true)
     }
 }
 
 pub(super) fn plugin(app: &mut App) {
-    app.init_state::<InspectorEnabled>();
-
     if !app.is_plugin_added::<EguiPlugin>() {
         app.add_plugins(EguiPlugin::default());
     }
 
+    app.init_state::<InspectorEnabled>();
+
     app.add_plugins((
         FpsOverlayPlugin {
             config: FpsOverlayConfig {
+                enabled: true,
                 frame_time_graph_config: FrameTimeGraphConfig {
                     enabled: false,
                     ..default()
@@ -56,7 +58,11 @@ pub(super) fn plugin(app: &mut App) {
     app.add_systems(Update, log_transitions::<Screen>)
         .add_systems(
             Update,
-            toggle_inspector.run_if(input_just_pressed(TOGGLE_INSPECTOR)),
+            (toggle_fps_overlay.run_if(input_just_pressed(TOGGLE_FPS_KEY)),),
+        )
+        .add_systems(
+            Update,
+            toggle_inspector.run_if(input_just_pressed(TOGGLE_INSPECTOR_KEY)),
         )
         .add_systems(
             Update,
@@ -66,6 +72,10 @@ pub(super) fn plugin(app: &mut App) {
             Update,
             toggle_gizmos.run_if(input_just_pressed(TOGGLE_GIZMOS_KEY)),
         );
+}
+
+fn toggle_fps_overlay(mut config: ResMut<FpsOverlayConfig>) {
+    config.enabled ^= true;
 }
 
 fn toggle_inspector(

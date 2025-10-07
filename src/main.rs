@@ -45,6 +45,8 @@ impl Plugin for AppPlugin {
                     primary_window: Window {
                         title: "LD58".to_string(),
                         resizable: false,
+                        #[cfg(feature = "no_window_decorations")]
+                        decorations: false,
                         ..default()
                     }
                     .into(),
