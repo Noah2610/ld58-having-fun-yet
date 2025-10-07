@@ -2,7 +2,10 @@
 
 use crate::{
     Paused,
-    game::{level::spawn_level, score::ScoreValueUi, survival_timer::TimeSurvivedValueUi},
+    game::{
+        health::HealthValueUi, level::spawn_level, score::ScoreValueUi,
+        survival_timer::TimeSurvivedValueUi,
+    },
     menus::Menu,
     screens::Screen,
 };
@@ -51,6 +54,19 @@ fn spawn_ui(mut commands: Commands) {
         DespawnOnExit(Screen::Gameplay),
         Pickable::IGNORE,
         children![
+            (
+                Name::new("Health text"),
+                Text::new("Health: "),
+                TextFont::from_font_size(16.0),
+                TextColor(Color::WHITE),
+                children![(
+                    Name::new("Health value"),
+                    TextSpan::new("100"),
+                    HealthValueUi,
+                    TextFont::from_font_size(24.0),
+                    TextColor(Color::WHITE)
+                )],
+            ),
             (
                 Name::new("SurvivalTimer text"),
                 Text::new("Time Survived: "),

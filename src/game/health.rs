@@ -1,4 +1,4 @@
-use crate::{AppSystems, GameplaySet};
+use crate::{AppSystems, GameplaySet, game::player::Player};
 use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
@@ -8,6 +8,10 @@ pub fn plugin(app: &mut App) {
             .chain()
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
+    )
+    .add_systems(
+        Update,
+        render_health.in_set(AppSystems::Update).in_set(GameplaySet),
     );
 }
 
@@ -23,6 +27,10 @@ pub struct Alive;
 #[derive(Component, Reflect, Clone, Copy, Default)]
 #[reflect(Component)]
 pub struct Dead;
+
+#[derive(Component, Reflect, Clone, Copy, Default)]
+#[reflect(Component)]
+pub struct HealthValueUi;
 
 impl Health {
     pub fn new(health: u32) -> Self {
@@ -74,5 +82,14 @@ fn despawn_entities(mut commands: Commands, dead_query: Query<(Entity, &Transfor
         if transform.scale.x <= 0.0 || transform.scale.y <= 0.0 {
             commands.entity(entity).despawn();
         }
+    }
+}
+
+fn render_health(
+    health: Single<&Health, (Changed<Health>, With<Player>)>,
+    query: Query<&mut TextSpan, With<HealthValueUi>>,
+) {
+    for mut ui_text in query {
+        ui_text.0 = health.0.to_string();
     }
 }
