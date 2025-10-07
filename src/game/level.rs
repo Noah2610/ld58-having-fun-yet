@@ -1,10 +1,7 @@
 //! Spawn the main level.
 
 use crate::{
-    asset_tracking::LoadResource,
-    audio::music,
-    game::{decoration::Decoration, waves::waves_managers},
-    screens::Screen,
+    asset_tracking::LoadResource, audio::music, game::waves::waves_managers, screens::Screen,
 };
 use bevy::prelude::*;
 use bevy_ecs_tiled::prelude::*;

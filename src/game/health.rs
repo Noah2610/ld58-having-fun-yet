@@ -34,7 +34,7 @@ impl Health {
     }
 
     pub fn damage(&mut self, amount: u32) {
-        self.0 = self.0.checked_sub(amount).unwrap_or(0);
+        self.0 = self.0.saturating_sub(amount);
     }
 }
 

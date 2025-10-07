@@ -5,7 +5,6 @@ use crate::{
     game::{level::spawn_level, score::ScoreValueUi, survival_timer::TimeSurvivedValueUi},
     menus::Menu,
     screens::Screen,
-    theme::widget,
 };
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 

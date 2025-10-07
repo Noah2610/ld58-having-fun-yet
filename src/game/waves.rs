@@ -115,8 +115,8 @@ fn handle_waves_manager(
             let time_s = survival_time.0.elapsed().as_secs() as u32;
             let expected_waves = time_s / settings.spawn_every_n_secs;
 
-            let waves_to_spawn = expected_waves.checked_sub(wave_counter.0).unwrap_or(0);
-            if waves_to_spawn <= 0 {
+            let waves_to_spawn = expected_waves.saturating_sub(wave_counter.0);
+            if waves_to_spawn == 0 {
                 continue;
             }
 

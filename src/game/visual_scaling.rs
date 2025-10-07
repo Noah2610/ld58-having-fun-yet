@@ -26,9 +26,11 @@ fn handle_visual_scaling(
     camera_query: Query<(&mut RotationAnimation, &mut ProjectionScaleAnimation), With<MainCamera>>,
 ) {
     let secs = time.0.elapsed().as_secs() as u32;
-    if secs > 0 && (secs % SCALE_EVERY_N_SECS) > 0 {
+    if secs > 0 && !secs.is_multiple_of(SCALE_EVERY_N_SECS) {
         return;
     }
+
+    dbg!("HERE");
 
     for (mut rot, mut scale) in camera_query {
         if let Some(range) = rot.0.range.as_mut() {

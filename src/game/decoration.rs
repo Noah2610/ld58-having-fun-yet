@@ -1,7 +1,4 @@
-use crate::game::visuals::{
-    AnimationDirection, HueAnimation, RotationAnimation, ScaleXAnimation, ScaleYAnimation,
-    SetSpriteColor, VisualAnimation,
-};
+use crate::game::visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation};
 use bevy::prelude::*;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
