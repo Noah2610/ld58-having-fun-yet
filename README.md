@@ -1,7 +1,10 @@
-# Ludum Dare 58 jam entry
-Theme: __Collector__
+# Having Fun Yet?
+A game made in 72 hours for [__Ludum Dare 58__][ld]!  
+> Theme: __Collector__
 
----
+__Check it out on [itch.io][itch]!__
+
+![Banner](./screenshots/banner.png)
 
 > What is happening to me?
 
@@ -43,17 +46,7 @@ Try to get the __highest score!__
 ---
 
 As usual, we worked on actual game content way too close to the deadline, so we didn't have time to thoroughly playtest and tweak the game. It's playable at least. Hopefully 🤷  
-We'll release a v1.0.1 post-jam version soon to improve the core gameplay.
-
-[`bevy`]: https://bevy.org/
-[`aseprite`]: https://www.aseprite.org/
-[`tiled`]: https://www.mapeditor.org/
-[`LSDj`]: https://www.littlesounddj.com/lsd/index.php
-[`FL Studio`]: https://www.image-line.com/fl-studio/
-[@williwiderstand]: https://ldjam.com/users/williwiderstand
-[@noahro]: https://ldjam.com/users/noahro
-
----
+We'll release a post-jam version soon to improve the core gameplay.
 
 ## Template
 This project was generated using the [Bevy New 2D](https://github.com/TheBevyFlock/bevy_new_2d) template.
@@ -61,3 +54,13 @@ Check out the [documentation](https://github.com/TheBevyFlock/bevy_new_2d/blob/m
 
 ## License
 Licensed under the [MIT License](./LICENSE).
+
+[ld]: https://ldjam.com/events/ludum-dare/58/having-fun-yet
+[itch]: https://noahro.itch.io/having-fun-yet
+[`bevy`]: https://bevy.org/
+[`aseprite`]: https://www.aseprite.org/
+[`tiled`]: https://www.mapeditor.org/
+[`LSDj`]: https://www.littlesounddj.com/lsd/index.php
+[`FL Studio`]: https://www.image-line.com/fl-studio/
+[@williwiderstand]: https://ldjam.com/users/williwiderstand
+[@noahro]: https://ldjam.com/users/noahro
