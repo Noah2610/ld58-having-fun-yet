@@ -126,7 +126,7 @@ impl From<EnemyVariant> for EnemyVariantBundle {
                 settings: EnemySettings {
                     speed:                     300.0,
                     stun_duration:             Duration::from_secs(2),
-                    knockback_strength:        400.0,
+                    knockback_strength:        600.0,
                     knockback_strength_bullet: 400.0,
                     score_worth:               10,
                 },

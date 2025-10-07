@@ -111,11 +111,11 @@ impl FromWorld for PlayerAssets {
 fn handle_enemy_collision(
     trigger: On<CollisionStart>,
     mut players: Query<
-        (&Transform, &mut LinearVelocity, Option<&mut Health>),
+        (&GlobalTransform, &mut LinearVelocity, Option<&mut Health>),
         (With<Player>, Without<Enemy>),
     >,
     enemies: Query<
-        (&Transform, &EnemySettings),
+        (&GlobalTransform, &EnemySettings),
         (
             With<Enemy>,
             Without<EnemyStunned>,
@@ -130,8 +130,8 @@ fn handle_enemy_collision(
     if let (Ok((player_transform, mut velocity, health)), Ok((enemy_transform, enemy_settings))) =
         (players.get_mut(player), enemies.get(enemy))
     {
-        let direction = (player_transform.translation.truncate()
-            - enemy_transform.translation.truncate())
+        let direction = (player_transform.translation().truncate()
+            - enemy_transform.translation().truncate())
         .normalize_or_zero();
         velocity.0 += direction * enemy_settings.knockback_strength;
         if let Some(mut health) = health {
