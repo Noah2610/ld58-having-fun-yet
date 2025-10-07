@@ -5,11 +5,15 @@ use crate::{
         survival_timer::SurvivalTimer,
         visuals::{ProjectionScaleAnimation, RotationAnimation},
     },
+    screens::Screen,
 };
 use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
     app.init_resource::<LastScaleAtSec>();
+    app.add_systems(OnEnter(Screen::Gameplay), |mut commands: Commands| {
+        commands.insert_resource(LastScaleAtSec::default())
+    });
     app.add_systems(
         Update,
         handle_visual_scaling
@@ -21,9 +25,9 @@ pub fn plugin(app: &mut App) {
 #[derive(Resource, Default)]
 struct LastScaleAtSec(u32);
 
-const ROTATION_INCREASE: f32 = 0.00005;
-const SCALE_INCREASE: f32 = 0.00005;
-const SCALE_EVERY_N_SECS: u32 = 10;
+const ROTATION_INCREASE: f32 = 0.0005;
+const SCALE_INCREASE: f32 = 0.001;
+const SCALE_EVERY_N_SECS: u32 = 5;
 
 fn handle_visual_scaling(
     time: Res<SurvivalTimer>,

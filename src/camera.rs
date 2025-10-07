@@ -6,11 +6,13 @@ use crate::{
             AnimationDirection, ProjectionScaleAnimation, RotationAnimation, VisualAnimation,
         },
     },
+    screens::Screen,
 };
 use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
-    app.add_systems(Startup, spawn_camera).add_systems(
+    app.add_systems(OnEnter(Screen::Title), spawn_camera);
+    app.add_systems(
         Update,
         camera_follow_player
             .in_set(AppSystems::Update)
@@ -41,6 +43,7 @@ pub struct MainCamera;
 fn spawn_camera(mut commands: Commands) {
     commands.spawn((
         MainCamera,
+        DespawnOnEnter(Screen::Title),
         Projection::Orthographic(OrthographicProjection {
             scale: 0.25,
             ..OrthographicProjection::default_2d()

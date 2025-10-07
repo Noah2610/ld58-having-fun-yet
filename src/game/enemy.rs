@@ -142,7 +142,7 @@ impl From<EnemyVariant> for EnemyVariantBundle {
                     score_worth:               100,
                 },
                 scale:    Vec2::splat(2.0).into(),
-                health:   Health::new(2),
+                health:   Health::new(3),
             },
         }
     }
