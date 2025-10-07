@@ -8,7 +8,15 @@ use crate::{
     },
     screens::Screen,
 };
-use bevy::prelude::*;
+use bevy::{
+    post_process::{
+        bloom::{Bloom, BloomCompositeMode},
+        dof::{DepthOfField, DepthOfFieldMode},
+    },
+    prelude::*,
+    render::view::Hdr,
+};
+use bevy_ecs_tiled::prelude::TiledParallaxCamera;
 
 pub fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Screen::Title), spawn_camera);
@@ -44,10 +52,19 @@ fn spawn_camera(mut commands: Commands) {
     commands.spawn((
         MainCamera,
         DespawnOnEnter(Screen::Title),
+        TiledParallaxCamera,
         Projection::Orthographic(OrthographicProjection {
             scale: 0.25,
             ..OrthographicProjection::default_2d()
         }),
+        Hdr,
+        Bloom {
+            intensity: 0.6,
+            scale: Vec2::new(1.5, 1.5),
+            composite_mode: BloomCompositeMode::Additive,
+            ..default()
+        },
+        DepthOfField { ..default() },
     ));
 }
 
