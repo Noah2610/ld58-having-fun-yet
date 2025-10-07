@@ -21,6 +21,11 @@ pub fn plugin(app: &mut App) {
         PhysicsSystems::StepSimulation
             .run_if(in_state(Screen::Gameplay).and(in_state(Paused(false)))),
     );
+
+    app.add_systems(
+        OnEnter(Screen::Gameplay),
+        |mut next_state: ResMut<NextState<GameOver>>| next_state.set(GameOver(false)),
+    );
 }
 
 #[derive(States, Reflect, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
