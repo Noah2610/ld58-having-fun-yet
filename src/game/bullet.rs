@@ -1,6 +1,7 @@
 use crate::{
     AppSystems, GameplaySet,
     asset_tracking::LoadResource,
+    audio::sound_effect,
     game::{
         aim::AimDirection,
         enemy::{Enemy, EnemySettings, EnemyStunned},
@@ -92,6 +93,10 @@ struct BulletAssets {
     spritesheet:      Handle<Aseprite>,
     #[dependency]
     sfx_shoot:        Handle<AudioSource>,
+    #[dependency]
+    sfx_blank:        Handle<AudioSource>,
+    #[dependency]
+    sfx_collect:      Handle<AudioSource>,
     spawn_offset:     Scalar,
     speed:            Scalar,
     duration:         Duration,
@@ -106,6 +111,8 @@ impl FromWorld for BulletAssets {
                 .resource::<AssetServer>()
                 .load("spritesheets/bullet.ase"),
             sfx_shoot:        world.resource::<AssetServer>().load("audio/sfx/shoot.ogg"),
+            sfx_blank:        world.resource::<AssetServer>().load("audio/sfx/blip.ogg"),
+            sfx_collect:      world.resource::<AssetServer>().load("audio/sfx/reload.ogg"),
             spawn_offset:     8.0,
             speed:            200.0,
             duration:         Duration::from_millis(500),
@@ -119,11 +126,22 @@ fn handle_spawn_bullet(
     mut commands: Commands,
     assets: Res<BulletAssets>,
     spawners: Query<
-        (Entity, &Transform, &AimDirection, &mut LinearVelocity),
-        (With<BulletSpawner>, With<BulletAvailable>),
+        (
+            Entity,
+            Has<BulletAvailable>,
+            &Transform,
+            &AimDirection,
+            &mut LinearVelocity,
+        ),
+        With<BulletSpawner>,
     >,
 ) {
-    for (entity, transform, aim, mut velocity) in spawners {
+    for (entity, has_bullet, transform, aim, mut velocity) in spawners {
+        if !has_bullet {
+            commands.spawn(sound_effect(assets.sfx_blank.clone()));
+            continue;
+        }
+
         if let Some(dir) = &aim.0 {
             let dir_vec = dir.vec();
             let offset = (dir_vec * assets.spawn_offset).extend(0.0);
@@ -134,6 +152,7 @@ fn handle_spawn_bullet(
             commands
                 .spawn((
                     Bullet,
+                    DespawnOnExit(Screen::Gameplay),
                     BulletTimer(Timer::new(assets.duration, TimerMode::Once)),
                     AudioPlayer(assets.sfx_shoot.clone()),
                     AseAnimation {
@@ -183,6 +202,7 @@ fn handle_bullet_timers(
 fn handle_collect_bullet(
     trigger: On<CollisionStart>,
     mut commands: Commands,
+    assets: Res<BulletAssets>,
     bullets: Query<(), (With<Bullet>, With<Collectable>)>,
     spawners: Query<(), (With<BulletSpawner>, Without<BulletAvailable>)>,
 ) {
@@ -191,6 +211,7 @@ fn handle_collect_bullet(
     if bullets.contains(bullet) && spawners.contains(spawner) {
         commands.entity(bullet).despawn();
         commands.entity(spawner).insert(BulletAvailable);
+        commands.spawn(sound_effect(assets.sfx_collect.clone()));
     }
 }
 

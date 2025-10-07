@@ -144,15 +144,10 @@ fn handle_player_death(
     mut commands: Commands,
     mut next_state: ResMut<NextState<GameOver>>,
     assets: Res<PlayerAssets>,
-    players: Query<(), (With<Player>, Added<Dead>)>,
+    dead_players: Query<(), (With<Player>, Added<Dead>)>,
 ) {
-    let mut did_die = false;
-    for _ in players {
-        did_die = true;
+    if !dead_players.is_empty() {
         commands.spawn(sound_effect(assets.sfx_death.clone()));
-    }
-
-    if did_die {
         next_state.set(GameOver(true));
     }
 }
