@@ -9,6 +9,7 @@ use crate::{
 use bevy::prelude::*;
 
 pub fn plugin(app: &mut App) {
+    app.init_resource::<LastScaleAtSec>();
     app.add_systems(
         Update,
         handle_visual_scaling
@@ -17,20 +18,24 @@ pub fn plugin(app: &mut App) {
     );
 }
 
+#[derive(Resource, Default)]
+struct LastScaleAtSec(u32);
+
 const ROTATION_INCREASE: f32 = 0.00005;
 const SCALE_INCREASE: f32 = 0.00005;
 const SCALE_EVERY_N_SECS: u32 = 10;
 
 fn handle_visual_scaling(
     time: Res<SurvivalTimer>,
+    mut last_scale: ResMut<LastScaleAtSec>,
     camera_query: Query<(&mut RotationAnimation, &mut ProjectionScaleAnimation), With<MainCamera>>,
 ) {
     let secs = time.0.elapsed().as_secs() as u32;
-    if secs > 0 && !secs.is_multiple_of(SCALE_EVERY_N_SECS) {
+    if last_scale.0 == secs || !secs.is_multiple_of(SCALE_EVERY_N_SECS) {
         return;
     }
 
-    dbg!("HERE");
+    last_scale.0 = secs;
 
     for (mut rot, mut scale) in camera_query {
         if let Some(range) = rot.0.range.as_mut() {
