@@ -3,7 +3,7 @@
 
 use crate::AppSystems;
 use bevy::prelude::*;
-use bevy_ecs_tiled::prelude::TileColor;
+use bevy_ecs_tiled::prelude::{TileColor, TilePos};
 use std::f32::consts::PI;
 
 pub fn plugin(app: &mut App) {
@@ -36,7 +36,10 @@ pub fn plugin(app: &mut App) {
     app.add_systems(
         Update,
         ((
-            handle_set_sprite_color,
+            (
+                handle_set_sprite_color,
+                handle_store_positions_for_position_animations,
+            ),
             (
                 (
                     (
@@ -56,6 +59,8 @@ pub fn plugin(app: &mut App) {
                     (
                         update_rotation_animations,
                         update_projection_scale_animations,
+                        update_position_x_animations,
+                        update_position_y_animations,
                     )
                         .run_if(global_camera_animations_enabled),
                     update_transform_scale_x_animations,
@@ -63,7 +68,7 @@ pub fn plugin(app: &mut App) {
                 )
                     .run_if(global_transform_animations_enabled),
             ),
-            render_animations,
+            (render_color_animations, render_position_animations),
         )
             .chain()
             .run_if(global_animations_enabled))
@@ -238,12 +243,35 @@ pub struct ScaleYAnimation(pub VisualAnimation);
 #[reflect(Component)]
 pub struct ScaleYAnimationState(pub f32);
 
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+#[require(PositionXAnimationState, StoredPositionX)]
+pub struct PositionXAnimation(pub VisualAnimation);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct PositionXAnimationState(pub f32);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct StoredPositionX(pub f32);
+
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+#[require(PositionYAnimationState, StoredPositionY)]
+pub struct PositionYAnimation(pub VisualAnimation);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct PositionYAnimationState(pub f32);
+#[derive(Component, Reflect, Default)]
+#[reflect(Component)]
+pub struct StoredPositionY(pub f32);
+
 const DEFAULT_HUE_RANGE: (f32, f32) = (0.0, 360.0);
 const DEFAULT_SATURATION_RANGE: (f32, f32) = (0.0, 1.0);
 const DEFAULT_LIGHTNESS_RANGE: (f32, f32) = (0.0, 1.0);
 const DEFAULT_CAMERA_ROTATION_RANGE: (f32, f32) = (-0.05, 0.05);
 const DEFAULT_CAMERA_SCALE_RANGE: (f32, f32) = (0.2, 0.3);
 const DEFAULT_SCALE_RANGE: (f32, f32) = (0.5, 1.5);
+const DEFAULT_POSITION_RANGE: (f32, f32) = (-20.0, 20.0);
 
 fn handle_set_sprite_color(
     mut commands: Commands,
@@ -271,7 +299,30 @@ fn handle_set_sprite_color(
     }
 }
 
-fn render_animations(
+fn handle_store_positions_for_position_animations(
+    query: Query<
+        (
+            &Transform,
+            Option<&mut StoredPositionX>,
+            Option<&mut StoredPositionY>,
+        ),
+        (
+            Added<Transform>,
+            Or<(With<StoredPositionX>, With<StoredPositionY>)>,
+        ),
+    >,
+) {
+    for (transform, stored_x, stored_y) in query {
+        if let Some(mut stored_x) = stored_x {
+            stored_x.0 = transform.translation.x;
+        }
+        if let Some(mut stored_y) = stored_y {
+            stored_y.0 = transform.translation.y;
+        }
+    }
+}
+
+fn render_color_animations(
     query: Query<
         (
             Option<&mut Sprite>,
@@ -306,6 +357,29 @@ fn render_animations(
             if let Some(lightness) = lightness {
                 *color = Color::hsl(color.hue(), color.saturation(), lightness.0);
             }
+        }
+    }
+}
+
+fn render_position_animations(
+    query: Query<
+        (
+            &mut Transform,
+            Option<(&PositionXAnimationState, &StoredPositionX)>,
+            Option<(&PositionYAnimationState, &StoredPositionY)>,
+        ),
+        (
+            Without<AnimationsDisabled>,
+            Or<(With<PositionXAnimationState>, With<PositionYAnimationState>)>,
+        ),
+    >,
+) {
+    for (mut transform, anim_x, anim_y) in query {
+        if let Some((state_x, stored_x)) = anim_x {
+            transform.translation.x = state_x.0 + stored_x.0;
+        }
+        if let Some((state_y, stored_y)) = anim_y {
+            transform.translation.y = state_y.0 + stored_y.0;
         }
     }
 }
@@ -432,6 +506,26 @@ fn update_transform_scale_y_animations(
     for (anim, mut state, mut transform) in &mut query {
         state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SCALE_RANGE);
         transform.scale = Vec3::new(transform.scale.x, state.0, transform.scale.z);
+    }
+}
+
+fn update_position_x_animations(
+    time: Res<Time>,
+    query: Query<(&PositionXAnimation, &mut PositionXAnimationState), Without<AnimationsDisabled>>,
+) {
+    let secs = time.elapsed_secs();
+    for (anim, mut state) in query {
+        state.0 = animate(secs, &anim.0, DEFAULT_POSITION_RANGE);
+    }
+}
+
+fn update_position_y_animations(
+    time: Res<Time>,
+    query: Query<(&PositionYAnimation, &mut PositionYAnimationState), Without<AnimationsDisabled>>,
+) {
+    let secs = time.elapsed_secs();
+    for (anim, mut state) in query {
+        state.0 = animate(secs, &anim.0, DEFAULT_POSITION_RANGE);
     }
 }
 

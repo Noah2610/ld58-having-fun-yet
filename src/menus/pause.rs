@@ -1,6 +1,8 @@
 //! The pause menu.
 
-use crate::{menus::Menu, screens::Screen, theme::widget};
+use crate::menus::Menu;
+#[cfg(not(feature = "no_pause_ui"))]
+use crate::{screens::Screen, theme::widget};
 use bevy::{input::common_conditions::input_just_pressed, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {

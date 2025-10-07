@@ -9,7 +9,10 @@ use crate::{
         health::{Dead, Health},
         movement::{Acceleration, MovementController},
         util::CollisionTag,
-        visuals::{AnimationDirection, HueAnimation, SetSpriteColor, VisualAnimation},
+        visuals::{
+            AnimationDirection, HueAnimation, ScaleXAnimation, ScaleYAnimation, SetSpriteColor,
+            VisualAnimation,
+        },
     },
     game_state::{GameOver, GameplaySet},
 };
@@ -81,6 +84,18 @@ fn post_add_player(
         period: 8.0,
         direction: AnimationDirection::Linear,
         ..default()
+    }),
+    ScaleXAnimation(VisualAnimation{
+        period: 4.0,
+        direction: AnimationDirection::Boomerang,
+        range: Some((0.5, 1.5)),
+        time_offset: 0.0,
+    }),
+    ScaleYAnimation(VisualAnimation{
+        period: 4.0,
+        direction: AnimationDirection::Boomerang,
+        range: Some((0.5, 1.5)),
+        time_offset: 2.0,
     }),
 )]
 pub struct Player;

@@ -125,64 +125,6 @@
         {
             "color": "#ff000000",
             "drawFill": true,
-            "id": 6,
-            "members": [
-            ],
-            "name": "bevy_ecs::entity_disabling::Disabled",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 7,
-            "members": [
-            ],
-            "name": "bevy_ecs::entity_disabling::Internal",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 8,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "object",
-                    "value": 0
-                }
-            ],
-            "name": "bevy_ecs::hierarchy::ChildOf",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 9,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "string",
-                    "value": ""
-                }
-            ],
-            "name": "bevy_ecs::name::Name",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
             "id": 10,
             "members": [
                 {
@@ -1055,6 +997,25 @@
         {
             "color": "#ff000000",
             "drawFill": true,
+            "id": 43,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "core::option::Option<glam::Vec2>",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "bevy_ecs_tiled::tiled::world::chunking::TiledWorldChunking",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
             "id": 41,
             "members": [
             ],
@@ -1076,42 +1037,6 @@
                 }
             ],
             "name": "bevy_ecs_tiled::tiled::world::TiledWorld",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 43,
-            "members": [
-                {
-                    "name": "0",
-                    "propertyType": "core::option::Option<glam::Vec2>",
-                    "type": "class",
-                    "value": {
-                    }
-                }
-            ],
-            "name": "bevy_ecs_tiled::tiled::world::chunking::TiledWorldChunking",
-            "type": "class",
-            "useAs": [
-                "property"
-            ]
-        },
-        {
-            "color": "#ff000000",
-            "drawFill": true,
-            "id": 44,
-            "members": [
-                {
-                    "name": "0",
-                    "type": "bool",
-                    "value": false
-                }
-            ],
-            "name": "bevy_ecs_tilemap::FrustumCulling",
             "type": "class",
             "useAs": [
                 "property"
@@ -1176,6 +1101,23 @@
                 }
             ],
             "name": "bevy_ecs_tilemap::anchor::TilemapAnchor::Custom",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 44,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "bool",
+                    "value": false
+                }
+            ],
+            "name": "bevy_ecs_tilemap::FrustumCulling",
             "type": "class",
             "useAs": [
                 "property"
@@ -1566,6 +1508,64 @@
                 }
             ],
             "name": "bevy_ecs_tilemap::tiles::TileVisible",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 6,
+            "members": [
+            ],
+            "name": "bevy_ecs::entity_disabling::Disabled",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 7,
+            "members": [
+            ],
+            "name": "bevy_ecs::entity_disabling::Internal",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 8,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "bevy_ecs::hierarchy::ChildOf",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 9,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "bevy_ecs::name::Name",
             "type": "class",
             "useAs": [
                 "property"
@@ -2360,6 +2360,11 @@
                     "name": "map",
                     "type": "file",
                     "value": ""
+                },
+                {
+                    "name": "music",
+                    "type": "file",
+                    "value": ""
                 }
             ],
             "name": "ld58::game::level::LevelAssets",
@@ -2992,6 +2997,11 @@
                     "value": 0
                 },
                 {
+                    "name": "score_mult",
+                    "type": "float",
+                    "value": 0
+                },
+                {
                     "name": "spawn_every_n_secs",
                     "type": "int",
                     "value": 0
@@ -3059,6 +3069,158 @@
                 }
             ],
             "name": "ld58::theme::interaction::InteractionPalette",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 155,
+            "members": [
+            ],
+            "name": "ld58::game::health::HealthValueUi",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 156,
+            "members": [
+                {
+                    "name": "sfx_death",
+                    "type": "file",
+                    "value": ""
+                },
+                {
+                    "name": "spritesheet",
+                    "type": "file",
+                    "value": ""
+                }
+            ],
+            "name": "ld58::game::player::PlayerAssets",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 157,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::game::score::Score",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 158,
+            "members": [
+            ],
+            "name": "ld58::game::score::ScoreValueUi",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 159,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "bool",
+                    "value": false
+                }
+            ],
+            "name": "ld58::game::visuals::GlobalTransformAnimationsEnabled",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 160,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "ld58::game::visuals::VisualAnimation",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "ld58::game::visuals::ScaleXAnimation",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 161,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::game::visuals::ScaleXAnimationState",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 162,
+            "members": [
+                {
+                    "name": "0",
+                    "propertyType": "ld58::game::visuals::VisualAnimation",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "ld58::game::visuals::ScaleYAnimation",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ff000000",
+            "drawFill": true,
+            "id": 163,
+            "members": [
+                {
+                    "name": "0",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "ld58::game::visuals::ScaleYAnimationState",
             "type": "class",
             "useAs": [
                 "property"

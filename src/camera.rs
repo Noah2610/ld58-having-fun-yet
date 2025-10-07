@@ -3,12 +3,14 @@ use crate::{
     game::{
         player::Player,
         visuals::{
-            AnimationDirection, ProjectionScaleAnimation, RotationAnimation, VisualAnimation,
+            AnimationDirection, ProjectionScaleAnimation, RotationAnimation, ScaleXAnimation,
+            ScaleYAnimation, VisualAnimation,
         },
     },
     screens::Screen,
 };
 use bevy::prelude::*;
+use rand::Rng;
 
 pub fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Screen::Title), spawn_camera);
@@ -27,16 +29,30 @@ pub fn plugin(app: &mut App) {
     Camera2d,
     RotationAnimation(VisualAnimation {
         direction:   AnimationDirection::Boomerang,
-        period:      4.0,
-        range:       Some((-0.003, 0.003)),
+        period:      rand::rng().random_range(1.0 .. 4.0),
+        // range:       Some((-0.003, 0.003)),
+        range:       Some((rand::rng().random_range(-1.0 .. 0.0), rand::rng().random_range(0.0 .. 1.0))),
         ..default()
     }),
     ProjectionScaleAnimation(VisualAnimation {
         direction:   AnimationDirection::Boomerang,
-        period:      8.0,
-        range:       Some((0.20, 0.21)),
+        period:      rand::rng().random_range(1.0 .. 8.0),
+        // range:       Some((0.20, 0.21)),
+        range:       Some((0.05, 0.5)),
         ..default()
-    })
+    }),
+    ScaleXAnimation(VisualAnimation{
+        direction: AnimationDirection::Boomerang,
+        period: rand::rng().random_range(1.0 .. 8.0),
+        range: Some((rand::rng().random_range(0.0 .. 0.5), rand::rng().random_range(0.5 .. 2.0))),
+        time_offset: 0.0,
+    }),
+    ScaleYAnimation(VisualAnimation{
+        direction: AnimationDirection::Boomerang,
+        period: rand::rng().random_range(1.0 .. 8.0),
+        range: Some((rand::rng().random_range(0.0 .. 0.5), rand::rng().random_range(0.5 .. 2.0))),
+        time_offset: 0.0,
+    }),
 )]
 pub struct MainCamera;
 
