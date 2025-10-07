@@ -50,7 +50,7 @@ pub fn plugin(app: &mut App) {
         [CollisionTag::Solid, CollisionTag::Enemy],
     ),
     Restitution {
-        coefficient: 0.5,
+        coefficient: 0.8,
         combine_rule: CoefficientCombine::Max
     },
     MaxLinearSpeed(200.0),
