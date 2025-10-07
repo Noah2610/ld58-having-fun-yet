@@ -59,7 +59,8 @@ fn post_add_player(
     Acceleration(1800.0),
     LinearDamping(15.0),
     RigidBody::Dynamic,
-    Collider::rectangle(8.0, 16.0),
+    // Collider::rectangle(8.0, 16.0),
+    Collider::circle(8.0),
     Mass(1.0),
     CollisionLayers::new(
         [CollisionTag::Player, CollisionTag::Entity],

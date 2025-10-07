@@ -44,7 +44,7 @@ pub fn waves_managers() -> Vec<WavesManagerBundle> {
             spawn_every_n_secs:       60,
             initial_enemies:          1,
             enemies_incr_per_wave:    1,
-            enemy_spawn_radius_range: (250.0, 300.0),
+            enemy_spawn_radius_range: (200.0, 400.0),
             score_mult:               500.0,
         }),
     ]
@@ -71,10 +71,10 @@ impl Default for WavesManagerSettings {
     fn default() -> Self {
         Self {
             enemy_variant:            EnemyVariant::Basic,
-            spawn_every_n_secs:       5,
-            initial_enemies:          1,
+            spawn_every_n_secs:       10,
+            initial_enemies:          3,
             enemies_incr_per_wave:    1,
-            enemy_spawn_radius_range: (100.0, 200.0),
+            enemy_spawn_radius_range: (100.0, 300.0),
             score_mult:               1.0,
         }
     }

@@ -44,16 +44,17 @@ pub fn plugin(app: &mut App) {
     Sprite::default(),
     RigidBody::Dynamic,
     Collider::circle(6.5),
-    Mass(0.1),
+    Mass(0.5),
     CollisionLayers::new(
         [CollisionTag::Bullet, CollisionTag::Entity],
         [CollisionTag::Solid, CollisionTag::Enemy],
     ),
     Restitution {
-        coefficient: 0.3,
+        coefficient: 0.5,
         combine_rule: CoefficientCombine::Max
     },
-    AngularDamping(2.0),
+    MaxLinearSpeed(200.0),
+    AngularDamping(1.0),
     CollisionEventsEnabled,
 
     SetSpriteColor(Color::hsl(0.0, 0.9, 0.4)),
@@ -109,7 +110,7 @@ impl FromWorld for BulletAssets {
             speed:            200.0,
             duration:         Duration::from_millis(500),
             velocity_damping: 2.0,
-            player_knockback: 300.0,
+            player_knockback: 400.0,
         }
     }
 }
@@ -170,7 +171,6 @@ fn handle_bullet_timers(
         if timer.0.is_finished() {
             ase.animation.play_loop("idle");
             collision_layers.memberships = CollisionTag::Collectable.into();
-            collision_layers.memberships |= CollisionTag::Entity;
             collision_layers.filters |= CollisionTag::Player;
             commands
                 .entity(entity)
@@ -198,39 +198,45 @@ fn handle_bullet_enemy_collision(
     trigger: On<CollisionStart>,
     mut commands: Commands,
     mut score: ResMut<Score>,
-    bullets: Query<&Transform, (With<Bullet>, Without<Collectable>, Without<Enemy>)>,
+    bullets: Query<(&Transform, &LinearVelocity), (With<Bullet>, Without<Enemy>)>,
     mut enemies: Query<
         (
             &Transform,
             &EnemySettings,
             &mut LinearVelocity,
             Option<&mut Health>,
+            Has<EnemyStunned>,
         ),
-        (
-            With<Enemy>,
-            Without<EnemyStunned>,
-            Without<Dead>,
-            Without<Bullet>,
-        ),
+        (With<Enemy>, Without<Dead>, Without<Bullet>),
     >,
 ) {
     let bullet = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok(bullet_transform), Ok((enemy_transform, settings, mut velocity, health))) =
-        (bullets.get(bullet), enemies.get_mut(enemy))
+    if let (
+        Ok((bullet_transform, bullet_velocity)),
+        Ok((enemy_transform, settings, mut velocity, health, is_stunned)),
+    ) = (bullets.get(bullet), enemies.get_mut(enemy))
     {
+        const MAX_SPEED_FOR_DAMAGE: f32 = 30.0;
+        if (bullet_velocity.0.x.powi(2) + bullet_velocity.0.y.powi(2)).sqrt() < MAX_SPEED_FOR_DAMAGE
+        {
+            return;
+        }
+
         let direction = (enemy_transform.translation.truncate()
             - bullet_transform.translation.truncate())
         .normalize_or_zero();
         velocity.0 += direction * settings.knockback_strength_bullet;
 
-        commands.entity(enemy).insert(EnemyStunned);
+        if !is_stunned {
+            commands.entity(enemy).insert(EnemyStunned);
 
-        if let Some(mut health) = health {
-            health.damage(1);
-            if !health.is_alive() {
-                score.0 += settings.score_worth;
+            if let Some(mut health) = health {
+                health.damage(1);
+                if !health.is_alive() {
+                    score.0 += settings.score_worth;
+                }
             }
         }
     }

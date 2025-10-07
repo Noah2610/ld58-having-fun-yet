@@ -74,11 +74,18 @@ fn handle_variant_change(
     // FixObjectColliders,
     Sprite::default(),
     RigidBody::Dynamic,
-    Collider::rectangle(14.0, 16.0),
+    // Collider::rectangle(14.0, 16.0),
+    Collider::circle(8.0),
     Mass(1.0),
     CollisionLayers::new(
         [CollisionTag::Enemy, CollisionTag::Entity],
-        [CollisionTag::Solid, CollisionTag::Player, CollisionTag::Bullet, CollisionTag::Enemy],
+        [
+            CollisionTag::Solid,
+            CollisionTag::Player,
+            CollisionTag::Bullet,
+            CollisionTag::Collectable,
+            CollisionTag::Enemy,
+        ],
     ),
     LockedAxes::ROTATION_LOCKED,
     LinearDamping(10.0),
@@ -117,9 +124,9 @@ impl From<EnemyVariant> for EnemyVariantBundle {
         match variant {
             EnemyVariant::Basic => Self {
                 settings: EnemySettings {
-                    speed:                     400.0,
+                    speed:                     300.0,
                     stun_duration:             Duration::from_secs(2),
-                    knockback_strength:        300.0,
+                    knockback_strength:        400.0,
                     knockback_strength_bullet: 800.0,
                     score_worth:               10,
                 },
@@ -130,12 +137,12 @@ impl From<EnemyVariant> for EnemyVariantBundle {
                 settings: EnemySettings {
                     speed:                     200.0,
                     stun_duration:             Duration::from_secs(4),
-                    knockback_strength:        600.0,
-                    knockback_strength_bullet: 1200.0,
+                    knockback_strength:        800.0,
+                    knockback_strength_bullet: 1000.0,
                     score_worth:               100,
                 },
                 scale:    Vec2::splat(2.0).into(),
-                health:   Health::new(3),
+                health:   Health::new(2),
             },
         }
     }
