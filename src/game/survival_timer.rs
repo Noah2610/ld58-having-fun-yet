@@ -13,7 +13,7 @@ pub fn plugin(app: &mut App) {
     );
     app.add_systems(
         OnEnter(Paused(false)),
-        resume_timer.run_if(in_state(Screen::Gameplay)),
+        resume_timer.run_if(in_state(Screen::Gameplay).and(in_state(GameOver(false)))),
     );
     app.add_systems(OnEnter(GameOver(true)), stop_timer);
 
