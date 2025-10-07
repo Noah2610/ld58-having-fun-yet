@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="16" tileheight="16" infinite="1" nextlayerid="3" nextobjectid="2">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="16" tileheight="16" infinite="1" nextlayerid="7" nextobjectid="2">
  <tileset firstgid="1" source="tiles.tsx"/>
+ <imagelayer id="6" name="p4" offsetx="-512" offsety="-512" parallaxx="1.7" parallaxy="1.7">
+     <image source="../parallax/parallax_1024_4.png" width="1024" height="1024"/>
+ </imagelayer>
+ <imagelayer id="5" name="p3" offsetx="-512" offsety="-512" parallaxx="1.5" parallaxy="1.5">
+     <image source="../parallax/parallax_1024_3.png" width="1024" height="1024"/>
+ </imagelayer>
+ <imagelayer id="4" name="p2" offsetx="-512" offsety="-512" parallaxx="1.1" parallaxy="1.1">
+     <image source="../parallax/parallax_1024_2.png" width="1024" height="1024"/>
+ </imagelayer>
+ <imagelayer id="3" name="p1" offsetx="-512" offsety="-512" parallaxx="1.01" parallaxy="1.01">
+     <image source="../parallax/parallax_1024_1.png" width="1024" height="1024"/>
+ </imagelayer>
  <layer id="1" name="tiles" width="16" height="16">
   <data encoding="csv">
    <chunk x="-48" y="-80" width="16" height="16">
