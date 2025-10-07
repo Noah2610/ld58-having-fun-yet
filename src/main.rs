@@ -1,12 +1,12 @@
 // Support configuring Bevy lints within code.
 #![cfg_attr(bevy_lint, feature(register_tool), register_tool(bevy))]
 // Disable console on Windows for non-dev builds.
-#![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
+#![cfg_attr(not(feature = "dev_tools"), windows_subsystem = "windows")]
 
 mod asset_tracking;
 mod audio;
 mod camera;
-#[cfg(feature = "dev")]
+#[cfg(feature = "dev_tools")]
 mod dev_tools;
 mod direction;
 mod game;
@@ -55,7 +55,7 @@ impl Plugin for AppPlugin {
                 .set(ImagePlugin::default_nearest()),
             PhysicsPlugins::default().with_length_unit(16.0),
             TiledPlugin(TiledPluginConfig {
-                tiled_types_export_file: if cfg!(feature = "dev") {
+                tiled_types_export_file: if cfg!(feature = "dev_tools") {
                     Some(PathBuf::from("./tiled/tiled_types_export.json"))
                 } else {
                     None
@@ -73,7 +73,7 @@ impl Plugin for AppPlugin {
         app.insert_resource(Gravity::ZERO)
             .insert_resource(ClearColor(Color::BLACK));
 
-        #[cfg(feature = "dev")]
+        #[cfg(feature = "dev_tools")]
         app.add_plugins(dev_tools::plugin);
 
         // Add other plugins.
