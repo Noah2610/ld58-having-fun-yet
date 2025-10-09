@@ -1,9 +1,10 @@
 use crate::{
-    menus::{Menu, pop_menu_on_click},
-    theme::widget::{self, ValueChange, checkbox_self_update, observe, self_start, settings_list},
+    menus::{Menu, MenuAction, action_just_pressed, pop_menu_on_click},
+    theme::widget::{self, FullscreenToggleCheckbox, ValueChange, self_start, settings_list},
 };
 use bevy::{
     prelude::*,
+    ui::Checked,
     window::{PrimaryWindow, Window, WindowMode},
 };
 
@@ -12,15 +13,37 @@ pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Menu::VideoSettings), spawn_video_settings_menu);
     app.add_systems(
         Update,
-        apply_fullscreen.run_if(resource_changed::<IsFullscreen>),
+        (
+            toggle_fullscreen.run_if(action_just_pressed(MenuAction::ToggleFullscreen)),
+            apply_fullscreen.run_if(resource_changed::<IsFullscreen>),
+        )
+            .chain(),
     );
+}
+
+fn toggle_fullscreen(mut fullscreen: ResMut<IsFullscreen>) {
+    fullscreen.0 ^= true;
 }
 
 fn apply_fullscreen(
     fullscreen: Res<IsFullscreen>,
     mut window: Single<&mut Window, With<PrimaryWindow>>,
+    mut commands: Commands,
+    checkboxes: Query<(Entity, Has<Checked>), With<FullscreenToggleCheckbox>>,
 ) {
-    window.mode = if dbg!(fullscreen.0) {
+    for (checkbox, checked) in checkboxes {
+        match (fullscreen.0, checked) {
+            (true, true) | (false, false) => {},
+            (true, false) => {
+                commands.entity(checkbox).insert(Checked);
+            },
+            (false, true) => {
+                commands.entity(checkbox).remove::<Checked>();
+            },
+        }
+    }
+
+    window.mode = if fullscreen.0 {
         WindowMode::Fullscreen(MonitorSelection::Current, VideoModeSelection::Current)
     } else {
         WindowMode::default()
@@ -56,9 +79,9 @@ fn fullscreen_toggle_widget(is_fullscreen: bool) -> impl Bundle {
             // widget::label("Fullscreen?"),
             widget::checkbox(
                 "Fullscreen?",
-                dbg!(is_fullscreen),
+                is_fullscreen,
                 |trigger: On<ValueChange<bool>>, mut fullscreen: ResMut<IsFullscreen>| {
-                    fullscreen.0 = dbg!(trigger.value);
+                    fullscreen.0 = trigger.value;
                 }
             ),
             // observe(checkbox_self_update),

@@ -137,6 +137,9 @@ where
     )
 }
 
+#[derive(Component, Default)]
+pub struct FullscreenToggleCheckbox;
+
 pub fn checkbox<E, B, M, I>(caption: impl Into<String>, checked: bool, action: I) -> impl Bundle
 where
     E: EntityEvent,
@@ -150,6 +153,7 @@ where
 
     (
         Name::new(format!("{} Checkbox", caption.as_str())),
+        FullscreenToggleCheckbox,
         Node {
             display: Display::Flex,
             flex_direction: FlexDirection::Row,
@@ -202,7 +206,7 @@ where
                 // .observe(action);
             }),
         )),
-        observe(checkbox_self_update),
+        // observe(checkbox_self_update),
         observe(action),
     )
 

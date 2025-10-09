@@ -12,6 +12,7 @@ pub enum MenuAction {
     Pause,
     Cancel,
     QuitGame,
+    ToggleFullscreen,
 }
 
 impl MenuAction {
@@ -22,5 +23,6 @@ impl MenuAction {
             .with(Cancel, KeyCode::Escape)
             .with(Cancel, GamepadButton::Start)
             .with(QuitGame, ModifierKey::Control.with(KeyCode::KeyQ))
+            .with(ToggleFullscreen, KeyCode::KeyF)
     }
 }
