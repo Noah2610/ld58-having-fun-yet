@@ -149,12 +149,12 @@ fn handle_spawn_bullet(
 
             velocity.0 += knockback;
 
+            commands.spawn(sound_effect(assets.sfx_shoot.clone()));
             commands
                 .spawn((
                     Bullet,
                     DespawnOnExit(Screen::Gameplay),
                     BulletTimer(Timer::new(assets.duration, TimerMode::Once)),
-                    AudioPlayer(assets.sfx_shoot.clone()),
                     AseAnimation {
                         aseprite:  assets.spritesheet.clone(),
                         animation: Animation::tag("fly"),
