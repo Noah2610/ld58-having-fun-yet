@@ -16,12 +16,14 @@ use std::time::Duration;
 
 pub fn plugin(app: &mut App) {
     app.load_resource::<EnemyAssets>();
+    app.init_state::<EnemiesEnabled>();
+
     app.add_systems(
         Update,
         (
             post_add_enemy,
             handle_variant_change,
-            run_enemy_behavior,
+            run_enemy_behavior.run_if(in_state(EnemiesEnabled(true))),
             handle_enemy_stun,
         )
             .in_set(AppSystems::Update)
@@ -63,6 +65,14 @@ fn handle_variant_change(
             EnemyInitializedVariant(*variant),
             EnemyVariantBundle::from(*variant),
         ));
+    }
+}
+
+#[derive(States, Reflect, Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub struct EnemiesEnabled(pub bool);
+impl Default for EnemiesEnabled {
+    fn default() -> Self {
+        Self(true)
     }
 }
 

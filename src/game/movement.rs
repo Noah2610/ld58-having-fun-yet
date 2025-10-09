@@ -1,7 +1,8 @@
 use crate::{
-    AppSystems, GameplaySet,
+    AppSystems,
     direction::Direction,
     game::health::Dead,
+    game_state::ActiveGameplaySet,
     input::{ActionState, PlayerAction},
 };
 use avian2d::{math::Scalar, prelude::*};
@@ -13,7 +14,7 @@ pub(super) fn plugin(app: &mut App) {
         Update,
         (apply_movement, sync_walk_direction)
             .in_set(AppSystems::Update)
-            .in_set(GameplaySet),
+            .in_set(ActiveGameplaySet),
     );
 }
 

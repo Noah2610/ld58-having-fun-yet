@@ -1,22 +1,16 @@
 //! Development tools for the game. This plugin is only enabled in dev builds.
 
-use crate::{Paused, screens::Screen};
+use crate::{Paused, input::*, screens::Screen};
 use avian2d::prelude::{PhysicsDebugPlugin, PhysicsGizmos};
 use bevy::{
     dev_tools::{
         fps_overlay::{FpsOverlayConfig, FpsOverlayPlugin, FrameTimeGraphConfig},
         states::log_transitions,
     },
-    input::common_conditions::input_just_pressed,
     prelude::*,
 };
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::quick::{StateInspectorPlugin, WorldInspectorPlugin};
-
-const TOGGLE_FPS_KEY: KeyCode = KeyCode::F1;
-const TOGGLE_INSPECTOR_KEY: KeyCode = KeyCode::F2;
-const TOGGLE_GIZMOS_KEY: KeyCode = KeyCode::F3;
-const TOGGLE_UI_KEY: KeyCode = KeyCode::F4;
 
 #[derive(States, Reflect, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 #[reflect(State)]
@@ -58,19 +52,19 @@ pub(super) fn plugin(app: &mut App) {
     app.add_systems(Update, log_transitions::<Screen>)
         .add_systems(
             Update,
-            (toggle_fps_overlay.run_if(input_just_pressed(TOGGLE_FPS_KEY)),),
+            (toggle_fps_overlay.run_if(action_just_pressed(DebugAction::ToggleFps)),),
         )
         .add_systems(
             Update,
-            toggle_inspector.run_if(input_just_pressed(TOGGLE_INSPECTOR_KEY)),
+            toggle_inspector.run_if(action_just_pressed(DebugAction::ToggleInspector)),
         )
         .add_systems(
             Update,
-            toggle_debug_ui.run_if(input_just_pressed(TOGGLE_UI_KEY)),
+            toggle_debug_ui.run_if(action_just_pressed(DebugAction::ToggleUiDebug)),
         )
         .add_systems(
             Update,
-            toggle_gizmos.run_if(input_just_pressed(TOGGLE_GIZMOS_KEY)),
+            toggle_gizmos.run_if(action_just_pressed(DebugAction::ToggleGizmos)),
         );
 }
 

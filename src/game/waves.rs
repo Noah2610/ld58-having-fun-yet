@@ -1,7 +1,7 @@
 use crate::{
     AppSystems, GameplaySet,
     game::{
-        enemy::{Enemy, EnemyVariant},
+        enemy::{EnemiesEnabled, Enemy, EnemyVariant},
         player::Player,
         score::Score,
         survival_timer::SurvivalTimer,
@@ -15,7 +15,7 @@ pub fn plugin(app: &mut App) {
     app.add_systems(
         Update,
         handle_waves_manager
-            .run_if(in_state(GameOver(false)))
+            .run_if(in_state(GameOver(false)).and(in_state(EnemiesEnabled(true))))
             .in_set(AppSystems::Update)
             .in_set(GameplaySet),
     );

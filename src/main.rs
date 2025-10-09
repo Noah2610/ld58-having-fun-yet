@@ -22,7 +22,7 @@ use avian2d::prelude::{Gravity, PhysicsPlugins};
 use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_aseprite_ultra::AsepriteUltraPlugin;
 use bevy_ecs_tiled::prelude::*;
-use game_state::{GameplaySet, Paused};
+use game_state::{AppSystems, GameplaySet, Paused};
 use std::path::PathBuf;
 
 fn main() -> AppExit {
@@ -114,19 +114,6 @@ impl Plugin for AppPlugin {
         #[cfg(not(feature = "dev"))]
         app.set_error_handler(bevy::ecs::error::error);
     }
-}
-
-/// High-level groupings of systems for the app in the `Update` schedule.
-/// When adding a new variant, make sure to order it in the `configure_sets`
-/// call above.
-#[derive(SystemSet, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
-enum AppSystems {
-    /// Tick timers.
-    TickTimers,
-    /// Record player input.
-    RecordInput,
-    /// Do everything else (consider splitting this into further variants).
-    Update,
 }
 
 #[cfg(feature = "dev_tools")]
