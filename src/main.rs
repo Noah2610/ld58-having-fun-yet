@@ -13,6 +13,7 @@ mod game;
 mod game_state;
 mod input;
 mod menus;
+mod quality;
 mod screens;
 mod state_history;
 mod theme;
@@ -95,6 +96,7 @@ impl Plugin for AppPlugin {
             theme::plugin,
             screens::plugin,
             camera::plugin,
+            quality::plugin,
         ));
 
         // Order new `AppSystems` variants by adding them here:
