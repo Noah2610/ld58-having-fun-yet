@@ -1,3 +1,4 @@
+use crate::input::{MenuAction, action_just_pressed};
 use bevy::{
     audio::{PlaybackMode, Volume},
     prelude::*,
@@ -6,6 +7,9 @@ use bevy::{
 pub(super) fn plugin(app: &mut App) {
     app.init_resource::<MusicVolume>();
     app.init_resource::<SoundsVolume>();
+    app.init_resource::<PreMuteVolume>();
+    // app.init_state::<Muted>();
+
     app.add_systems(
         PreUpdate,
         (
@@ -16,6 +20,27 @@ pub(super) fn plugin(app: &mut App) {
             apply_sounds_volume,
         ),
     );
+    app.add_systems(
+        Update,
+        toggle_mute.run_if(action_just_pressed(MenuAction::ToggleMute)),
+    );
+}
+
+#[derive(Resource, Default)]
+struct PreMuteVolume(Option<Volume>);
+
+// #[derive(States, Clone, Copy, PartialEq, Eq, Hash, Default, Debug)]
+// struct Muted(bool);
+
+fn toggle_mute(mut global_volume: ResMut<GlobalVolume>, mut pre_vol: ResMut<PreMuteVolume>) {
+    if global_volume.volume < Volume::Linear(0.01) {
+        if let Some(vol) = pre_vol.0 {
+            global_volume.volume = vol;
+        }
+    } else {
+        pre_vol.0 = Some(global_volume.volume);
+        global_volume.volume = Volume::SILENT;
+    }
 }
 
 #[derive(Resource, Reflect, Default)]
