@@ -19,7 +19,9 @@ impl MenuAction {
     fn default_input_map() -> InputMap<MenuAction> {
         use MenuAction::*;
         InputMap::default()
-            .with(Cancel, KeyCode::KeyP)
+            .with(Pause, KeyCode::KeyP)
+            .with(Pause, KeyCode::Escape)
+            .with(Pause, GamepadButton::Start)
             .with(Cancel, KeyCode::Escape)
             .with(Cancel, GamepadButton::Start)
             .with(QuitGame, ModifierKey::Control.with(KeyCode::KeyQ))
