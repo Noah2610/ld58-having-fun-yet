@@ -25,13 +25,14 @@ Be sure to __collect it__ after each shot to be able to fire again.
 Try to get the __highest score!__
 
 ## Controls
-| Action     | Keyboard   | Gamepad                      |
-|------------|------------|------------------------------|
-| Movement   | WASD       | Left Stick, DPad             |
-| Aim Weapon | Arrow Keys | Right Stick, Face Buttons    |
-| Shoot      | Spacebar   | Any Trigger or Should button |
-| Pause      | Escape, P  | Start Button                 |
-| Quit game  | Control+Q  | Nah                          |
+| Action      | Keyboard   | Gamepad                      |
+|-------------|------------|------------------------------|
+| Movement    | WASD       | Left Stick, DPad             |
+| Aim Weapon  | Arrow Keys | Right Stick, Face Buttons    |
+| Shoot       | Spacebar   | Any Trigger or Should button |
+| Pause       | Escape, P  | Start Button                 |
+| Toggle Mute | M          | Nope                         |
+| Quit game   | Control+Q  | Nah                          |
 
 ## Tools Used
 - __[`bevy`]__: the incredibly hot and fresh game engine for rust 🕊
