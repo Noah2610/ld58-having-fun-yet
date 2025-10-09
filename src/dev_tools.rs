@@ -1,6 +1,12 @@
-//! Development tools for the game. This plugin is only enabled in dev builds.
-
-use crate::{Paused, input::*, screens::Screen};
+use crate::{
+    Paused,
+    game::visuals::{
+        BackgroundHueAnimation, GlobalAnimationsEnabled, GlobalCameraAnimationsEnabled,
+        GlobalColorAnimationsEnabled, GlobalTransformAnimationsEnabled,
+    },
+    input::*,
+    screens::Screen,
+};
 use avian2d::prelude::{PhysicsDebugPlugin, PhysicsGizmos};
 use bevy::{
     dev_tools::{
@@ -10,16 +16,13 @@ use bevy::{
     prelude::*,
 };
 use bevy_egui::EguiPlugin;
-use bevy_inspector_egui::quick::{StateInspectorPlugin, WorldInspectorPlugin};
+use bevy_inspector_egui::quick::{
+    ResourceInspectorPlugin, StateInspectorPlugin, WorldInspectorPlugin,
+};
 
-#[derive(States, Reflect, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(States, Reflect, Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 #[reflect(State)]
 struct InspectorEnabled(bool);
-impl Default for InspectorEnabled {
-    fn default() -> Self {
-        Self(true)
-    }
-}
 
 pub(super) fn plugin(app: &mut App) {
     if !app.is_plugin_added::<EguiPlugin>() {
@@ -40,8 +43,16 @@ pub(super) fn plugin(app: &mut App) {
             },
         },
         WorldInspectorPlugin::default().run_if(in_state(InspectorEnabled(true))),
-        StateInspectorPlugin::<Screen>::default().run_if(in_state(InspectorEnabled(true))),
-        StateInspectorPlugin::<Paused>::default().run_if(in_state(InspectorEnabled(true))),
+        ResourceInspectorPlugin::<BackgroundHueAnimation>::default()
+            .run_if(in_state(InspectorEnabled(true))),
+        ResourceInspectorPlugin::<GlobalAnimationsEnabled>::default()
+            .run_if(in_state(InspectorEnabled(true))),
+        ResourceInspectorPlugin::<GlobalCameraAnimationsEnabled>::default()
+            .run_if(in_state(InspectorEnabled(true))),
+        ResourceInspectorPlugin::<GlobalColorAnimationsEnabled>::default()
+            .run_if(in_state(InspectorEnabled(true))),
+        ResourceInspectorPlugin::<GlobalTransformAnimationsEnabled>::default()
+            .run_if(in_state(InspectorEnabled(true))),
         PhysicsDebugPlugin,
     ))
     .insert_gizmo_config(PhysicsGizmos::default(), GizmoConfig {

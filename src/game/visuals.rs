@@ -183,7 +183,7 @@ pub struct LightnessAnimationState(pub f32);
 
 #[derive(Resource, Reflect)]
 #[reflect(Resource)]
-struct BackgroundHueAnimation(VisualAnimation);
+pub struct BackgroundHueAnimation(VisualAnimation);
 #[derive(Resource, Reflect, Default)]
 #[reflect(Resource)]
 struct BackgroundHueAnimationState(f32);
