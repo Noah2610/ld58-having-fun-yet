@@ -1,5 +1,6 @@
 use crate::{
     game::{
+        bullet::{Bullet, RetrieveBall},
         enemy::EnemiesEnabled,
         player::{Invincible, Player},
         survival_timer::SurvivalTimer,
@@ -7,12 +8,14 @@ use crate::{
     game_state::{ActiveGameplayForced, Paused},
     screens::Screen,
 };
+use avian2d::prelude::LinearVelocity;
 use bevy::prelude::*;
 use leafwing_input_manager::{common_conditions::action_just_pressed, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
     app.add_plugins(InputManagerPlugin::<DebugAction>::default())
         .init_resource::<ActionState<DebugAction>>()
+        .init_resource::<RetrieveBallSpeed>()
         .insert_resource(DebugAction::default_input_map());
 
     app.init_state::<ActiveGameplayForced>();
@@ -32,10 +35,41 @@ pub(super) fn plugin(app: &mut App) {
                 .run_if(action_just_pressed(DebugAction::ToggleEnemyBehavior)),
             reset_survival_timer.run_if(action_just_pressed(DebugAction::ResetSurvivalTimer)),
             toggle_invincible.run_if(action_just_pressed(DebugAction::ToggleInvincible)),
+            retrieve_ball.run_if(action_just_pressed(DebugAction::RetrieveBall)),
+            handle_retrieve_ball,
             handle_survival_time_add,
         )
             .run_if(in_state(Screen::Gameplay)),
     );
+}
+
+#[derive(Resource, Reflect)]
+#[reflect(Resource)]
+struct RetrieveBallSpeed(f32);
+impl Default for RetrieveBallSpeed {
+    fn default() -> Self {
+        RetrieveBallSpeed(200.0)
+    }
+}
+
+fn retrieve_ball(
+    mut commands: Commands,
+    ball: Single<Entity, (With<Bullet>, Without<RetrieveBall>)>,
+) {
+    commands.entity(ball.entity()).insert(RetrieveBall);
+}
+
+fn handle_retrieve_ball(
+    retrieve_ball_speed: Res<RetrieveBallSpeed>,
+    balls: Query<(&GlobalTransform, &mut LinearVelocity), (With<Bullet>, With<RetrieveBall>)>,
+    player: Single<&GlobalTransform, (With<Player>, Without<Bullet>, Without<RetrieveBall>)>,
+) {
+    let player_translation = player.translation().truncate();
+    for (ball_transform, mut velocity) in balls {
+        let direction =
+            (player_translation - ball_transform.translation().truncate()).normalize_or_zero();
+        velocity.0 = direction * retrieve_ball_speed.0;
+    }
 }
 
 fn enable_pause(
@@ -113,6 +147,7 @@ pub enum DebugAction {
     ResetSurvivalTimer,
     SurvivalTimeAddSeconds(i32),
     ToggleInvincible,
+    RetrieveBall,
 }
 
 impl DebugAction {
@@ -141,5 +176,6 @@ impl DebugAction {
                 ModifierKey::Control.with(KeyCode::Comma),
             )
             .with(ToggleInvincible, ModifierKey::Control.with(KeyCode::KeyI))
+            .with(RetrieveBall, KeyCode::KeyR)
     }
 }

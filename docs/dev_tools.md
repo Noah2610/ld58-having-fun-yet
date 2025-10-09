@@ -17,5 +17,6 @@ cargo run --features dev_tools
 | `,` / `Control+,` | Sub -10sec/-60sec from survival timer                                          |
 | `Control+R`       | Reset survival timer                                                           |
 | `Control+I`       | Toggle player invincibility                                                    |
+| `R`               | Retrieve Ball
 
 <!-- vim: conceallevel=0 -->

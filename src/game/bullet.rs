@@ -73,6 +73,9 @@ pub struct Bullet;
 #[require(BulletAvailable)]
 pub struct BulletSpawner;
 
+#[derive(Component, Clone, Copy, Default)]
+pub struct RetrieveBall;
+
 #[derive(Component, Reflect, Clone, Copy, Default)]
 #[component(storage = "SparseSet")]
 #[reflect(Component)]
