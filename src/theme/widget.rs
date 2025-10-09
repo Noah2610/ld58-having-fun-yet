@@ -34,12 +34,33 @@ pub fn ui_root(name: impl Into<Cow<'static, str>>) -> impl Bundle {
     )
 }
 
-/// A simple header label. Bigger than [`label`].
-pub fn header(text: impl Into<String>) -> impl Bundle {
+pub fn h1(text: impl Into<String>) -> impl Bundle {
+    (
+        Name::new("Header"),
+        Node {
+            padding: UiRect::vertical(px(24)),
+            ..default()
+        },
+        Text(text.into()),
+        TextFont::from_font_size(60.0),
+        TextColor(HEADER_TEXT),
+    )
+}
+
+pub fn h2(text: impl Into<String>) -> impl Bundle {
     (
         Name::new("Header"),
         Text(text.into()),
         TextFont::from_font_size(40.0),
+        TextColor(HEADER_TEXT),
+    )
+}
+
+pub fn h3(text: impl Into<String>) -> impl Bundle {
+    (
+        Name::new("Header"),
+        Text(text.into()),
+        TextFont::from_font_size(32.0),
         TextColor(HEADER_TEXT),
     )
 }
@@ -68,12 +89,12 @@ where
         (
             Node {
                 width: px(380),
-                height: px(80),
+                height: px(64),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 ..default()
             },
-            BorderRadius::MAX,
+            BorderRadius::all(px(8)),
         ),
     )
 }
@@ -125,7 +146,7 @@ where
                     children![(
                         Name::new("Button Text"),
                         Text(text),
-                        TextFont::from_font_size(40.0),
+                        TextFont::from_font_size(24.0),
                         TextColor(BUTTON_TEXT),
                         // Don't bubble picking events from the text up to the button.
                         Pickable::IGNORE,
@@ -231,7 +252,7 @@ pub fn settings_list() -> impl Bundle {
     Node {
         display: Display::Flex,
         flex_direction: FlexDirection::Column,
-        row_gap: px(16),
+        row_gap: px(24),
         grid_template_columns: RepeatedGridTrack::px(2, 600.0),
         ..default()
     }

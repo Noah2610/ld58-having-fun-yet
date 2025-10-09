@@ -28,7 +28,7 @@ mod settings {
             GlobalZIndex(3),
             DespawnOnExit(Menu::Settings),
             children![
-                widget::header("Settings"),
+                widget::h2("Settings"),
                 grid(),
                 widget::button("Back", pop_menu_on_click),
             ],

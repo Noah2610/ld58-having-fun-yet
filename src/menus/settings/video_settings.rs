@@ -60,7 +60,7 @@ fn spawn_video_settings_menu(mut commands: Commands, fullscreen: Res<IsFullscree
         GlobalZIndex(4),
         DespawnOnExit(Menu::VideoSettings),
         children![
-            widget::header("Video Settings"),
+            widget::h2("Video Settings"),
             video_settings_list(fullscreen.0),
             widget::button("Back", pop_menu_on_click),
         ],

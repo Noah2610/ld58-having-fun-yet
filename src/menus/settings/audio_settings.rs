@@ -25,7 +25,7 @@ fn spawn_audio_settings(mut commands: Commands) {
         GlobalZIndex(4),
         DespawnOnExit(Menu::AudioSettings),
         children![
-            widget::header("Audio Settings"),
+            widget::h2("Audio Settings"),
             audio_settings_grid(),
             widget::button("Back", pop_menu_on_click),
         ],
