@@ -1,4 +1,7 @@
-use crate::{AppSystems, GameplaySet, Paused, game_state::GameOver, screens::Screen};
+use crate::{
+    AppSystems, GameplaySet, Paused, game::enemy::EnemiesEnabled, game_state::GameOver,
+    screens::Screen,
+};
 use bevy::{prelude::*, time::Stopwatch};
 use std::time::Duration;
 
@@ -16,6 +19,9 @@ pub fn plugin(app: &mut App) {
         resume_timer.run_if(in_state(Screen::Gameplay).and(in_state(GameOver(false)))),
     );
     app.add_systems(OnEnter(GameOver(true)), stop_timer);
+
+    app.add_systems(OnEnter(EnemiesEnabled(false)), pause_timer);
+    app.add_systems(OnExit(EnemiesEnabled(false)), resume_timer);
 
     app.add_systems(
         Update,
