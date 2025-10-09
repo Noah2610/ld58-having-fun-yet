@@ -58,7 +58,13 @@ impl Plugin for AppPlugin {
             PhysicsPlugins::default().with_length_unit(16.0),
             TiledPlugin(TiledPluginConfig {
                 tiled_types_export_file: if cfg!(feature = "dev_tools") {
-                    Some(PathBuf::from("./tiled/tiled_types_export.json"))
+                    match get_tiled_types_export_path() {
+                        Ok(path) => Some(path),
+                        Err(e) => {
+                            error!("Failed to get tiled_export_path {e}");
+                            None
+                        },
+                    }
                 } else {
                     None
                 },
@@ -121,4 +127,28 @@ enum AppSystems {
     RecordInput,
     /// Do everything else (consider splitting this into further variants).
     Update,
+}
+
+#[cfg(feature = "dev_tools")]
+fn get_tiled_types_export_path() -> Result<PathBuf> {
+    use std::{
+        fs,
+        path::{Path, PathBuf},
+    };
+
+    const PATH: &str = "./tiled/tiled_types_export.json";
+
+    let path = Path::new(PATH);
+
+    if let Some(parent) = path.parent() {
+        if !parent.is_dir() {
+            info!("Creating directory for {PATH}: {:#?}", parent);
+            fs::create_dir_all(parent)
+                .map_err(|e| format!("Failed to create parent directory for {PATH}:\n{:#?}", e))?;
+        }
+    }
+
+    fs::write(PATH, "").map_err(|e| format!("Filed to write to {PATH}\n{:#?}", e))?;
+
+    Ok(PathBuf::from(path))
 }
