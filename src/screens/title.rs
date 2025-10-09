@@ -1,5 +1,3 @@
-//! The title screen that appears after the splash screen.
-
 use crate::{menus::Menu, screens::Screen};
 use bevy::prelude::*;
 

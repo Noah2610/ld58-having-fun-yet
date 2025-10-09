@@ -1,40 +1,39 @@
-//! The screen state for the main gameplay.
-
 use crate::{
     Paused,
     game::{
         health::HealthValueUi, level::spawn_level, score::ScoreValueUi,
         survival_timer::TimeSurvivedValueUi,
     },
+    input::MenuAction,
     menus::Menu,
     screens::Screen,
 };
-use bevy::{input::common_conditions::input_just_pressed, prelude::*};
+use bevy::prelude::*;
+use leafwing_input_manager::common_conditions::action_just_pressed;
 
 pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Screen::Gameplay), (spawn_level, spawn_ui));
-
-    // Toggle pause on key press.
     app.add_systems(
         Update,
-        (
-            (pause, open_pause_menu).run_if(
-                in_state(Screen::Gameplay)
-                    .and(in_state(Menu::None))
-                    .and(input_just_pressed(KeyCode::KeyP).or(input_just_pressed(KeyCode::Escape))),
-            ),
-            close_menu.run_if(
-                in_state(Screen::Gameplay)
-                    .and(not(in_state(Menu::None)))
-                    .and(input_just_pressed(KeyCode::KeyP)),
-            ),
+        pause.run_if(
+            in_state(Screen::Gameplay)
+                .and(in_state(Paused(false)))
+                .and(action_just_pressed(MenuAction::Pause)),
         ),
     );
-    app.add_systems(OnExit(Screen::Gameplay), (close_menu, unpause));
     app.add_systems(
         OnEnter(Menu::None),
-        unpause.run_if(in_state(Screen::Gameplay)),
+        unpause.run_if(in_state(Screen::Gameplay).and(in_state(Paused(true)))),
     );
+}
+
+fn pause(mut next_pause: ResMut<NextState<Paused>>, mut next_menu: ResMut<NextState<Menu>>) {
+    next_pause.set(Paused(true));
+    next_menu.set(Menu::Pause);
+}
+
+fn unpause(mut next_pause: ResMut<NextState<Paused>>) {
+    next_pause.set(Paused(false));
 }
 
 fn spawn_ui(mut commands: Commands) {
@@ -95,20 +94,4 @@ fn spawn_ui(mut commands: Commands) {
             ),
         ],
     ));
-}
-
-fn unpause(mut next_pause: ResMut<NextState<Paused>>) {
-    next_pause.set(Paused(false));
-}
-
-fn pause(mut next_pause: ResMut<NextState<Paused>>) {
-    next_pause.set(Paused(true));
-}
-
-fn open_pause_menu(mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::Pause);
-}
-
-fn close_menu(mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::None);
 }

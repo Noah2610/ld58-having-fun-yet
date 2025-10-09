@@ -14,6 +14,7 @@ mod game_state;
 mod input;
 mod menus;
 mod screens;
+mod state_history;
 mod theme;
 
 use avian2d::prelude::{Gravity, PhysicsPlugins};

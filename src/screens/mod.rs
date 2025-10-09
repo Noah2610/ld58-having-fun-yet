@@ -1,5 +1,3 @@
-//! The game's main screen states and transitions between them.
-
 mod gameplay;
 mod loading;
 mod title;

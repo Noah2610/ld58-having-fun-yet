@@ -21,7 +21,12 @@ use serde::{Deserialize, Serialize};
 pub(super) fn plugin(app: &mut App) {
     app.load_resource::<PlayerAssets>();
 
-    app.add_systems(Update, handle_player_death);
+    app.add_systems(
+        Update,
+        handle_player_death
+            .in_set(GameplaySet)
+            .in_set(AppSystems::Update),
+    );
     app.add_systems(
         PreUpdate,
         post_add_player
