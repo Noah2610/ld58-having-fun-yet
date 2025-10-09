@@ -30,7 +30,8 @@ Try to get the __highest score!__
 | Movement   | WASD       | Left Stick, DPad             |
 | Aim Weapon | Arrow Keys | Right Stick, Face Buttons    |
 | Shoot      | Spacebar   | Any Trigger or Should button |
-| Pause      | Escape     | OOps I forgor ☠️             |
+| Pause      | Escape, P  | Start Button                 |
+| Quit game  | Control+Q  | Nah                          |
 
 ## Tools Used
 - __[`bevy`]__: the incredibly hot and fresh game engine for rust 🕊
