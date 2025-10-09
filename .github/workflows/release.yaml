@@ -1,12 +1,16 @@
 name: Release
 
 on:
-  # Trigger this workflow on a manual workflow dispatch.
+  push:
+    tags:
+      - v0.*
+      - v1.*
   workflow_dispatch:
     inputs:
       version:
         description: "Version number in the format `v1.2.3`"
         required: true
+        default: ""
         type: string
       build_for_windows:
         description: "Build for Windows (WARNING: slow!)"
@@ -14,7 +18,7 @@ on:
         type: boolean
       build_for_macos:
         description: "Build for macOS"
-        default: true
+        default: false
         type: boolean
       build_for_linux:
         description: "Build for Linux"
@@ -30,7 +34,7 @@ on:
         type: boolean
       upload_to_itch:
         description: "Upload to itch.io (if configured)"
-        default: true
+        default: false
         type: boolean
       deny_warnings:
         description: "Deny warnings"
@@ -62,7 +66,7 @@ env:
   # The base filename of the binary in the package produced by this workflow.
   # Applies to Windows, macOS, and Linux releases.
   # Defaults to `cargo_build_binary_name` if commented out.
- app_binary_name: ld58-having-fun-yet
+  app_binary_name: ld58-having-fun-yet
 
   # The name of the `.zip` or `.dmg` file produced by this workflow.
   # Defaults to `app_binary_name` if commented out.
