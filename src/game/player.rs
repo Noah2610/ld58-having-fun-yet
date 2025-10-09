@@ -91,6 +91,9 @@ fn post_add_player(
 pub struct Player;
 
 #[derive(Component)]
+pub struct Invincible;
+
+#[derive(Component)]
 struct PlayerInitialized;
 
 #[derive(Resource, Asset, Reflect, Clone)]
@@ -116,7 +119,12 @@ impl FromWorld for PlayerAssets {
 fn handle_enemy_collision(
     trigger: On<CollisionStart>,
     mut players: Query<
-        (&GlobalTransform, &mut LinearVelocity, Option<&mut Health>),
+        (
+            &GlobalTransform,
+            &mut LinearVelocity,
+            Option<&mut Health>,
+            Has<Invincible>,
+        ),
         (With<Player>, Without<Enemy>),
     >,
     enemies: Query<
@@ -132,13 +140,20 @@ fn handle_enemy_collision(
     let player = trigger.collider1;
     let enemy = trigger.collider2;
 
-    if let (Ok((player_transform, mut velocity, health)), Ok((enemy_transform, enemy_settings))) =
-        (players.get_mut(player), enemies.get(enemy))
+    if let (
+        Ok((player_transform, mut velocity, health, is_invincible)),
+        Ok((enemy_transform, enemy_settings)),
+    ) = (players.get_mut(player), enemies.get(enemy))
     {
         let direction = (player_transform.translation().truncate()
             - enemy_transform.translation().truncate())
         .normalize_or_zero();
         velocity.0 += direction * enemy_settings.knockback_strength;
+
+        if is_invincible {
+            return;
+        }
+
         if let Some(mut health) = health {
             health.damage(1);
         }

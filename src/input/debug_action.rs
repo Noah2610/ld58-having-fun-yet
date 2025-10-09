@@ -1,5 +1,9 @@
 use crate::{
-    game::{enemy::EnemiesEnabled, survival_timer::SurvivalTimer},
+    game::{
+        enemy::EnemiesEnabled,
+        player::{Invincible, Player},
+        survival_timer::SurvivalTimer,
+    },
     game_state::{ActiveGameplayForced, Paused},
     screens::Screen,
 };
@@ -27,6 +31,7 @@ pub(super) fn plugin(app: &mut App) {
             )
                 .run_if(action_just_pressed(DebugAction::ToggleEnemyBehavior)),
             reset_survival_timer.run_if(action_just_pressed(DebugAction::ResetSurvivalTimer)),
+            toggle_invincible.run_if(action_just_pressed(DebugAction::ToggleInvincible)),
             handle_survival_time_add,
         )
             .run_if(in_state(Screen::Gameplay)),
@@ -59,6 +64,19 @@ fn disable_enemy_behavior(mut state: ResMut<NextState<EnemiesEnabled>>) {
 
 fn reset_survival_timer(mut timer: ResMut<SurvivalTimer>) {
     timer.0.reset();
+}
+
+fn toggle_invincible(
+    mut commands: Commands,
+    players: Query<(Entity, Has<Invincible>), With<Player>>,
+) {
+    for (entity, is_invincible) in players {
+        if is_invincible {
+            commands.entity(entity).remove::<Invincible>();
+        } else {
+            commands.entity(entity).insert(Invincible);
+        }
+    }
 }
 
 fn handle_survival_time_add(
@@ -94,6 +112,7 @@ pub enum DebugAction {
     ToggleEnemyBehavior,
     ResetSurvivalTimer,
     SurvivalTimeAddSeconds(i32),
+    ToggleInvincible,
 }
 
 impl DebugAction {
@@ -121,5 +140,6 @@ impl DebugAction {
                 SurvivalTimeAddSeconds(-60),
                 ModifierKey::Control.with(KeyCode::Comma),
             )
+            .with(ToggleInvincible, ModifierKey::Control.with(KeyCode::KeyI))
     }
 }
