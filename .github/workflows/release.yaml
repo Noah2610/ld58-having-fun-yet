@@ -1,12 +1,18 @@
 name: Release
 
 on:
+  push:
+    tags:
+      - v0.*
+      - v1.*
+
   # Trigger this workflow on a manual workflow dispatch.
   workflow_dispatch:
     inputs:
       version:
         description: "Version number in the format `v1.2.3`"
         required: true
+        default: ""
         type: string
       build_for_windows:
         description: "Build for Windows (WARNING: slow!)"
@@ -14,7 +20,7 @@ on:
         type: boolean
       build_for_macos:
         description: "Build for macOS"
-        default: true
+        default: false
         type: boolean
       build_for_linux:
         description: "Build for Linux"
@@ -30,7 +36,7 @@ on:
         type: boolean
       upload_to_itch:
         description: "Upload to itch.io (if configured)"
-        default: true
+        default: false
         type: boolean
       deny_warnings:
         description: "Deny warnings"
