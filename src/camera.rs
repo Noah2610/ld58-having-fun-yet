@@ -8,14 +8,7 @@ use crate::{
     },
     screens::Screen,
 };
-use bevy::{
-    post_process::{
-        bloom::{Bloom, BloomCompositeMode},
-        dof::{DepthOfField, DepthOfFieldMode},
-    },
-    prelude::*,
-    render::view::Hdr,
-};
+use bevy::{prelude::*, render::view::Hdr};
 use bevy_ecs_tiled::prelude::TiledParallaxCamera;
 
 pub fn plugin(app: &mut App) {
@@ -32,7 +25,6 @@ pub fn plugin(app: &mut App) {
 #[reflect(Component)]
 #[require(
     Name::new("Camera"),
-    Camera2d,
     RotationAnimation(VisualAnimation {
         direction:   AnimationDirection::Boomerang,
         period:      4.0,
@@ -51,6 +43,7 @@ pub struct MainCamera;
 fn spawn_camera(mut commands: Commands) {
     commands.spawn((
         MainCamera,
+        Camera2d,
         DespawnOnEnter(Screen::Title),
         TiledParallaxCamera,
         Projection::Orthographic(OrthographicProjection {
@@ -58,13 +51,6 @@ fn spawn_camera(mut commands: Commands) {
             ..OrthographicProjection::default_2d()
         }),
         Hdr,
-        Bloom {
-            intensity: 0.6,
-            scale: Vec2::new(1.5, 1.5),
-            composite_mode: BloomCompositeMode::Additive,
-            ..default()
-        },
-        DepthOfField { ..default() },
     ));
 }
 

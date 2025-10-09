@@ -85,6 +85,7 @@ fn handle_survival_time_add(
 pub enum DebugAction {
     ToggleFps,
     ToggleInspector,
+    ToggleVisualInspectors,
     ToggleGizmos,
     ToggleUiDebug,
     /// Global pause toggle, but without pause menu UI
@@ -101,6 +102,7 @@ impl DebugAction {
         InputMap::default()
             .with(ToggleFps, KeyCode::F1)
             .with(ToggleInspector, KeyCode::F2)
+            .with(ToggleVisualInspectors, KeyCode::F3)
             .with(ToggleGizmos, KeyCode::F3)
             .with(ToggleUiDebug, KeyCode::F4)
             .with(Pause, ModifierKey::Control.with(KeyCode::KeyO))
