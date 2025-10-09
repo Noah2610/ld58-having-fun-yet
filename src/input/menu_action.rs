@@ -1,5 +1,4 @@
-use bevy::prelude::*;
-use leafwing_input_manager::prelude::*;
+use crate::input::*;
 
 pub(super) fn plugin(app: &mut App) {
     app.add_plugins(InputManagerPlugin::<MenuAction>::default())
@@ -13,6 +12,7 @@ pub enum MenuAction {
     Cancel,
     QuitGame,
     ToggleFullscreen,
+    ToggleMute,
 }
 
 impl MenuAction {
@@ -26,5 +26,6 @@ impl MenuAction {
             .with(Cancel, GamepadButton::Start)
             .with(QuitGame, ModifierKey::Control.with(KeyCode::KeyQ))
             .with(ToggleFullscreen, KeyCode::KeyF)
+            .with(ToggleMute, KeyCode::KeyM)
     }
 }
