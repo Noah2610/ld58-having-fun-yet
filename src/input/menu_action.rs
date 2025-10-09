@@ -9,9 +9,8 @@ pub(super) fn plugin(app: &mut App) {
 
 #[derive(Actionlike, Reflect, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum MenuAction {
-    #[actionlike(Button)]
     Pause,
-    #[actionlike(Button)]
+    Cancel,
     QuitGame,
 }
 
@@ -19,9 +18,9 @@ impl MenuAction {
     fn default_input_map() -> InputMap<MenuAction> {
         use MenuAction::*;
         InputMap::default()
-            .with(Pause, KeyCode::KeyP)
-            .with(Pause, KeyCode::Escape)
-            .with(Pause, GamepadButton::Start)
+            .with(Cancel, KeyCode::KeyP)
+            .with(Cancel, KeyCode::Escape)
+            .with(Cancel, GamepadButton::Start)
             .with(QuitGame, ModifierKey::Control.with(KeyCode::KeyQ))
     }
 }

@@ -11,7 +11,7 @@ pub(super) fn plugin(app: &mut App) {
     app.add_systems(OnEnter(Menu::Pause), spawn_pause_menu);
     app.add_systems(
         Update,
-        close_menu.run_if(in_state(Menu::Pause).and(action_just_pressed(MenuAction::Pause))),
+        close_menu.run_if(in_state(Menu::Pause).and(action_just_pressed(MenuAction::Cancel))),
     );
 }
 

@@ -17,6 +17,7 @@ mod screens;
 mod state_history;
 mod theme;
 
+use crate::theme::widget::UiWidgetsPlugins;
 use avian2d::prelude::{Gravity, PhysicsPlugins};
 use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_aseprite_ultra::AsepriteUltraPlugin;
@@ -32,7 +33,6 @@ pub struct AppPlugin;
 
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
-        // Add Bevy plugins.
         app.add_plugins((
             DefaultPlugins
                 .set(AssetPlugin {
@@ -54,6 +54,7 @@ impl Plugin for AppPlugin {
                     ..default()
                 })
                 .set(ImagePlugin::default_nearest()),
+            UiWidgetsPlugins,
             PhysicsPlugins::default().with_length_unit(16.0),
             TiledPlugin(TiledPluginConfig {
                 tiled_types_export_file: if cfg!(feature = "dev") {

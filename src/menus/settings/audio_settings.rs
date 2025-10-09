@@ -1,17 +1,12 @@
 use crate::{
     audio::{MusicVolume, SoundsVolume},
-    input::{MenuAction, action_just_pressed},
-    menus::Menu,
-    theme::prelude::*,
+    menus::{Menu, pop_menu_on_click},
+    theme::{prelude::*, widget::settings_grid_2x},
 };
 use bevy::{audio::Volume, ecs::system::IntoObserverSystem, prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_systems(OnEnter(Menu::Settings), spawn_settings_menu);
-    app.add_systems(
-        Update,
-        go_back.run_if(in_state(Menu::Settings).and(action_just_pressed(MenuAction::Pause))),
-    );
+    app.add_systems(OnEnter(Menu::AudioSettings), spawn_audio_settings);
 
     app.add_systems(
         Update,
@@ -20,33 +15,27 @@ pub(super) fn plugin(app: &mut App) {
             update_music_volume_label,
             update_sounds_volume_label,
         )
-            .run_if(in_state(Menu::Settings)),
+            .run_if(in_state(Menu::AudioSettings)),
     );
 }
 
-fn spawn_settings_menu(mut commands: Commands) {
+fn spawn_audio_settings(mut commands: Commands) {
     commands.spawn((
-        widget::ui_root("Settings Menu"),
-        GlobalZIndex(2),
-        DespawnOnExit(Menu::Settings),
+        widget::ui_root("Audio Settings Menu"),
+        GlobalZIndex(4),
+        DespawnOnExit(Menu::AudioSettings),
         children![
-            widget::header("Settings"),
-            settings_grid(),
-            widget::button("Back", go_back_on_click),
+            widget::header("Audio Settings"),
+            audio_settings_grid(),
+            widget::button("Back", pop_menu_on_click),
         ],
     ));
 }
 
-fn settings_grid() -> impl Bundle {
+fn audio_settings_grid() -> impl Bundle {
     (
-        Name::new("Settings Grid"),
-        Node {
-            display: Display::Grid,
-            row_gap: px(10),
-            column_gap: px(30),
-            grid_template_columns: RepeatedGridTrack::px(2, 400.0),
-            ..default()
-        },
+        Name::new("Audio Settings Grid"),
+        settings_grid_2x(),
         children![
             (widget::label("Master Volume"), Node {
                 justify_self: JustifySelf::End,
@@ -188,12 +177,4 @@ fn update_sounds_volume_label(
 ) {
     let percent = 100.0 * global_volume.0.to_linear();
     label.0 = format!("{percent:3.0}%");
-}
-
-fn go_back_on_click(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::Pop);
-}
-
-fn go_back(mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::Pop);
 }

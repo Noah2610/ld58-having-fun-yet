@@ -1,9 +1,16 @@
 //! Helper functions for creating common widgets.
 
-use crate::theme::{interaction::InteractionPalette, palette::*};
+use crate::theme::{
+    interaction::{InteractionPalette, checkbox::CheckedDefault},
+    palette::*,
+};
+pub use bevy::ui_widgets::*;
 use bevy::{
     ecs::{spawn::SpawnWith, system::IntoObserverSystem},
+    input_focus::tab_navigation::{TabGroup, TabIndex},
     prelude::*,
+    ui::Checked,
+    ui_widgets,
 };
 use std::borrow::Cow;
 
@@ -18,11 +25,12 @@ pub fn ui_root(name: impl Into<Cow<'static, str>>) -> impl Bundle {
             align_items: AlignItems::Center,
             justify_content: JustifyContent::Center,
             flex_direction: FlexDirection::Column,
-            row_gap: px(20),
+            row_gap: px(24),
             ..default()
         },
         // Don't block picking events for other UI roots.
         Pickable::IGNORE,
+        TabGroup::default(),
     )
 }
 
@@ -38,9 +46,10 @@ pub fn header(text: impl Into<String>) -> impl Bundle {
 
 /// A simple text label.
 pub fn label(text: impl Into<String>) -> impl Bundle {
+    let text: String = text.into();
     (
-        Name::new("Label"),
-        Text(text.into()),
+        Name::new(format!("{} Label", text.as_str())),
+        Text(text),
         TextFont::from_font_size(24.0),
         TextColor(LABEL_TEXT),
     )
@@ -100,13 +109,13 @@ where
     let text = text.into();
     let action = IntoObserverSystem::into_system(action);
     (
-        Name::new("Button"),
+        Name::new(format!("{} Button", text.as_str())),
         Node::default(),
         Children::spawn(SpawnWith(|parent: &mut ChildSpawner| {
             parent
                 .spawn((
                     Name::new("Button Inner"),
-                    Button,
+                    bevy::prelude::Button,
                     BackgroundColor(BUTTON_BACKGROUND),
                     InteractionPalette {
                         none:    BUTTON_BACKGROUND,
@@ -126,4 +135,127 @@ where
                 .observe(action);
         })),
     )
+}
+
+pub fn checkbox<E, B, M, I>(caption: impl Into<String>, checked: bool, action: I) -> impl Bundle
+where
+    E: EntityEvent,
+    B: Bundle,
+    I: IntoObserverSystem<E, B, M>,
+{
+    const CHECKBOX_OUTLINE: Color = Color::srgb(0.45, 0.45, 0.45);
+
+    let caption: String = caption.into();
+    let action = IntoObserverSystem::into_system(action);
+
+    (
+        Name::new(format!("{} Checkbox", caption.as_str())),
+        Node {
+            display: Display::Flex,
+            flex_direction: FlexDirection::Row,
+            justify_content: JustifyContent::FlexStart,
+            align_items: AlignItems::Center,
+            align_content: AlignContent::Center,
+            column_gap: px(4),
+            ..default()
+        },
+        InteractionPalette {
+            none:    BUTTON_BACKGROUND,
+            hovered: BUTTON_HOVERED_BACKGROUND,
+            pressed: BUTTON_PRESSED_BACKGROUND,
+        },
+        // Hovered::default(),
+        Checkbox,
+        CheckedDefault(checked),
+        TabIndex(0),
+        Children::spawn((
+            Spawn(label(caption)),
+            SpawnWith(|parent: &mut ChildSpawner| {
+                parent.spawn((
+                    // Checkbox outer
+                    Node {
+                        display: Display::Flex,
+                        width: px(24),
+                        height: px(24),
+                        border: UiRect::all(px(2)),
+                        ..default()
+                    },
+                    BorderColor::all(CHECKBOX_OUTLINE), // Border color for the checkbox
+                    BorderRadius::all(px(2)),
+                    children![
+                        // Checkbox inner
+                        (
+                            Node {
+                                display: Display::Flex,
+                                width: px(12),
+                                height: px(12),
+                                position_type: PositionType::Absolute,
+                                left: px(4),
+                                top: px(4),
+                                ..default()
+                            },
+                            BackgroundColor(Srgba::NONE.into()),
+                        ),
+                    ],
+                ));
+                // .observe(checkbox_self_update);
+                // .observe(action);
+            }),
+        )),
+        observe(checkbox_self_update),
+        observe(action),
+    )
+
+    // (
+    //     // Node {
+    //     //     width: px(64),
+    //     //     height: px(64),
+    //     //     ..default()
+    //     // },
+    //     BackgroundColor(Color::BLACK),
+    //     ui_widgets::Checkbox,
+    //     Pickable::default(),
+    // )
+}
+
+// fn if_component<C: Component>(enabled: bool, comp: C) -> impl Bundle {
+//     if enabled { comp } else { () }
+// }
+
+/// Bundle for a vertical flex layout
+pub fn settings_list() -> impl Bundle {
+    Node {
+        display: Display::Flex,
+        flex_direction: FlexDirection::Column,
+        row_gap: px(16),
+        grid_template_columns: RepeatedGridTrack::px(2, 600.0),
+        ..default()
+    }
+}
+
+/// Bundle for a 2-column grid layout
+pub fn settings_grid_2x() -> impl Bundle {
+    Node {
+        display: Display::Grid,
+        row_gap: px(8),
+        column_gap: px(24),
+        grid_template_columns: RepeatedGridTrack::px(2, 600.0),
+        ..default()
+    }
+}
+
+#[inline]
+pub fn self_start() -> impl Bundle {
+    Node {
+        justify_self: JustifySelf::Start,
+        ..default()
+    }
+}
+
+#[inline]
+pub fn self_end() -> impl Bundle {
+    Node {
+        justify_self: JustifySelf::End,
+        ..default()
+    }
 }
