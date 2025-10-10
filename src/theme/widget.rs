@@ -253,7 +253,6 @@ pub fn settings_list() -> impl Bundle {
         display: Display::Flex,
         flex_direction: FlexDirection::Column,
         row_gap: px(24),
-        grid_template_columns: RepeatedGridTrack::px(2, 600.0),
         ..default()
     }
 }
@@ -283,4 +282,30 @@ pub fn self_end() -> impl Bundle {
         justify_self: JustifySelf::End,
         ..default()
     }
+}
+
+pub fn analog_slider<
+    C: Component,
+    LS: IntoObserverSystem<E, B, M>,
+    RS: IntoObserverSystem<E, B, M>,
+    E: EntityEvent,
+    B: Bundle,
+    M,
+>(
+    marker: C,
+    on_decrease: LS,
+    on_increase: RS,
+) -> impl Bundle {
+    (self_start(), children![
+        button_small("-", on_decrease),
+        (
+            Node {
+                padding: UiRect::horizontal(px(10)),
+                justify_content: JustifyContent::Center,
+                ..default()
+            },
+            children![(label(""), marker)],
+        ),
+        button_small("+", on_increase),
+    ])
 }
