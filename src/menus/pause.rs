@@ -39,7 +39,8 @@ fn open_settings_menu(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Men
 
 #[cfg(not(feature = "no_pause_ui"))]
 fn on_continue(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::Pop);
+    // next_menu.set(Menu::Pop);
+    next_menu.set(Menu::None);
 }
 
 #[cfg(not(feature = "no_pause_ui"))]
@@ -48,5 +49,6 @@ fn quit_to_title(_: On<Pointer<Click>>, mut next_screen: ResMut<NextState<Screen
 }
 
 fn close_menu(mut next_menu: ResMut<NextState<Menu>>) {
-    next_menu.set(Menu::Pop);
+    // next_menu.set(Menu::Pop);
+    next_menu.set(Menu::None);
 }
