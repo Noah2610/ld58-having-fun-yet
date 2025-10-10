@@ -1,7 +1,10 @@
 use crate::{
     audio::{MusicVolume, SoundsVolume},
     menus::{Menu, pop_menu_on_click},
-    theme::{prelude::*, widget::settings_grid_2x},
+    theme::{
+        prelude::*,
+        widget::{self_end, settings_grid_2x},
+    },
 };
 use bevy::{audio::Volume, ecs::system::IntoObserverSystem, prelude::*};
 
@@ -37,20 +40,11 @@ fn audio_settings_grid() -> impl Bundle {
         Name::new("Audio Settings Grid"),
         settings_grid_2x(),
         children![
-            (widget::label("Master Volume"), Node {
-                justify_self: JustifySelf::End,
-                ..default()
-            }),
+            (widget::label("Master Volume"), self_end()),
             global_volume_widget(),
-            (widget::label("Music Volume"), Node {
-                justify_self: JustifySelf::End,
-                ..default()
-            }),
+            (widget::label("Music Volume"), self_end()),
             music_volume_widget(),
-            (widget::label("Sound Effects Volume"), Node {
-                justify_self: JustifySelf::End,
-                ..default()
-            }),
+            (widget::label("Sound Effects Volume"), self_end()),
             sounds_volume_widget(),
         ],
     )
@@ -68,24 +62,7 @@ fn volume_widget<
     lower_volume: LS,
     raise_volume: RS,
 ) -> impl Bundle {
-    (
-        Node {
-            justify_self: JustifySelf::Start,
-            ..default()
-        },
-        children![
-            widget::button_small("-", lower_volume),
-            (
-                Node {
-                    padding: UiRect::horizontal(px(10)),
-                    justify_content: JustifyContent::Center,
-                    ..default()
-                },
-                children![(widget::label(""), volume_label_marker)],
-            ),
-            widget::button_small("+", raise_volume),
-        ],
-    )
+    widget::analog_slider(volume_label_marker, lower_volume, raise_volume)
 }
 
 fn global_volume_widget() -> impl Bundle {
