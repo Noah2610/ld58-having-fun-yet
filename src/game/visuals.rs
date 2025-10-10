@@ -7,6 +7,8 @@ use bevy_ecs_tiled::prelude::TileColor;
 use std::f32::consts::PI;
 
 pub fn plugin(app: &mut App) {
+    app.init_resource::<VisualIntensity>();
+
     app.insert_resource(ClearColor(Color::hsl(0.0, 0.3, 0.075)));
 
     app.insert_resource(BackgroundHueAnimation(VisualAnimation {
@@ -108,6 +110,16 @@ fn has_background_lightness_animation(
     state: Option<Res<BackgroundLightnessAnimationState>>,
 ) -> bool {
     animation.is_some() && state.is_some()
+}
+
+/// Visual intensity of animations multiplier 1.0 = 100% = default
+#[derive(Resource, Reflect, Clone, Debug)]
+#[reflect(Resource)]
+pub struct VisualIntensity(pub f32);
+impl Default for VisualIntensity {
+    fn default() -> Self {
+        Self(1.0)
+    }
 }
 
 #[derive(Resource, Reflect)]
@@ -312,69 +324,101 @@ fn render_animations(
 
 fn animate_background_hue(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     visuals: Res<BackgroundHueAnimation>,
     mut state: ResMut<BackgroundHueAnimationState>,
     mut bg: ResMut<ClearColor>,
 ) {
-    state.0 = animate(time.elapsed_secs(), &visuals.0, DEFAULT_HUE_RANGE);
+    state.0 = animate(
+        time.elapsed_secs(),
+        &visuals.0,
+        DEFAULT_HUE_RANGE,
+        intensity.0,
+    );
     bg.0.set_hue(state.0);
 }
 
 fn animate_background_saturation(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     visuals: Res<BackgroundSaturationAnimation>,
     mut state: ResMut<BackgroundSaturationAnimationState>,
     mut bg: ResMut<ClearColor>,
 ) {
-    state.0 = animate(time.elapsed_secs(), &visuals.0, DEFAULT_SATURATION_RANGE);
+    state.0 = animate(
+        time.elapsed_secs(),
+        &visuals.0,
+        DEFAULT_SATURATION_RANGE,
+        intensity.0,
+    );
     bg.0.set_saturation(state.0);
 }
 
 fn animate_background_lightness(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     visuals: Res<BackgroundLightnessAnimation>,
     mut state: ResMut<BackgroundLightnessAnimationState>,
     mut bg: ResMut<ClearColor>,
 ) {
-    state.0 = animate(time.elapsed_secs(), &visuals.0, DEFAULT_LIGHTNESS_RANGE);
+    state.0 = animate(
+        time.elapsed_secs(),
+        &visuals.0,
+        DEFAULT_LIGHTNESS_RANGE,
+        intensity.0,
+    );
     bg.0 = Color::hsl(bg.0.hue(), bg.0.saturation(), state.0);
 }
 
 fn update_hue_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut animations: Query<(&HueAnimation, &mut HueAnimationState), Without<AnimationsDisabled>>,
 ) {
     for (anim, mut state) in &mut animations {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_HUE_RANGE);
+        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_HUE_RANGE, intensity.0);
     }
 }
 
 fn update_saturation_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut animations: Query<
         (&SaturationAnimation, &mut SaturationAnimationState),
         Without<AnimationsDisabled>,
     >,
 ) {
     for (anim, mut state) in &mut animations {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SATURATION_RANGE);
+        state.0 = animate(
+            time.elapsed_secs(),
+            &anim.0,
+            DEFAULT_SATURATION_RANGE,
+            intensity.0,
+        );
     }
 }
 
 fn update_lightness_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut animations: Query<
         (&LightnessAnimation, &mut LightnessAnimationState),
         Without<AnimationsDisabled>,
     >,
 ) {
     for (anim, mut state) in &mut animations {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_LIGHTNESS_RANGE);
+        state.0 = animate(
+            time.elapsed_secs(),
+            &anim.0,
+            DEFAULT_LIGHTNESS_RANGE,
+            intensity.0,
+        );
     }
 }
 
 fn update_rotation_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut query: Query<
         (
             &RotationAnimation,
@@ -385,13 +429,19 @@ fn update_rotation_animations(
     >,
 ) {
     for (anim, mut state, mut transform) in &mut query {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_CAMERA_ROTATION_RANGE);
+        state.0 = animate(
+            time.elapsed_secs(),
+            &anim.0,
+            DEFAULT_CAMERA_ROTATION_RANGE,
+            intensity.0,
+        );
         transform.rotation.z = state.0;
     }
 }
 
 fn update_projection_scale_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut query: Query<
         (
             &ProjectionScaleAnimation,
@@ -403,7 +453,12 @@ fn update_projection_scale_animations(
 ) {
     for (anim, mut state, mut projection) in &mut query {
         if let Projection::Orthographic(ortho) = projection.as_mut() {
-            state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_CAMERA_SCALE_RANGE);
+            state.0 = animate(
+                time.elapsed_secs(),
+                &anim.0,
+                DEFAULT_CAMERA_SCALE_RANGE,
+                intensity.0,
+            );
             ortho.scale = state.0;
         }
     }
@@ -411,26 +466,38 @@ fn update_projection_scale_animations(
 
 fn update_transform_scale_x_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut query: Query<
         (&ScaleXAnimation, &mut ScaleXAnimationState, &mut Transform),
         Without<AnimationsDisabled>,
     >,
 ) {
     for (anim, mut state, mut transform) in &mut query {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SCALE_RANGE);
+        state.0 = animate(
+            time.elapsed_secs(),
+            &anim.0,
+            DEFAULT_SCALE_RANGE,
+            intensity.0,
+        );
         transform.scale = Vec3::new(state.0, transform.scale.y, transform.scale.z);
     }
 }
 
 fn update_transform_scale_y_animations(
     time: Res<Time>,
+    intensity: Res<VisualIntensity>,
     mut query: Query<
         (&ScaleYAnimation, &mut ScaleYAnimationState, &mut Transform),
         Without<AnimationsDisabled>,
     >,
 ) {
     for (anim, mut state, mut transform) in &mut query {
-        state.0 = animate(time.elapsed_secs(), &anim.0, DEFAULT_SCALE_RANGE);
+        state.0 = animate(
+            time.elapsed_secs(),
+            &anim.0,
+            DEFAULT_SCALE_RANGE,
+            intensity.0,
+        );
         transform.scale = Vec3::new(transform.scale.x, state.0, transform.scale.z);
     }
 }
@@ -444,13 +511,16 @@ fn animate(
         time_offset,
     }: &VisualAnimation,
     default_range: (f32, f32),
+    intensity: f32,
 ) -> f32 {
     let t = elapsed + time_offset;
     let (min, max) = range.unwrap_or(default_range);
-    match direction {
+    let value = match direction {
         AnimationDirection::Linear => min + ((max - min) * ((t / period) % 1.0)),
         AnimationDirection::Boomerang => {
             min + (max - min) * 0.5 * (1.0 - ((2.0 * PI * t) / period).cos())
         },
-    }
+    };
+    let mid_value = min + (max - min) * 0.5;
+    mid_value.lerp(value, intensity)
 }
