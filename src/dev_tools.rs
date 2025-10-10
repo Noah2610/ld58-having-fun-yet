@@ -2,7 +2,7 @@ use crate::{
     camera::MainCamera,
     game::visuals::{
         BackgroundHueAnimation, GlobalAnimationsEnabled, GlobalCameraAnimationsEnabled,
-        GlobalColorAnimationsEnabled, GlobalTransformAnimationsEnabled,
+        GlobalColorAnimationsEnabled, GlobalTransformAnimationsEnabled, VisualIntensity,
     },
     input::*,
     quality::Quality,
@@ -69,6 +69,9 @@ pub(super) fn plugin(app: &mut App) {
                 in_state(InspectorEnabled(true)).and(in_state(VisualInspectorsEnabled(true))),
             ),
             ResourceInspectorPlugin::<GlobalTransformAnimationsEnabled>::default().run_if(
+                in_state(InspectorEnabled(true)).and(in_state(VisualInspectorsEnabled(true))),
+            ),
+            ResourceInspectorPlugin::<VisualIntensity>::default().run_if(
                 in_state(InspectorEnabled(true)).and(in_state(VisualInspectorsEnabled(true))),
             ),
         ),
