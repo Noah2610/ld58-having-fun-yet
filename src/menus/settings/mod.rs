@@ -15,12 +15,14 @@ mod settings {
     use crate::{
         camera::MainCamera,
         menus::{Menu, pop_menu_on_click, to_menu_on_click},
+        screens::Screen,
         theme::{widget, widget::settings_list},
     };
     use bevy::{post_process::bloom::Bloom, prelude::*};
 
     pub(super) fn plugin(app: &mut App) {
-        app.init_resource::<PrevBloom>();
+        app.init_resource::<PrevBloom>()
+            .init_resource::<IsBlurred>();
         app.add_systems(OnEnter(Menu::Settings), spawn_settings_menu);
 
         app.add_systems(
@@ -66,25 +68,41 @@ mod settings {
             },
             remove_blur,
         );
+
+        app.add_systems(OnEnter(Screen::Gameplay), remove_blur);
     }
 
+    #[derive(Resource, Default)]
+    struct IsBlurred(bool);
     #[derive(Resource, Default)]
     struct PrevBloom(Option<Bloom>);
 
     fn add_blur(
         mut commands: Commands,
+        mut is_blurred: ResMut<IsBlurred>,
         mut prev_bloom: ResMut<PrevBloom>,
         camera: Single<(Entity, Option<&Bloom>), With<MainCamera>>,
     ) {
+        if is_blurred.0 {
+            return;
+        }
+
+        is_blurred.0 = true;
         prev_bloom.0 = camera.1.cloned();
         commands.entity(camera.0).insert(Bloom::SCREEN_BLUR);
     }
 
     fn remove_blur(
         mut commands: Commands,
+        mut is_blurred: ResMut<IsBlurred>,
         prev_bloom: Res<PrevBloom>,
         camera: Single<(Entity, Has<Bloom>), With<MainCamera>>,
     ) {
+        if !is_blurred.0 {
+            return;
+        }
+
+        is_blurred.0 = false;
         if let Some(bloom) = &prev_bloom.0 {
             commands.entity(camera.0).insert(bloom.clone());
         } else if camera.1 {
