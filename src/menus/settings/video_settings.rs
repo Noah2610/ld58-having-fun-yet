@@ -1,19 +1,20 @@
 use crate::{
+    camera::MainCamera,
     game::visuals::VisualIntensity,
     menus::{Menu, MenuAction, action_just_pressed, pop_menu_on_click},
-    theme::widget::{
-        self, FullscreenToggleCheckbox, ValueChange, self_end, self_start, settings_grid_2x,
-        settings_list,
-    },
+    theme::widget::{self, ValueChange, self_end, self_start, settings_list},
 };
 use bevy::{
+    post_process::bloom::Bloom,
     prelude::*,
     ui::Checked,
     window::{PrimaryWindow, Window, WindowMode},
 };
 
 pub(super) fn plugin(app: &mut App) {
-    app.init_resource::<IsFullscreen>();
+    app.init_resource::<IsFullscreen>()
+        .init_resource::<BloomEnabled>()
+        .init_resource::<PrevBloom>();
     app.add_systems(OnEnter(Menu::VideoSettings), spawn_video_settings_menu);
     app.add_systems(
         Update,
@@ -25,6 +26,11 @@ pub(super) fn plugin(app: &mut App) {
     );
     app.add_systems(
         Update,
+        apply_bloom_enabled
+            .run_if(in_state(Menu::VideoSettings).and(resource_changed::<BloomEnabled>)),
+    );
+    app.add_systems(
+        Update,
         update_intensity_ui_value.run_if(in_state(Menu::VideoSettings)),
     );
 }
@@ -32,6 +38,12 @@ pub(super) fn plugin(app: &mut App) {
 fn toggle_fullscreen(mut fullscreen: ResMut<IsFullscreen>) {
     fullscreen.0 ^= true;
 }
+
+#[derive(Component, Default)]
+struct FullscreenToggleCheckbox;
+
+#[derive(Component, Default)]
+struct BloomToggleCheckbox;
 
 fn apply_fullscreen(
     fullscreen: Res<IsFullscreen>,
@@ -58,14 +70,42 @@ fn apply_fullscreen(
     };
 }
 
+fn apply_bloom_enabled(
+    mut commands: Commands,
+    bloom_enabled: Res<BloomEnabled>,
+    mut prev_bloom: ResMut<PrevBloom>,
+    camera_bloom: Single<(Entity, Option<&Bloom>), With<MainCamera>>,
+) {
+    if bloom_enabled.0 {
+        if camera_bloom.1.is_none() {
+            commands
+                .entity(camera_bloom.0)
+                .insert(prev_bloom.0.as_ref().map(|b| b.clone()).unwrap_or_default());
+        }
+    } else {
+        if let Some(bloom) = camera_bloom.1 {
+            prev_bloom.0 = Some(bloom.clone());
+            commands.entity(camera_bloom.0).remove::<Bloom>();
+        }
+    }
+}
+
 #[derive(Resource, Reflect, Default)]
 #[reflect(Resource)]
 struct IsFullscreen(bool);
 
+#[derive(Resource, Reflect, Default)]
+#[reflect(Resource)]
+struct BloomEnabled(bool);
+
+#[derive(Resource, Reflect, Default)]
+#[reflect(Resource)]
+struct PrevBloom(Option<Bloom>);
+
 fn spawn_video_settings_menu(
     mut commands: Commands,
     fullscreen: Res<IsFullscreen>,
-    intensity: Res<VisualIntensity>,
+    bloom: Res<BloomEnabled>,
 ) {
     commands.spawn((
         widget::ui_root("Video Settings Menu"),
@@ -73,20 +113,21 @@ fn spawn_video_settings_menu(
         DespawnOnExit(Menu::VideoSettings),
         children![
             widget::h2("Video Settings"),
-            video_settings_grid(fullscreen.0, intensity.0),
+            video_settings_grid(fullscreen.0, bloom.0),
             widget::button("Back", pop_menu_on_click),
         ],
     ));
 }
 
-fn video_settings_grid(is_fullscreen: bool, intensity: f32) -> impl Bundle {
+fn video_settings_grid(is_fullscreen: bool, has_bloom: bool) -> impl Bundle {
     (settings_list(), children![
         fullscreen_toggle_widget(is_fullscreen),
-        visual_intensity_widget(intensity),
+        bloom_toggle_widget(has_bloom),
+        visual_intensity_widget(),
     ])
 }
 
-fn visual_intensity_widget(intensity: f32) -> impl Bundle {
+fn visual_intensity_widget() -> impl Bundle {
     (
         Node {
             display: Display::Flex,
@@ -105,12 +146,26 @@ fn visual_intensity_widget(intensity: f32) -> impl Bundle {
     )
 }
 
+fn bloom_toggle_widget(has_bloom: bool) -> impl Bundle {
+    (Name::new("Bloom Toggle"), self_start(), children![(
+        widget::checkbox(
+            BloomToggleCheckbox,
+            "Bloom? ",
+            has_bloom,
+            |trigger: On<ValueChange<bool>>, mut bloom: ResMut<BloomEnabled>| {
+                bloom.0 = trigger.value;
+            }
+        ),
+    ),])
+}
+
 fn fullscreen_toggle_widget(is_fullscreen: bool) -> impl Bundle {
     (Name::new("Fullscreen Toggle"), self_start(), children![
         (
             // widget::label("Fullscreen?"),
             widget::checkbox(
-                "Fullscreen?",
+                FullscreenToggleCheckbox,
+                "Fullscreen? ",
                 is_fullscreen,
                 |trigger: On<ValueChange<bool>>, mut fullscreen: ResMut<IsFullscreen>| {
                     fullscreen.0 = trigger.value;

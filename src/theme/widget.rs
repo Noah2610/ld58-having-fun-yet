@@ -158,11 +158,14 @@ where
     )
 }
 
-#[derive(Component, Default)]
-pub struct FullscreenToggleCheckbox;
-
-pub fn checkbox<E, B, M, I>(caption: impl Into<String>, checked: bool, action: I) -> impl Bundle
+pub fn checkbox<C, E, B, M, I>(
+    marker: C,
+    caption: impl Into<String>,
+    checked: bool,
+    action: I,
+) -> impl Bundle
 where
+    C: Component,
     E: EntityEvent,
     B: Bundle,
     I: IntoObserverSystem<E, B, M>,
@@ -174,11 +177,11 @@ where
 
     (
         Name::new(format!("{} Checkbox", caption.as_str())),
-        FullscreenToggleCheckbox,
+        marker,
         Node {
             display: Display::Flex,
             flex_direction: FlexDirection::Row,
-            justify_content: JustifyContent::FlexStart,
+            justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
             align_content: AlignContent::Center,
             column_gap: px(4),
@@ -194,7 +197,7 @@ where
         CheckedDefault(checked),
         TabIndex(0),
         Children::spawn((
-            Spawn(label(caption)),
+            Spawn((label(caption), self_end())),
             SpawnWith(|parent: &mut ChildSpawner| {
                 parent.spawn((
                     // Checkbox outer
@@ -203,6 +206,7 @@ where
                         width: px(24),
                         height: px(24),
                         border: UiRect::all(px(2)),
+                        justify_self: JustifySelf::Start,
                         ..default()
                     },
                     BorderColor::all(CHECKBOX_OUTLINE), // Border color for the checkbox
@@ -227,7 +231,7 @@ where
                 // .observe(action);
             }),
         )),
-        // observe(checkbox_self_update),
+        observe(checkbox_self_update),
         observe(action),
     )
 
