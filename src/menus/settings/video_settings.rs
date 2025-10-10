@@ -5,6 +5,7 @@ use crate::{
     theme::widget::{self, ValueChange, self_end, self_start, settings_list},
 };
 use bevy::{
+    image::{ImageSampler, ImageSamplerDescriptor},
     post_process::bloom::Bloom,
     prelude::*,
     ui::Checked,
@@ -14,7 +15,8 @@ use bevy::{
 pub(super) fn plugin(app: &mut App) {
     app.init_resource::<IsFullscreen>()
         .init_resource::<BloomEnabled>()
-        .init_resource::<PrevBloom>();
+        .init_resource::<PrevBloom>()
+        .init_resource::<PixelPerfectEnabled>();
     app.add_systems(OnEnter(Menu::VideoSettings), spawn_video_settings_menu);
     app.add_systems(
         Update,
@@ -26,12 +28,12 @@ pub(super) fn plugin(app: &mut App) {
     );
     app.add_systems(
         Update,
-        apply_bloom_enabled
-            .run_if(in_state(Menu::VideoSettings).and(resource_changed::<BloomEnabled>)),
-    );
-    app.add_systems(
-        Update,
-        update_intensity_ui_value.run_if(in_state(Menu::VideoSettings)),
+        (
+            update_intensity_ui_value,
+            apply_bloom_enabled.run_if(resource_changed::<BloomEnabled>),
+            apply_pixel_perfect_enabled.run_if(resource_changed::<PixelPerfectEnabled>),
+        )
+            .run_if(in_state(Menu::VideoSettings)),
     );
 }
 
@@ -90,22 +92,51 @@ fn apply_bloom_enabled(
     }
 }
 
+fn apply_pixel_perfect_enabled(
+    pixel_perfect_enabled: Res<PixelPerfectEnabled>,
+    mut images: ResMut<Assets<Image>>,
+) {
+    let descriptor = if pixel_perfect_enabled.0 {
+        ImageSamplerDescriptor::nearest()
+    } else {
+        ImageSamplerDescriptor::linear()
+    };
+    for (_, image) in images.iter_mut() {
+        image.sampler = ImageSampler::Descriptor(descriptor.clone());
+    }
+}
+
 #[derive(Resource, Reflect, Default)]
 #[reflect(Resource)]
 struct IsFullscreen(bool);
 
-#[derive(Resource, Reflect, Default)]
+#[derive(Resource, Reflect)]
 #[reflect(Resource)]
 struct BloomEnabled(bool);
+impl Default for BloomEnabled {
+    fn default() -> Self {
+        Self(true)
+    }
+}
 
 #[derive(Resource, Reflect, Default)]
 #[reflect(Resource)]
 struct PrevBloom(Option<Bloom>);
 
+#[derive(Resource, Reflect)]
+#[reflect(Resource)]
+struct PixelPerfectEnabled(bool);
+impl Default for PixelPerfectEnabled {
+    fn default() -> Self {
+        Self(true)
+    }
+}
+
 fn spawn_video_settings_menu(
     mut commands: Commands,
     fullscreen: Res<IsFullscreen>,
     bloom: Res<BloomEnabled>,
+    pixel_perfect: Res<PixelPerfectEnabled>,
 ) {
     commands.spawn((
         widget::ui_root("Video Settings Menu"),
@@ -113,15 +144,20 @@ fn spawn_video_settings_menu(
         DespawnOnExit(Menu::VideoSettings),
         children![
             widget::h2("Video Settings"),
-            video_settings_grid(fullscreen.0, bloom.0),
+            video_settings_grid(fullscreen.0, bloom.0, pixel_perfect.0),
             widget::button("Back", pop_menu_on_click),
         ],
     ));
 }
 
-fn video_settings_grid(is_fullscreen: bool, has_bloom: bool) -> impl Bundle {
+fn video_settings_grid(
+    is_fullscreen: bool,
+    has_bloom: bool,
+    is_pixel_perfect: bool,
+) -> impl Bundle {
     (settings_list(), children![
         fullscreen_toggle_widget(is_fullscreen),
+        image_sampler_widget(is_pixel_perfect),
         bloom_toggle_widget(has_bloom),
         visual_intensity_widget(),
     ])
@@ -144,6 +180,19 @@ fn visual_intensity_widget() -> impl Bundle {
             ),
         ],
     )
+}
+
+fn image_sampler_widget(is_pixel_perfect: bool) -> impl Bundle {
+    (Name::new("Image Sampler Toggle"), self_start(), children![
+        (widget::checkbox(
+            BloomToggleCheckbox,
+            "Pixel-perfect? ",
+            is_pixel_perfect,
+            |trigger: On<ValueChange<bool>>, mut pixel_perfect: ResMut<PixelPerfectEnabled>| {
+                pixel_perfect.0 = trigger.value;
+            }
+        ),),
+    ])
 }
 
 fn bloom_toggle_widget(has_bloom: bool) -> impl Bundle {
