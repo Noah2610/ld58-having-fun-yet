@@ -7,6 +7,7 @@ pub mod decoration;
 pub mod enemy;
 pub mod health;
 pub mod level;
+pub mod mouse_aim;
 pub mod movement;
 pub mod player;
 pub mod score;
@@ -35,5 +36,5 @@ pub(super) fn plugin(app: &mut App) {
         health::plugin,
         decoration::plugin,
     ))
-    .add_plugins((score::plugin, visual_scaling::plugin));
+    .add_plugins((score::plugin, visual_scaling::plugin, mouse_aim::plugin));
 }
