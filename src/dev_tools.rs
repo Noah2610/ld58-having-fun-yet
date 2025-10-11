@@ -1,8 +1,11 @@
 use crate::{
     camera::MainCamera,
-    game::visuals::{
-        BackgroundHueAnimation, GlobalAnimationsEnabled, GlobalCameraAnimationsEnabled,
-        GlobalColorAnimationsEnabled, GlobalTransformAnimationsEnabled, VisualIntensity,
+    game::{
+        mouse_aim::MouseAimEnabled,
+        visuals::{
+            BackgroundHueAnimation, GlobalAnimationsEnabled, GlobalCameraAnimationsEnabled,
+            GlobalColorAnimationsEnabled, GlobalTransformAnimationsEnabled, VisualIntensity,
+        },
     },
     input::*,
     quality::Quality,
@@ -76,6 +79,7 @@ pub(super) fn plugin(app: &mut App) {
             ),
         ),
         StateInspectorPlugin::<Quality>::default().run_if(in_state(InspectorEnabled(true))),
+        StateInspectorPlugin::<MouseAimEnabled>::default().run_if(in_state(InspectorEnabled(true))),
         FilterQueryInspectorPlugin::<With<MainCamera>>::default()
             .run_if(in_state(InspectorEnabled(true))),
         PhysicsDebugPlugin,
