@@ -129,13 +129,12 @@ fn get_tiled_types_export_path() -> Result<PathBuf> {
 
     let path = Path::new(PATH);
 
-    if let Some(parent) = path.parent() {
-        if !parent.is_dir() {
+    if let Some(parent) = path.parent()
+        && !parent.is_dir() {
             info!("Creating directory for {PATH}: {:#?}", parent);
             fs::create_dir_all(parent)
                 .map_err(|e| format!("Failed to create parent directory for {PATH}:\n{:#?}", e))?;
         }
-    }
 
     fs::write(PATH, "").map_err(|e| format!("Filed to write to {PATH}\n{:#?}", e))?;
 

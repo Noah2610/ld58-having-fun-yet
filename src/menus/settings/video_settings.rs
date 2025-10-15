@@ -82,13 +82,11 @@ fn apply_bloom_enabled(
         if camera_bloom.1.is_none() {
             commands
                 .entity(camera_bloom.0)
-                .insert(prev_bloom.0.as_ref().map(|b| b.clone()).unwrap_or_default());
+                .insert(prev_bloom.0.clone().unwrap_or_default());
         }
-    } else {
-        if let Some(bloom) = camera_bloom.1 {
-            prev_bloom.0 = Some(bloom.clone());
-            commands.entity(camera_bloom.0).remove::<Bloom>();
-        }
+    } else if let Some(bloom) = camera_bloom.1 {
+        prev_bloom.0 = Some(bloom.clone());
+        commands.entity(camera_bloom.0).remove::<Bloom>();
     }
 }
 

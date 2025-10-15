@@ -94,16 +94,13 @@ pub mod checkbox {
     use bevy::{
         input_focus::{
             InputDispatchPlugin,
-            tab_navigation::{TabGroup, TabIndex, TabNavigationPlugin},
+            tab_navigation::TabNavigationPlugin,
         },
         picking::hover::Hovered,
         prelude::*,
         reflect::Is,
-        ui::{Checked, InteractionDisabled, Pressed},
-        ui_widgets::{
-            Activate, Button, Checkbox, Slider, SliderRange, SliderThumb, SliderValue,
-            UiWidgetsPlugins, ValueChange, checkbox_self_update, observe,
-        },
+        ui::{Checked, InteractionDisabled},
+        ui_widgets::Checkbox,
     };
 
     #[derive(Component, Default)]

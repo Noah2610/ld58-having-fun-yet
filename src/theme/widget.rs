@@ -9,8 +9,6 @@ use bevy::{
     ecs::{spawn::SpawnWith, system::IntoObserverSystem},
     input_focus::tab_navigation::{TabGroup, TabIndex},
     prelude::*,
-    ui::Checked,
-    ui_widgets,
 };
 use std::borrow::Cow;
 
