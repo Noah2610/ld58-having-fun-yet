@@ -278,15 +278,11 @@ const MAX_INTENSITY: f32 = 8.0;
 const INTENSITY_STEP: f32 = 0.1;
 
 fn increase_intensity(_: On<Pointer<Click>>, mut intensity: ResMut<VisualIntensity>) {
-    intensity.0 = (intensity.0 + INTENSITY_STEP)
-        .min(MAX_INTENSITY)
-        .max(MIN_INTENSITY);
+    intensity.0 = (intensity.0 + INTENSITY_STEP).clamp(MIN_INTENSITY, MAX_INTENSITY);
 }
 
 fn decrease_intensity(_: On<Pointer<Click>>, mut intensity: ResMut<VisualIntensity>) {
-    intensity.0 = (intensity.0 - INTENSITY_STEP)
-        .min(MAX_INTENSITY)
-        .max(MIN_INTENSITY);
+    intensity.0 = (intensity.0 - INTENSITY_STEP).clamp(MIN_INTENSITY, MAX_INTENSITY);
 }
 
 fn update_intensity_ui_value(

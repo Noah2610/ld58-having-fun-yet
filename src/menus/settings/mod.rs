@@ -5,13 +5,13 @@ mod video_settings;
 
 pub(super) fn plugin(app: &mut App) {
     app.add_plugins((
-        settings::plugin,
+        settings_menu::plugin,
         audio_settings::plugin,
         video_settings::plugin,
     ));
 }
 
-mod settings {
+mod settings_menu {
     use crate::{
         camera::MainCamera,
         menus::{Menu, pop_menu_on_click, to_menu_on_click},

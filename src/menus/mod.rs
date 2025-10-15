@@ -59,6 +59,7 @@ fn to_menu_on_click(menu: Menu) -> impl FnMut(On<Pointer<Click>>, ResMut<NextSta
     move |_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>| next_menu.set(menu)
 }
 
+#[allow(dead_code)]
 fn to_menu(menu: Menu) -> impl FnMut(ResMut<NextState<Menu>>) {
     move |mut next_menu: ResMut<NextState<Menu>>| next_menu.set(menu)
 }
