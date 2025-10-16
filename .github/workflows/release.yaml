@@ -46,9 +46,9 @@ on:
         type: string
 
 # Cancel the release workflow when a more recent workflow begins.
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 # Configure the release workflow by editing the following values.
 env:
@@ -163,12 +163,12 @@ jobs:
         run: |
           # Default values:
           echo "app_binary_name=${app_binary_name:=${{ env.cargo_build_binary_name }}}" >> "${GITHUB_ENV}"
-          echo "app_package_name=${app_package_name:=${app_binary_name}}-${{ env.version }}" >> "${GITHUB_ENV}"
+          echo "app_package_name=${app_package_name:=${app_binary_name}}-${{ env.version }}-${{ matrix.platform }}" >> "${GITHUB_ENV}"
           echo "app_display_name=${app_display_name:=${app_package_name}}" >> "${GITHUB_ENV}"
           echo "app_short_name=${app_short_name:=${app_display_name}}" >> "${GITHUB_ENV}"
 
           # File paths:
-          echo "app=tmp/app/${app_package_name}-${{ env.version }}"'${{ matrix.app_suffix }}' >> "${GITHUB_ENV}"
+          echo "app=tmp/app/${app_package_name}-${{ env.version }}-${{ matrix.platform }}"'${{ matrix.app_suffix }}' >> "${GITHUB_ENV}"
           echo "package=${app_package_name}-${{ env.version }}-"'${{ matrix.platform }}${{ matrix.package_ext }}' >> "${GITHUB_ENV}"
 
           # Rustflags:
