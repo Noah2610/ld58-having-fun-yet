@@ -24,7 +24,6 @@ use bevy::{asset::AssetMetaCheck, prelude::*};
 use bevy_aseprite_ultra::AsepriteUltraPlugin;
 use bevy_ecs_tiled::prelude::*;
 use game_state::{AppSystems, GameplaySet, Paused};
-use std::path::PathBuf;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -58,17 +57,7 @@ impl Plugin for AppPlugin {
             UiWidgetsPlugins,
             PhysicsPlugins::default().with_length_unit(16.0),
             TiledPlugin(TiledPluginConfig {
-                tiled_types_export_file: if cfg!(feature = "dev_tools") {
-                    match get_tiled_types_export_path() {
-                        Ok(path) => Some(path),
-                        Err(e) => {
-                            error!("Failed to get tiled_export_path {e}");
-                            None
-                        },
-                    }
-                } else {
-                    None
-                },
+                tiled_types_export_file: get_tiled_types_export_path(),
                 tiled_types_filter:      TiledFilter::from(
                     RegexSet::new([r"^ld58::.+$", r"^bevy_ecs.+$"]).expect(
                         "[TiledPluginConfig.tiled_types_filter] Expected regexes to be valid",
@@ -118,25 +107,40 @@ impl Plugin for AppPlugin {
     }
 }
 
+#[cfg(not(feature = "dev_tools"))]
+fn get_tiled_types_export_path() -> Option<PathBuf> {
+    None
+}
+
 #[cfg(feature = "dev_tools")]
-fn get_tiled_types_export_path() -> Result<PathBuf> {
+fn get_tiled_types_export_path() -> Option<std::path::PathBuf> {
     use std::{
         fs,
         path::{Path, PathBuf},
     };
 
-    const PATH: &str = "./tiled/tiled_types_export.json";
+    fn get_export_path() -> Result<PathBuf> {
+        const PATH: &str = "./tiled/tiled_types_export.json";
 
-    let path = Path::new(PATH);
+        let path = Path::new(PATH);
 
-    if let Some(parent) = path.parent()
-        && !parent.is_dir() {
+        if let Some(parent) = path.parent()
+            && !parent.is_dir()
+        {
             info!("Creating directory for {PATH}: {:#?}", parent);
             fs::create_dir_all(parent)
                 .map_err(|e| format!("Failed to create parent directory for {PATH}:\n{:#?}", e))?;
         }
 
-    fs::write(PATH, "").map_err(|e| format!("Filed to write to {PATH}\n{:#?}", e))?;
+        fs::write(PATH, "").map_err(|e| format!("Filed to write to {PATH}\n{:#?}", e))?;
+        Ok(PathBuf::from(path))
+    }
 
-    Ok(PathBuf::from(path))
+    match get_export_path() {
+        Ok(path) => Some(path),
+        Err(e) => {
+            error!("Failed to get tiled_export_path: {e}");
+            None
+        },
+    }
 }

@@ -12,13 +12,13 @@ fn spawn_main_menu(mut commands: Commands) {
         widget::ui_root("Main Menu"),
         GlobalZIndex(2),
         DespawnOnExit(Menu::Main),
-        children![
-            widget::h1("Having Fun Yet?"),
-            widget::button("Play", enter_loading_or_gameplay_screen),
-            widget::button("Settings", open_settings_menu),
+        Children::spawn(SpawnWith(|parent: &mut ChildSpawner| {
+            parent.spawn(widget::h1("Having Fun Yet?"));
+            parent.spawn(widget::button("Play", enter_loading_or_gameplay_screen));
+            parent.spawn(widget::button("Settings", open_settings_menu));
             #[cfg(not(target_family = "wasm"))]
-            widget::button("Exit", exit_app),
-        ],
+            parent.spawn(widget::button("Exit", exit_app));
+        })),
     ));
 }
 
