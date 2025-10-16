@@ -92,10 +92,7 @@ pub mod checkbox {
     //! https://github.com/bevyengine/bevy/blob/main/examples/ui/standard_widgets_observers.rs
 
     use bevy::{
-        input_focus::{
-            InputDispatchPlugin,
-            tab_navigation::TabNavigationPlugin,
-        },
+        input_focus::{InputDispatchPlugin, tab_navigation::TabNavigationPlugin},
         picking::hover::Hovered,
         prelude::*,
         reflect::Is,

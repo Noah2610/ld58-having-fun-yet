@@ -1,8 +1,6 @@
 use crate::{
     input::{MenuAction, action_just_pressed},
     menus::Menu,
-    screens::Screen,
-    theme::widget,
 };
 use bevy::prelude::*;
 
@@ -19,6 +17,8 @@ pub(super) fn plugin(app: &mut App) {
 
 #[cfg(not(feature = "no_pause_ui"))]
 fn spawn_pause_menu(mut commands: Commands) {
+    use crate::theme::widget;
+
     commands.spawn((
         widget::ui_root("Pause Menu"),
         GlobalZIndex(2),
@@ -44,8 +44,11 @@ fn on_continue(_: On<Pointer<Click>>, mut next_menu: ResMut<NextState<Menu>>) {
 }
 
 #[cfg(not(feature = "no_pause_ui"))]
-fn quit_to_title(_: On<Pointer<Click>>, mut next_screen: ResMut<NextState<Screen>>) {
-    next_screen.set(Screen::Title);
+fn quit_to_title(
+    _: On<Pointer<Click>>,
+    mut next_screen: ResMut<NextState<crate::screens::Screen>>,
+) {
+    next_screen.set(crate::screens::Screen::Title);
 }
 
 fn close_menu(mut next_menu: ResMut<NextState<Menu>>) {
