@@ -108,7 +108,7 @@ impl Plugin for AppPlugin {
 }
 
 #[cfg(not(feature = "dev_tools"))]
-fn get_tiled_types_export_path() -> Option<PathBuf> {
+fn get_tiled_types_export_path() -> Option<std::path::PathBuf> {
     None
 }
 
