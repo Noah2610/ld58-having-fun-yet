@@ -1,10 +1,10 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - v0.*
-      - v1.*
+  # push:
+  #   tags:
+  #     - v0.*
+  #     - v1.*
   workflow_dispatch:
     inputs:
       version:
